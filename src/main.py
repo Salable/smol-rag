@@ -252,11 +252,11 @@ Response parameters:
     return get_completion(text, context=system_prompt)
 
 if __name__ == '__main__':
-    # create_file_if_not_exists(SOURCE_TO_DOC_ID_MAP, "{}")
-    # create_file_if_not_exists(DOC_ID_TO_SOURCE_MAP, "{}")
-    # create_file_if_not_exists(DOC_ID_TO_EXCERPT_IDS, "{}")
-    # create_file_if_not_exists(EXCERPT_DB, "{}")
-    # set_logger("main.log")
-    #
-    # import_documents()
+    create_file_if_not_exists(SOURCE_TO_DOC_ID_MAP, "{}")
+    create_file_if_not_exists(DOC_ID_TO_SOURCE_MAP, "{}")
+    create_file_if_not_exists(DOC_ID_TO_EXCERPT_IDS, "{}")
+    create_file_if_not_exists(EXCERPT_DB, "{}")
+    set_logger("main.log")
+
+    import_documents()
     print(query("what do cats eat?"))

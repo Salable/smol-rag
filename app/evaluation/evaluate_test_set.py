@@ -6,7 +6,7 @@ from app.main import query
 from app.utilities import get_json
 
 
-def accuracy(query, response, source):
+def evaluate_accuracy(query, response, source):
     prompt = inspect.cleandoc(f"""
         Does the <response> accurately answer the <query> in relation to the <source>?
         
@@ -43,10 +43,9 @@ if __name__ == '__main__':
     results = []
 
     for row in data_set:
-        # result = accuracy(row["query"], row["response"], row["pull_quote"])
         response = query(row["query"])
-        result = accuracy(row["query"], response, row["pull_quote"])
+        result = evaluate_accuracy(row["query"], response, row["pull_quote"])
         results.append(result)
 
     score = sum(results) / len(results)
-    print(score) # 1 for data set
+    print(score)

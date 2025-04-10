@@ -29,7 +29,7 @@ def evaluate_accuracy(query, response, source):
 
     responses = []
     for _ in range(3):
-        response = get_completion(prompt)
+        response = get_completion(prompt, use_cache=False)
         if response not in ['yes', 'no']:
             print("failed to respond with yes or no")
             continue

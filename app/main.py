@@ -1,11 +1,13 @@
 import inspect
 import os
+import re
 import time
 
 import networkx as nx
 import numpy as np
 
 from nano_vectordb import NanoVectorDB
+from nltk import sent_tokenize
 
 from app.llm import get_embedding, get_completion
 from app.logger import logger, set_logger
@@ -18,7 +20,11 @@ from app.prompts import get_query_system_prompt, excerpt_summary_prompt, get_ext
 
 from app.utilities import get_json, remove_from_json, read_file, get_docs, make_hash, add_to_json, \
     split_string_by_multi_markers, clean_str, extract_json_from_text, is_float_regex, truncate_list_by_token_size, \
-    list_of_list_to_csv, get_encoded_tokens, create_file_if_not_exists, delete_all_files
+    list_of_list_to_csv, delete_all_files, create_file_if_not_exists
+
+import nltk
+
+nltk.download('punkt')
 
 dim = 1536
 embeddings_db = NanoVectorDB(dim, storage_file=EMBEDDINGS_DB)
@@ -97,12 +103,89 @@ def embed_document(content, doc_id):
     embeddings_db.save()
     add_to_json(DOC_ID_TO_EXCERPT_IDS, doc_id, excerpt_ids)
 
-# Todo: write smart chunking function to extract excerpts without chopping words
-def get_excerpts(content, n=2000, overlap=200):
+
+def get_excerpts(content, n=2000):
+    """
+    Split `content` into code/text chunks up to `n` characters.
+
+    The function processes the content as follows:
+      1) Code blocks (denoted by triple backticks) remain whole, but the triple backticks
+         are removed from the output.
+      2) Regular text is split into paragraphs (using one or more newlines).
+      3) Paragraphs longer than `n` characters are further split into sentences using NLTK.
+      4) Any sentence that exceeds `n` characters is stored on its own.
+
+    All text excerpts are stripped of leading and trailing whitespace.
+    """
+
+    parts = re.split(r'(```.*?```)', content, flags=re.DOTALL)
     excerpts = []
-    step = n - overlap
-    for i in range(0, len(content), step):
-        excerpts.append(content[i:i + n])
+
+    for part in parts:
+        part_stripped = part.strip()
+
+        if part_stripped.startswith('```') and part_stripped.endswith('```'):
+            code_content = part_stripped[3:-3].strip()
+            excerpts.append(code_content)
+            continue
+
+        if len(part) <= n:
+            excerpts.append(part.strip())
+            continue
+
+        paragraphs = re.split(r'\n+', part)
+        current_excerpt = ""
+
+        for paragraph in paragraphs:
+            paragraph = paragraph.strip()
+            if not paragraph:
+                continue
+
+            if len(paragraph) <= n:
+                if current_excerpt:
+                    proposed_excerpt = current_excerpt + "\n\n" + paragraph
+                else:
+                    proposed_excerpt = paragraph
+
+                if len(proposed_excerpt) <= n:
+                    current_excerpt = proposed_excerpt
+                else:
+                    if current_excerpt:
+                        excerpts.append(current_excerpt.strip())
+                    current_excerpt = paragraph
+            else:
+                if current_excerpt:
+                    excerpts.append(current_excerpt.strip())
+                    current_excerpt = ""
+
+                sentences = sent_tokenize(paragraph)
+                sentence_excerpt = ""
+                for sentence in sentences:
+                    sentence = sentence.strip()
+                    if len(sentence) > n:
+                        if sentence_excerpt:
+                            excerpts.append(sentence_excerpt.strip())
+                            sentence_excerpt = ""
+                        excerpts.append(sentence.strip())
+                        continue
+
+                    if sentence_excerpt:
+                        proposed_sentence_excerpt = sentence_excerpt + " " + sentence
+                    else:
+                        proposed_sentence_excerpt = sentence
+
+                    if len(proposed_sentence_excerpt) <= n:
+                        sentence_excerpt = proposed_sentence_excerpt
+                    else:
+                        excerpts.append(sentence_excerpt.strip())
+                        sentence_excerpt = sentence
+
+                if sentence_excerpt:
+                    excerpts.append(sentence_excerpt.strip())
+
+        if current_excerpt:
+            excerpts.append(current_excerpt.strip())
+
     return excerpts
 
 
@@ -608,7 +691,6 @@ def get_entities_from_relationships(graph, kg_dataset):
     entity_names = []
     seen = set()
 
-
     for e in kg_dataset:
         if e["src_tgt"][0] not in seen:
             entity_names.append(e["src_tgt"][0])
@@ -626,7 +708,6 @@ def get_entities_from_relationships(graph, kg_dataset):
         for k, n, d in zip(entity_names, data, degrees) if 'description' in n
     ]
 
-
     # Todo: figure out how we hit a bug here with missing description
     data = truncate_list_by_token_size(
         data,
@@ -639,7 +720,7 @@ def get_entities_from_relationships(graph, kg_dataset):
 
 if __name__ == '__main__':
     set_logger("main.log")
-
+    #
     delete_all_files(DATA_DIR)
     delete_all_files(LOG_DIR)
 
@@ -652,25 +733,35 @@ if __name__ == '__main__':
 
     import_documents()
 
-    # print(query("what do rabbits eat?"))  # Should answer
-    # print(query("what do cats eat?"))  # Should reject
-    # print(query("What's the subject matter we can discuss?"))
+    print(query("what do rabbits eat?"))  # Should answer
+    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+    print(query("what do cats eat?"))  # Should reject
+    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+    print(query("What's the subject matter we can discuss?"))  # Should answer
 
-    # print(kg_query("what do rabbits eat?"))  # Should answer
-    # print(kg_query("what do cows eat?"))  # Should reject
-    # print(kg_query("What's the subject matter we can discuss?"))
+    print(hybrid_kg_query("what do rabbits eat?"))  # Should answer
+    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+    print(hybrid_kg_query("what do cows eat?"))  # Should reject
+    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+    print(hybrid_kg_query("What's the subject matter we can discuss?"))
 
-    # print(local_kg_query("what do rabbits eat?"))  # Should answer
-    # print(local_kg_query("what do cows eat?"))  # Should reject
-    # print(local_kg_query("What's the subject matter we can discuss?"))
+    print(local_kg_query("what do rabbits eat?"))  # Should answer
+    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+    print(local_kg_query("what do cows eat?"))  # Should reject
+    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+    print(local_kg_query("What's the subject matter we can discuss?"))
 
-    # print(global_kg_query("what do rabbits eat?"))  # Should answer
-    # print(global_kg_query("what do cows eat?"))  # Should reject
-    # print(global_kg_query("What's the subject matter we can discuss?"))
+    print(global_kg_query("what do rabbits eat?"))  # Should answer
+    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+    print(global_kg_query("what do cows eat?"))  # Should reject
+    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+    print(global_kg_query("What's the subject matter we can discuss?"))
 
     print(mix_query("what do rabbits eat?"))  # Should answer
-    # print(mix_query("what do cows eat?"))  # Should reject
-    # print(mix_query("What's the subject matter we can discuss?"))
+    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+    print(mix_query("what do cows eat?"))  # Should reject
+    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+    print(mix_query("What's the subject matter we can discuss?"))
 
     # remove_document_by_id("doc_4c3f8100da0b90c1a44c94e6b4ffa041")
 

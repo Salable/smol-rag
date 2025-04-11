@@ -1,8 +1,8 @@
 import inspect
 
 from app.definitions import EVALUATION_DATA_SET
-from app.llm import get_completion
-from app.main import query, mix_query, local_kg_query, global_kg_query, hybrid_kg_query
+from app.openai_llm import get_completion
+from app.smol_rag import query, mix_query, local_kg_query, global_kg_query, hybrid_kg_query
 from app.utilities import get_json, create_file_if_not_exists
 
 

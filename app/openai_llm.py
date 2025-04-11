@@ -1,0 +1,114 @@
+import logging
+import os
+from typing import Any, Dict, List, Optional
+
+from dotenv import load_dotenv
+from openai import OpenAI
+
+from app.logger import logger
+from app.definitions import QUERY_CACHE, EMBEDDING_CACHE
+from app.utilities import add_to_json, get_json, make_hash
+
+load_dotenv()
+
+class OpenAiLlm:
+    def __init__(self, completion_model: str, embedding_model: str) -> None:
+        """
+        Initializes the OpenAiLlm instance with specified models and caches.
+        """
+        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        self.query_cache: Dict[str, Any] = get_json(QUERY_CACHE)
+        self.embedding_cache: Dict[str, Any] = get_json(EMBEDDING_CACHE)
+        self.completion_model = completion_model
+        self.embedding_model = embedding_model
+
+    def get_completion(self, query: str, model: Optional[str] = None, context: str = "", use_cache: bool = True) -> str:
+        """
+        Gets a completion from the API with optional caching.
+
+        :param query: User's query string.
+        :param model: The model to use; if None, use self.completion_model.
+        :param context: Optional context or instructions.
+        :param use_cache: Whether to use the cached results.
+        :return: The completion result.
+        """
+        model = model or self.completion_model
+        query_hash = make_hash(query, 'qry-')
+        if use_cache and query_hash in self.query_cache:
+            logger.info("Query cache hit")
+            return self.query_cache[query_hash]["result"]
+
+        logger.info("New query")
+        system_message = [{"role": "system", "content": context}] if context else []
+        messages: List[Dict[str, str]] = [{"role": "user", "content": query}]
+
+        try:
+            response = self.client.chat.completions.create(
+                model=model,
+                store=True,
+                messages=system_message + messages
+            )
+            result = response.choices[0].message.content
+        except Exception as e:
+            logger.error(f"Error getting completion: {e}")
+            raise
+
+        add_to_json(QUERY_CACHE, query_hash, {"query": query, "result": result})
+        return result
+
+    def get_chat_completion(self, query: str, model: Optional[str] = None, context: str = "", chat_history: List[Dict[str, str]] = []) -> List[Dict[str, str]]:
+        """
+        Gets a chat completion by providing the chat history and query.
+
+        :param query: New query to send.
+        :param model: The model to use; if None, use self.completion_model.
+        :param context: Optional system context instructions.
+        :param chat_history: List of previous chat messages.
+        :return: Updated chat history including the assistant's response.
+        """
+        model = model or self.completion_model
+        system_message = [{"role": "system", "content": context}] if context else []
+        messages = chat_history + [{"role": "user", "content": query}]
+
+        try:
+            response = self.client.chat.completions.create(
+                model=model,
+                store=True,
+                messages=system_message + messages
+            )
+            assistant_reply = response.choices[0].message.content
+        except Exception as e:
+            logger.error(f"Error in chat completion: {e}")
+            raise
+
+        messages.append({"role": "assistant", "content": assistant_reply})
+        return messages
+
+    def get_embedding(self, content: Any, model: Optional[str] = None) -> List[float]:
+        """
+        Gets the embedding for the provided content using the specified model.
+
+        :param content: The text or data to be embedded.
+        :param model: The model to use; if None, use self.embedding_model.
+        :return: The embedding vector.
+        """
+        model = model or self.embedding_model
+        content_hash = make_hash(str(content), 'emb-')
+
+        if content_hash in self.embedding_cache:
+            logger.info("Embedding cache hit")
+            embedding = self.embedding_cache[content_hash]
+        else:
+            logger.info("New embedding computation")
+            try:
+                response = self.client.embeddings.create(
+                    model=model,
+                    input=content,
+                )
+                embedding = response.data[0].embedding
+            except Exception as e:
+                logger.error(f"Error getting embedding: {e}")
+                raise
+            add_to_json(EMBEDDING_CACHE, content_hash, embedding)
+
+        return embedding

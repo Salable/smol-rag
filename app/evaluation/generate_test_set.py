@@ -12,7 +12,7 @@ from nltk.translate.meteor_score import meteor_score
 # nltk.download('wordnet')
 
 from app.definitions import INPUT_DOCS_DIR, EVALUATION_DATA_SET
-from app.llm import get_completion
+from app.openai_llm import get_completion
 from app.utilities import get_docs, read_file, create_file_if_not_exists, write_json
 
 

@@ -98,5 +98,3 @@ Use this when:
 ---
 
 Each query type is optimised for a different information need. You can start simple with vector search and progressively move toward hybrid or mix queries when interpretability and deeper reasoning matter.
-
-

@@ -6,7 +6,6 @@ import time
 import networkx as nx
 import numpy as np
 
-from nano_vectordb import NanoVectorDB
 from nltk import sent_tokenize
 
 from app.openai_llm import OpenAiLlm
@@ -24,18 +23,21 @@ from app.utilities import get_json, remove_from_json, read_file, get_docs, make_
 
 import nltk
 
-class SmolRag:
-    def __init__(self, llm):
-        set_logger("main.log")
+from app.nano_vector_storage import NanoVectorStorage
 
-        self.llm = llm
+
+class SmolRag:
+    def __init__(self, llm=None, embeddings_db=None, entities_db=None, relationships_db=None):
+        set_logger("main.log")
 
         nltk.download('punkt')
 
-        self.dim = 1536
-        self.embeddings_db = NanoVectorDB(self.dim, storage_file=EMBEDDINGS_DB)
-        self.entities_db = NanoVectorDB(self.dim, storage_file=ENTITIES_DB)
-        self.relationships_db = NanoVectorDB(self.dim, storage_file=RELATIONSHIPS_DB)
+        self.llm = llm or OpenAiLlm(COMPLETION_MODEL, EMBEDDING_MODEL)
+
+        self.dimensions = 1536
+        self.embeddings_db = embeddings_db or NanoVectorStorage(EMBEDDINGS_DB, self.dimensions)
+        self.entities_db = entities_db or NanoVectorStorage(ENTITIES_DB, self.dimensions)
+        self.relationships_db = relationships_db or NanoVectorStorage(RELATIONSHIPS_DB, self.dimensions)
 
         if os.path.exists(KG_DB):
             try:
@@ -725,9 +727,7 @@ if __name__ == '__main__':
     delete_all_files(DATA_DIR)
     delete_all_files(LOG_DIR)
 
-    llm = OpenAiLlm(COMPLETION_MODEL, EMBEDDING_MODEL)
-
-    smol_rag = SmolRag(llm)
+    smol_rag = SmolRag()
 
     smol_rag.import_documents()
 

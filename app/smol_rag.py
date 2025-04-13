@@ -42,7 +42,6 @@ class SmolRag:
             embedding_cache_kv=None
     ):
         set_logger("main.log")
-
         nltk.download('punkt')
 
         self.llm = llm or OpenAiLlm(
@@ -65,13 +64,13 @@ class SmolRag:
         if os.path.exists(KG_DB):
             try:
                 self.graph = nx.read_graphml(KG_DB)
-                logger.info(f"Loaded existing graph from {KG_DB}")
+                logger.info(f"Knowledge graph loaded from {KG_DB}")
             except Exception as e:
-                logger.error(f"Error loading graph from {KG_DB}: {e}")
+                logger.error(f"Error loading knowledge graph from {KG_DB}: {e}")
                 self.graph = nx.Graph()
         else:
             self.graph = nx.Graph()
-            logger.info("No existing graph found. Creating a new graph.")
+            logger.info("No existing knowledge graph found; creating a new one.")
 
     def remove_document_by_id(self, doc_id):
         if self.doc_to_source_kv.has(doc_id):
@@ -97,19 +96,19 @@ class SmolRag:
             doc_id = make_hash(content, "doc_")
 
             if not self.source_to_doc_kv.has(source):
-                logger.info(f"importing new document {source} with id {doc_id}")
+                logger.info(f"Importing new document: {source} (ID: {doc_id})")
                 self._add_document_maps(source, content)
                 self._embed_document(content, doc_id)
                 self._extract_entities(content, doc_id)
             elif not self.source_to_doc_kv.equal(source, doc_id):
-                logger.info(f"updating existing document {source} with id {doc_id}")
+                logger.info(f"Updating document: {source} (New ID: {doc_id})")
                 old_doc_id = self.source_to_doc_kv.get_by_key(source)
                 self.remove_document_by_id(old_doc_id)
                 self._add_document_maps(source, content)
                 self._embed_document(content, doc_id)
                 self._extract_entities(content, doc_id)
             else:
-                logger.info(f"no changes, skipping document {source} with id {doc_id}")
+                logger.debug(f"No changes detected for document: {source} (ID: {doc_id})")
 
     def _add_document_maps(self, source, content):
         doc_id = make_hash(content, "doc_")
@@ -119,6 +118,7 @@ class SmolRag:
         self.doc_to_source_kv.save()
 
     def _embed_document(self, content, doc_id):
+        start_time = time.time()
         excerpts = self._get_excerpts(content)
         excerpt_ids = []
         for i, excerpt in enumerate(excerpts):
@@ -138,12 +138,14 @@ class SmolRag:
                 "summary": summary,
                 "indexed_at": time.time()
             })
-            logger.info(f"created embedding for {excerpt_id} — {embedding_result}")
+            logger.info(f"Created embedding for excerpt {excerpt_id} associated with document {doc_id}")
 
         self.excerpt_kv.save()
         self.embeddings_db.save()
         self.doc_to_excerpt_kv.add(doc_id, excerpt_ids)
         self.doc_to_excerpt_kv.save()
+        elapsed = time.time() - start_time
+        logger.info(f"Document {doc_id} processed with {len(excerpts)} excerpts in {elapsed:.2f} seconds.")
 
     def _get_excerpts(self, content, n=2000):
         """
@@ -158,13 +160,11 @@ class SmolRag:
 
         All text excerpts stripped of leading and trailing whitespace.
         """
-
         parts = re.split(r'(```.*?```)', content, flags=re.DOTALL)
         excerpts = []
 
         for part in parts:
             part_stripped = part.strip()
-
             if part_stripped.startswith('```') and part_stripped.endswith('```'):
                 code_content = part_stripped[3:-3].strip()
                 excerpts.append(code_content)
@@ -176,7 +176,6 @@ class SmolRag:
 
             paragraphs = re.split(r'\n\n+', part)
             current_excerpt = ""
-
             for paragraph in paragraphs:
                 paragraph = paragraph.strip()
                 if not paragraph:
@@ -198,7 +197,6 @@ class SmolRag:
                     if current_excerpt:
                         excerpts.append(current_excerpt.strip())
                         current_excerpt = ""
-
                     sentences = sent_tokenize(paragraph)
                     sentence_excerpt = ""
                     for sentence in sentences:
@@ -209,21 +207,17 @@ class SmolRag:
                                 sentence_excerpt = ""
                             excerpts.append(sentence.strip())
                             continue
-
                         if sentence_excerpt:
                             proposed_sentence_excerpt = sentence_excerpt + " " + sentence
                         else:
                             proposed_sentence_excerpt = sentence
-
                         if len(proposed_sentence_excerpt) <= n:
                             sentence_excerpt = proposed_sentence_excerpt
                         else:
                             excerpts.append(sentence_excerpt.strip())
                             sentence_excerpt = sentence
-
                     if sentence_excerpt:
                         excerpts.append(sentence_excerpt.strip())
-
             if current_excerpt:
                 excerpts.append(current_excerpt.strip())
 
@@ -231,24 +225,29 @@ class SmolRag:
 
     def _get_excerpt_summary(self, full_doc, excerpt):
         prompt = excerpt_summary_prompt(full_doc, excerpt)
-        summary = self.llm.get_completion(prompt)
-
-        logger.info(f"Excerpt:\n{excerpt}\n\nSummary:\n{summary}")
-
+        try:
+            summary = self.llm.get_completion(prompt)
+        except Exception as e:
+            logger.error(f"LLM call in _get_excerpt_summary failed: {e}")
+            summary = "Summary unavailable."
         return summary
 
     def _extract_entities(self, content, doc_id):
+        start_time = time.time()
+        total_entities = 0
+        total_relationships = 0
         excerpts = self._get_excerpts(content)
 
         for excerpt in excerpts:
             excerpt_id = make_hash(excerpt, "excerpt_id_")
-            result = self.llm.get_completion(get_extract_entities_prompt(excerpt))
-            logger.info(result)
+            try:
+                result = self.llm.get_completion(get_extract_entities_prompt(excerpt))
+            except Exception as e:
+                logger.error(f"LLM call for entity extraction failed for excerpt {excerpt_id}: {e}")
+                continue
 
             data_str = result.replace(COMPLETE_TAG, '').strip()
-
             records = split_string_by_multi_markers(data_str, [REC_SEP])
-
             clean_records = []
             for record in records:
                 if record.startswith('(') and record.endswith(')'):
@@ -258,20 +257,16 @@ class SmolRag:
 
             for record in records:
                 fields = split_string_by_multi_markers(record, [TUPLE_SEP])
-                logger.info("FIELDS: " + ",".join(fields))
                 if not fields:
                     continue
                 fields = [field[1:-1] if field.startswith('"') and field.endswith('"') else field for field in fields]
-                logger.info("FIELDS TWO: " + ",".join(fields))
                 record_type = fields[0].lower()
-                logger.info(f"{record_type} {len(fields)}")
+
                 if record_type == 'entity':
                     if len(fields) >= 4:
                         _, name, category, description = fields[:4]
-                        logger.info(f"Entity - Name: {name}, Category: {category}, Description: {description}")
                         existing_node = self.graph.nodes.get(name)
                         if existing_node:
-                            logger.info("NODE:" + str(existing_node))
                             existing_descriptions = split_string_by_multi_markers(existing_node["description"], KG_SEP)
                             descriptions = KG_SEP.join(set(list(existing_descriptions) + [description]))
                             existing_categories = split_string_by_multi_markers(existing_node["category"], KG_SEP)
@@ -287,6 +282,7 @@ class SmolRag:
                             )
                         else:
                             self.graph.add_node(name, category=category, description=description, excerpt_id=excerpt_id)
+                        total_entities += 1
                         entity_id = make_hash(name, prefix="ent-")
                         embedding_content = f"{name} {description}"
                         embedding_result = self.llm.get_embedding(embedding_content)
@@ -303,8 +299,6 @@ class SmolRag:
                     if len(fields) >= 6:
                         _, source, target, description, keywords, weight = fields[:6]
                         source, target = sorted([source, target])
-                        logger.info(
-                            f"Relationship - Source: {source}, Target: {target}, Description: {description}, Keywords: {keywords}, Weight: {weight}, Excerpt ID: {excerpt_id}")
                         # Todo: summarise descriptions with LLM query if they get too long
                         existing_edge = self.graph.edges.get((source, target))
                         weight = float(weight) if is_float_regex(weight) else 1.0
@@ -323,6 +317,8 @@ class SmolRag:
                             self.graph.add_edge(source, target, description=description, keywords=keywords,
                                                 weight=weight,
                                                 excerpt_id=excerpt_id)
+                        total_relationships += 1
+
                         relationship_id = make_hash(f"{source}_{target}", prefix="ent-")
                         embedding_content = f"{keywords} {source} {target} {description}"
                         embedding_result = self.llm.get_embedding(embedding_content)
@@ -338,17 +334,20 @@ class SmolRag:
                         ])
                 elif record_type == 'content_keywords':
                     if len(fields) >= 2:
-                        logger.info(f"Content Keywords: {fields[1]}")
                         self.graph.graph['content_keywords'] = fields[1]
 
         self.entities_db.save()
         self.relationships_db.save()
 
         nx.write_graphml(self.graph, KG_DB)
+        elapsed = time.time() - start_time
+        logger.info(f"Extracted {total_entities} entities and {total_relationships} relationships "
+                    f"from document {doc_id} in {elapsed:.2f} seconds.")
 
     def query(self, text):
-        logger.info(f"Received Query:\n{text}")
+        logger.info(f"Received query: {text}")
         excerpts = self._get_query_excerpts(text)
+        logger.info(f"Retrieved {len(excerpts)} excerpts for the query.")
         excerpt_context = self._get_excerpt_context(excerpts)
         system_prompt = get_query_system_prompt(excerpt_context)
 
@@ -356,7 +355,7 @@ class SmolRag:
 
     def _get_excerpt_context(self, excerpts):
         context = ""
-        for i, excerpt in enumerate(excerpts):
+        for excerpt in excerpts:
             context += inspect.cleandoc(f"""
                 ## Excerpt
     
@@ -382,7 +381,7 @@ class SmolRag:
         prompt = get_high_low_level_keywords_prompt(text)
         result = self.llm.get_completion(prompt)
         keyword_data = extract_json_from_text(result)
-        logger.info(f'keyword_data: {keyword_data}')
+        logger.info("Processed high/low level keywords for hybrid KG query.")
 
         ll_dataset, ll_entity_excerpts, ll_relations = self._get_low_level_dataset(keyword_data)
         hl_dataset, hl_entities, hl_entity_excerpts = self._get_high_level_dataset(keyword_data)
@@ -390,52 +389,43 @@ class SmolRag:
         entities = ll_dataset + hl_entities
         relations = ll_relations + hl_dataset
         excerpts = ll_entity_excerpts + hl_entity_excerpts
-
         context = self._get_kg_query_context(entities, excerpts, relations)
-
         system_prompt = get_kg_query_system_prompt(context)
-
         return self.llm.get_completion(text, context=system_prompt.strip(), use_cache=False)
 
     def local_kg_query(self, text):
         prompt = get_high_low_level_keywords_prompt(text)
         result = self.llm.get_completion(prompt)
         keyword_data = extract_json_from_text(result)
-        logger.info(f'keyword_data: {keyword_data}')
+        logger.info("Processed high/low level keywords for local KG query.")
 
         ll_dataset, ll_entity_excerpts, ll_relations = self._get_low_level_dataset(keyword_data)
-
         entities = ll_dataset
         relations = ll_relations
         excerpts = ll_entity_excerpts
-
         context = self._get_kg_query_context(entities, excerpts, relations)
         system_prompt = get_kg_query_system_prompt(context)
-
         return self.llm.get_completion(text, context=system_prompt.strip(), use_cache=False)
 
     def global_kg_query(self, text):
         prompt = get_high_low_level_keywords_prompt(text)
         result = self.llm.get_completion(prompt)
         keyword_data = extract_json_from_text(result)
-        logger.info(f'keyword_data: {keyword_data}')
+        logger.info("Processed high/low level keywords for global KG query.")
 
         hl_dataset, hl_entities, hl_entity_excerpts = self._get_high_level_dataset(keyword_data)
-
         entities = hl_entities
         relations = hl_dataset
         excerpts = hl_entity_excerpts
-
         context = self._get_kg_query_context(entities, excerpts, relations)
         system_prompt = get_kg_query_system_prompt(context)
-
         return self.llm.get_completion(text, context=system_prompt.strip(), use_cache=False)
 
     def mix_query(self, text):
         prompt = get_high_low_level_keywords_prompt(text)
         result = self.llm.get_completion(prompt)
         keyword_data = extract_json_from_text(result)
-        logger.info(f'keyword_data: {keyword_data}')
+        logger.info("Processed high/low level keywords for mixed KG query.")
 
         ll_dataset, ll_entity_excerpts, ll_relations = self._get_low_level_dataset(keyword_data)
         hl_dataset, hl_entities, hl_entity_excerpts = self._get_high_level_dataset(keyword_data)
@@ -443,40 +433,32 @@ class SmolRag:
         kg_entities = ll_dataset + hl_entities
         kg_relations = ll_relations + hl_dataset
         kg_excerpts = ll_entity_excerpts + hl_entity_excerpts
-
         query_excerpts = self._get_query_excerpts(text)
-
         kg_context = self._get_kg_query_context(kg_entities, kg_excerpts, kg_relations)
         excerpt_context = self._get_excerpt_context(query_excerpts)
-
         system_prompt = get_mix_system_prompt(excerpt_context, kg_context)
-
         return self.llm.get_completion(text, context=system_prompt.strip(), use_cache=False)
 
     def _get_kg_query_context(self, entities, excerpts, relations):
         entity_csv = [["entity", "type", "description", "rank"]]
         for entity in entities:
-            entity_csv.append(
-                [
+            entity_csv.append([
                     entity["entity_name"],
                     entity.get("category", "UNKNOWN"),
                     entity.get("description", "UNKNOWN"),
                     entity["rank"],
-                ]
-            )
+                ])
         entity_context = list_of_list_to_csv(entity_csv)
         relation_csv = [["source", "target", "description", "keywords", "weight", "rank"]]
         for relation in relations:
-            relation_csv.append(
-                [
+            relation_csv.append([
                     relation["src_tgt"][0],
                     relation["src_tgt"][1],
                     relation["description"],
                     relation["keywords"],
                     relation["weight"],
                     relation["rank"],
-                ]
-            )
+                ])
         relations_context = list_of_list_to_csv(relation_csv)
         excerpt_csv = [["excerpt"]]
         for excerpt in excerpts:
@@ -488,7 +470,7 @@ class SmolRag:
             {entity_context}
             ```
             -----Relationships-----
-           excerpts
+            ```csv
             {relations_context}
             ```
             -----Excerpts-----
@@ -496,83 +478,67 @@ class SmolRag:
             {excerpt_context}
             ```
         """)
-
+        logger.info(f"KG query context built with {len(entities)} entities, {len(relations)} relationships, "
+                    f"and {len(excerpts)} excerpts.")
         return context
 
     def _get_high_level_dataset(self, keyword_data):
         hl_keywords = keyword_data.get("high_level_keywords", [])
-        logger.info(f'hl_keywords: {hl_keywords}')
+        logger.info(f"Found {len(hl_keywords)} high-level keywords.")
         if len(hl_keywords):
             hl_embedding = self.llm.get_embedding(hl_keywords)
             hl_embedding_array = np.array(hl_embedding)
             hl_results = self.relationships_db.query(query=hl_embedding_array, top_k=25, better_than_threshold=0.02)
-            logger.info(f'hl_results: {hl_results}')
         hl_data = [self.graph.edges.get((r["__source__"], r["__target__"])) for r in hl_results]
         hl_degrees = [self.graph.degree(r["__source__"]) + self.graph.degree(r["__target__"]) for r in hl_results]
-        logger.info(f'hl_data: {hl_data}')
-        logger.info(f'hl_degrees: {hl_degrees}')
         hl_dataset = []
         for k, n, d in zip(hl_results, hl_data, hl_degrees):
             hl_dataset.append({"src_tgt": (k["__source__"], k["__target__"]), "rank": d, **n, })
-        logger.info(hl_dataset)
         hl_dataset = sorted(hl_dataset, key=lambda x: (x["rank"], x["weight"]), reverse=True)
         hl_dataset = truncate_list_by_token_size(
             hl_dataset,
             get_text_for_row=lambda x: x["description"],
             max_token_size=4000,
         )
-        logger.info(f'hl_dataset: {hl_dataset}')
         hl_entity_excerpts = self._get_excerpts_for_relationships(hl_dataset)
-        logger.info(f'hl_entity_excerpts {hl_entity_excerpts}')
         hl_entities = self._get_entities_from_relationships(hl_dataset)
-        logger.info(f'hl_relation_excerpts {hl_entities}')
+        logger.info(f"High-level dataset: {len(hl_dataset)} relationships, {len(hl_entities)} entities extracted.")
         return hl_dataset, hl_entities, hl_entity_excerpts
 
     def _get_low_level_dataset(self, keyword_data):
         ll_keywords = keyword_data.get("low_level_keywords", [])
-        logger.info(f'll_keywords: {ll_keywords}')
+        logger.info(f"Found {len(ll_keywords)} low-level keywords.")
         if len(ll_keywords):
             ll_embedding = self.llm.get_embedding(ll_keywords)
             ll_embedding_array = np.array(ll_embedding)
             ll_results = self.entities_db.query(query=ll_embedding_array, top_k=25, better_than_threshold=0.02)
-            logger.info(f'll_results: {ll_results}')
         ll_data = [self.graph.nodes.get(r["__entity_name__"]) for r in ll_results]
         ll_degrees = [self.graph.degree(r["__entity_name__"]) for r in ll_results]
-        logger.info(f'll_degrees: {ll_degrees}')
-        logger.info(f'll_data: {ll_data}')
         ll_dataset = [
             {**n, "entity_name": k["__entity_name__"], "rank": d}
             for k, n, d in zip(ll_results, ll_data, ll_degrees)
         ]
-        logger.info(f'll_dataset: {ll_dataset}')
         ll_entity_excerpts = self._get_excerpts_for_entities(ll_dataset)
-        logger.info(f'll_entity_excerpts {ll_entity_excerpts}')
         ll_relations = self._get_relationships_from_entities(ll_dataset)
-        logger.info(f'll_relations {ll_relations}')
+        logger.info(f"Low-level dataset: {len(ll_dataset)} entities, {len(ll_relations)} relationships extracted.")
         return ll_dataset, ll_entity_excerpts, ll_relations
 
     def _get_excerpts_for_entities(self, kg_dataset):
         excerpt_ids = [split_string_by_multi_markers(row["excerpt_id"], KG_SEP) for row in kg_dataset]
-        logger.info(f'excerpt_ids: {excerpt_ids}')
         all_edges = [self.graph.edges(row["entity_name"]) for row in kg_dataset]
-        logger.info(f'edges: {all_edges}')
         sibling_names = set()
         for edge in all_edges:
             if not edge:
                 continue
             sibling_names.update([e[1] for e in edge])
-        logger.info(f'sibling_names: {sibling_names}')
         sibling_nodes = [self.graph.nodes.get(name) for name in list(sibling_names)]
-        logger.info(f'sibling_nodes: {sibling_nodes}')
         sibling_excerpt_lookup = {
             k: set(split_string_by_multi_markers(v["excerpt_id"], [KG_SEP]))
             for k, v in zip(sibling_names, sibling_nodes)
             if v is not None and "excerpt_id" in v
         }
-        logger.info(f'sibling_excerpt_lookup: {sibling_excerpt_lookup}')
         all_excerpt_data_lookup = {}
         for index, (excerpt_ids, edges) in enumerate(zip(excerpt_ids, all_edges)):
-            logger.info(f'excerpt_ids: {excerpt_ids}, edges: {edges}')
             for excerpt_id in excerpt_ids:
                 if excerpt_id in all_excerpt_data_lookup:
                     continue
@@ -583,16 +549,13 @@ class SmolRag:
                         if sibling_name in sibling_excerpt_lookup and excerpt_id in sibling_excerpt_lookup[
                             sibling_name]:
                             relation_counts += 1
-                logger.info(f'excerpt_id: {excerpt_id}')
                 excerpt_data = self.excerpt_kv.get_by_key(excerpt_id)
-                logger.info(f'excerpt: {excerpt_data}')
                 if excerpt_data is not None and "excerpt" in excerpt_data:
                     all_excerpt_data_lookup[excerpt_id] = {
                         "data": excerpt_data,
                         "order": index,
                         "relation_counts": relation_counts,
                     }
-        logger.info(f'all_excerpts_lookup: {all_excerpt_data_lookup}')
 
         all_excerpts = [
             {"id": k, **v}
@@ -600,11 +563,8 @@ class SmolRag:
             if v is not None and v.get("data") is not None and "excerpt" in v["data"]
         ]
 
-        logger.info(f'all_excerpts: {all_excerpts}')
-        logger.info(f'len_all_excerpts: {len(all_excerpts)}')
-
         if not all_excerpts:
-            logger.warning("No valid excerpts found")
+            logger.warning("No valid excerpts found for low-level entities.")
             return []
 
         all_excerpts = sorted(all_excerpts, key=lambda x: (x["order"], -x["relation_counts"]))
@@ -615,15 +575,11 @@ class SmolRag:
             get_text_for_row=lambda x: x["excerpt"],
             max_token_size=4000,
         )
-
-        logger.info(f'len_all_excerpts: {len(all_excerpts)}')
-        logger.info(f'final_all_excerpts: {all_excerpts}')
-
+        logger.info(f"Extracted {len(all_excerpts)} excerpts for low-level entities.")
         return all_excerpts
 
     def _get_relationships_from_entities(self, kg_dataset):
         node_edges_list = [self.graph.edges(row["entity_name"]) for row in kg_dataset]
-        logger.info(f'node_edges_list: {node_edges_list}')
 
         edges = []
         seen = set()
@@ -635,29 +591,21 @@ class SmolRag:
                     seen.add(sorted_edge)
                     edges.append(sorted_edge)
 
-        logger.info(f'edges: {edges}')
-
         edges_pack = [self.graph.edges.get((e[0], e[1])) for e in edges]
-        logger.info(f'edges_pack: {edges_pack}')
-
         edges_degree = [self.graph.degree(e[0]) + self.graph.degree(e[1]) for e in edges]
-        logger.info(f'edges_degree: {edges_degree}')
 
         edges_data = [
             {"src_tgt": k, "rank": d, **v}
             for k, v, d in zip(edges, edges_pack, edges_degree)
             if v is not None
         ]
-        logger.info(f'edges_data: {edges_data}')
         edges_data = sorted(edges_data, key=lambda x: (x["rank"], x["weight"]), reverse=True)
-        logger.info(f'sorted_edges_data: {edges_data}')
         edges_data = truncate_list_by_token_size(
             edges_data,
             get_text_for_row=lambda x: x["description"],
             max_token_size=1000,
         )
-        logger.info(f'final_edges_data: {edges_data}')
-
+        logger.info(f"Extracted {len(edges_data)} relationships from low-level entities.")
         return edges_data
 
     def _get_excerpts_for_relationships(self, kg_dataset):
@@ -719,7 +667,7 @@ class SmolRag:
             get_text_for_row=lambda x: x["description"],
             max_token_size=4000,
         )
-
+        logger.info(f"Extracted {len(data)} entities from relationships.")
         return data
 
 

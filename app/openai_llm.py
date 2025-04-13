@@ -1,24 +1,25 @@
-import logging
 import os
 from typing import Any, Dict, List, Optional
 
 from dotenv import load_dotenv
 from openai import OpenAI
 
+from app.kv_store import JsonKvStore
 from app.logger import logger
-from app.definitions import QUERY_CACHE, EMBEDDING_CACHE
-from app.utilities import add_to_json, get_json, make_hash
+from app.definitions import QUERY_CACHE_KV_PATH, EMBEDDING_CACHE_KV_PATH
+from app.utilities import make_hash
 
 load_dotenv()
 
+
 class OpenAiLlm:
-    def __init__(self, completion_model: str, embedding_model: str) -> None:
+    def __init__(self, completion_model: str, embedding_model: str, query_cache_kv, embedding_cache_kv) -> None:
         """
         Initializes the OpenAiLlm instance with specified models and caches.
         """
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-        self.query_cache: Dict[str, Any] = get_json(QUERY_CACHE)
-        self.embedding_cache: Dict[str, Any] = get_json(EMBEDDING_CACHE)
+        self.query_cache_kv = query_cache_kv or JsonKvStore(QUERY_CACHE_KV_PATH)
+        self.embedding_cache_kv = embedding_cache_kv or JsonKvStore(EMBEDDING_CACHE_KV_PATH)
         self.completion_model = completion_model
         self.embedding_model = embedding_model
 
@@ -34,9 +35,9 @@ class OpenAiLlm:
         """
         model = model or self.completion_model
         query_hash = make_hash(query, 'qry-')
-        if use_cache and query_hash in self.query_cache:
+        if use_cache and self.query_cache_kv.has(query_hash):
             logger.info("Query cache hit")
-            return self.query_cache[query_hash]["result"]
+            return self.query_cache_kv.get_by_key(query_hash)["result"]
 
         logger.info("New query")
         system_message = [{"role": "system", "content": context}] if context else []
@@ -53,10 +54,14 @@ class OpenAiLlm:
             logger.error(f"Error getting completion: {e}")
             raise
 
-        add_to_json(QUERY_CACHE, query_hash, {"query": query, "result": result})
+        self.query_cache_kv.add(query_hash, {"query": query, "result": result})
+        self.query_cache_kv.save()
+
         return result
 
-    def get_chat_completion(self, query: str, model: Optional[str] = None, context: str = "", chat_history: List[Dict[str, str]] = []) -> List[Dict[str, str]]:
+    # Todo: add caching for chat completion
+    def get_chat_completion(self, query: str, model: Optional[str] = None, context: str = "",
+                            chat_history: List[Dict[str, str]] = []) -> List[Dict[str, str]]:
         """
         Gets a chat completion by providing the chat history and query.
 
@@ -95,9 +100,9 @@ class OpenAiLlm:
         model = model or self.embedding_model
         content_hash = make_hash(str(content), 'emb-')
 
-        if content_hash in self.embedding_cache:
+        if self.embedding_cache_kv.has(content_hash):
             logger.info("Embedding cache hit")
-            embedding = self.embedding_cache[content_hash]
+            embedding = self.embedding_cache_kv.get_by_key(content_hash)
         else:
             logger.info("New embedding computation")
             try:
@@ -109,6 +114,7 @@ class OpenAiLlm:
             except Exception as e:
                 logger.error(f"Error getting embedding: {e}")
                 raise
-            add_to_json(EMBEDDING_CACHE, content_hash, embedding)
+            self.embedding_cache_kv.add(content_hash, embedding)
+            self.embedding_cache_kv.save()
 
         return embedding

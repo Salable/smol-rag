@@ -8,36 +8,59 @@ import numpy as np
 
 from nltk import sent_tokenize
 
+from app.kv_store import JsonKvStore
 from app.openai_llm import OpenAiLlm
 from app.logger import logger, set_logger
 
-from app.definitions import INPUT_DOCS_DIR, SOURCE_TO_DOC_ID_MAP, DOC_ID_TO_SOURCE_MAP, EMBEDDINGS_DB, EXCERPT_DB, \
-    DOC_ID_TO_EXCERPT_IDS, KG_DB, ENTITIES_DB, RELATIONSHIPS_DB, KG_SEP, TUPLE_SEP, REC_SEP, COMPLETE_TAG, QUERY_CACHE, \
-    EMBEDDING_CACHE, DATA_DIR, LOG_DIR, COMPLETION_MODEL, EMBEDDING_MODEL
+from app.definitions import INPUT_DOCS_DIR, SOURCE_TO_DOC_ID_KV_PATH, DOC_ID_TO_SOURCE_KV_PATH, EMBEDDINGS_DB, \
+    EXCERPT_KV_PATH, DOC_ID_TO_EXCERPT_KV_PATH, KG_DB, ENTITIES_DB, RELATIONSHIPS_DB, KG_SEP, TUPLE_SEP, REC_SEP, \
+    COMPLETE_TAG, DATA_DIR, LOG_DIR, COMPLETION_MODEL, EMBEDDING_MODEL
 from app.prompts import get_query_system_prompt, excerpt_summary_prompt, get_extract_entities_prompt, \
     get_high_low_level_keywords_prompt, get_kg_query_system_prompt, get_mix_system_prompt
 
-from app.utilities import get_json, remove_from_json, read_file, get_docs, make_hash, add_to_json, \
-    split_string_by_multi_markers, clean_str, extract_json_from_text, is_float_regex, truncate_list_by_token_size, \
-    list_of_list_to_csv, delete_all_files, create_file_if_not_exists
+from app.utilities import get_json, read_file, get_docs, make_hash, split_string_by_multi_markers, clean_str, \
+    extract_json_from_text, is_float_regex, truncate_list_by_token_size, \
+    list_of_list_to_csv, delete_all_files
 
 import nltk
 
-from app.nano_vector_storage import NanoVectorStorage
+from app.vector_store import NanoVectorStore
 
 
 class SmolRag:
-    def __init__(self, llm=None, embeddings_db=None, entities_db=None, relationships_db=None):
+    def __init__(
+            self,
+            llm=None,
+            embeddings_db=None,
+            entities_db=None,
+            relationships_db=None,
+            source_to_doc_kv=None,
+            doc_to_source_kv=None,
+            doc_to_excerpt_kv=None,
+            excerpt_kv=None,
+            query_cache_kv=None,
+            embedding_cache_kv=None
+    ):
         set_logger("main.log")
 
         nltk.download('punkt')
 
-        self.llm = llm or OpenAiLlm(COMPLETION_MODEL, EMBEDDING_MODEL)
+        self.llm = llm or OpenAiLlm(
+            COMPLETION_MODEL,
+            EMBEDDING_MODEL,
+            query_cache_kv=query_cache_kv,
+            embedding_cache_kv=embedding_cache_kv
+        )
 
         self.dimensions = 1536
-        self.embeddings_db = embeddings_db or NanoVectorStorage(EMBEDDINGS_DB, self.dimensions)
-        self.entities_db = entities_db or NanoVectorStorage(ENTITIES_DB, self.dimensions)
-        self.relationships_db = relationships_db or NanoVectorStorage(RELATIONSHIPS_DB, self.dimensions)
+        self.embeddings_db = embeddings_db or NanoVectorStore(EMBEDDINGS_DB, self.dimensions)
+        self.entities_db = entities_db or NanoVectorStore(ENTITIES_DB, self.dimensions)
+        self.relationships_db = relationships_db or NanoVectorStore(RELATIONSHIPS_DB, self.dimensions)
+
+        self.source_to_doc_kv = source_to_doc_kv or JsonKvStore(SOURCE_TO_DOC_ID_KV_PATH)
+        self.doc_to_source_kv = doc_to_source_kv or JsonKvStore(DOC_ID_TO_SOURCE_KV_PATH)
+        self.doc_to_excerpt_kv = doc_to_excerpt_kv or JsonKvStore(DOC_ID_TO_EXCERPT_KV_PATH)
+        self.excerpt_kv = excerpt_kv or JsonKvStore(EXCERPT_KV_PATH)
 
         if os.path.exists(KG_DB):
             try:
@@ -50,25 +73,20 @@ class SmolRag:
             self.graph = nx.Graph()
             logger.info("No existing graph found. Creating a new graph.")
 
-        create_file_if_not_exists(SOURCE_TO_DOC_ID_MAP, "{}")
-        create_file_if_not_exists(DOC_ID_TO_SOURCE_MAP, "{}")
-        create_file_if_not_exists(DOC_ID_TO_EXCERPT_IDS, "{}")
-        create_file_if_not_exists(EXCERPT_DB, "{}")
-        create_file_if_not_exists(QUERY_CACHE, "{}")
-        create_file_if_not_exists(EMBEDDING_CACHE, "{}")
-
     def remove_document_by_id(self, doc_id):
-        doc_id_to_excerpt_ids = get_json(DOC_ID_TO_EXCERPT_IDS)
-        doc_id_to_source_map = get_json(DOC_ID_TO_SOURCE_MAP)
-        if doc_id in doc_id_to_source_map:
-            source = doc_id_to_source_map[doc_id]
-            remove_from_json(DOC_ID_TO_SOURCE_MAP, doc_id)
-            remove_from_json(SOURCE_TO_DOC_ID_MAP, source)
-        if doc_id in doc_id_to_excerpt_ids:
-            excerpt_ids = doc_id_to_excerpt_ids[doc_id]
+        if self.doc_to_source_kv.has(doc_id):
+            source = self.doc_to_source_kv.get_by_key(doc_id)
+            self.doc_to_source_kv.remove(doc_id)
+            self.source_to_doc_kv.remove(source)
+            self.doc_to_source_kv.save()
+            self.source_to_doc_kv.save()
+        if self.doc_to_excerpt_kv.has(doc_id):
+            excerpt_ids = self.doc_to_excerpt_kv.get_by_key(doc_id)
             for excerpt_id in excerpt_ids:
-                remove_from_json(EXCERPT_DB, excerpt_id)
-            remove_from_json(DOC_ID_TO_EXCERPT_IDS, doc_id)
+                self.excerpt_kv.remove(excerpt_id)
+            self.doc_to_excerpt_kv.remove(doc_id)
+            self.excerpt_kv.save()
+            self.doc_to_excerpt_kv.save()
             self.embeddings_db.delete(excerpt_ids)
             self.embeddings_db.save()
 
@@ -78,16 +96,14 @@ class SmolRag:
             content = read_file(source)
             doc_id = make_hash(content, "doc_")
 
-            source_to_doc_id_map = get_json(SOURCE_TO_DOC_ID_MAP)
-
-            if source not in source_to_doc_id_map:
+            if not self.source_to_doc_kv.has(source):
                 logger.info(f"importing new document {source} with id {doc_id}")
                 self._add_document_maps(source, content)
                 self._embed_document(content, doc_id)
                 self._extract_entities(content, doc_id)
-            elif source_to_doc_id_map[source] != doc_id:
+            elif not self.source_to_doc_kv.equal(source, doc_id):
                 logger.info(f"updating existing document {source} with id {doc_id}")
-                old_doc_id = source_to_doc_id_map[source]
+                old_doc_id = self.source_to_doc_kv.get_by_key(source)
                 self.remove_document_by_id(old_doc_id)
                 self._add_document_maps(source, content)
                 self._embed_document(content, doc_id)
@@ -95,11 +111,12 @@ class SmolRag:
             else:
                 logger.info(f"no changes, skipping document {source} with id {doc_id}")
 
-
     def _add_document_maps(self, source, content):
         doc_id = make_hash(content, "doc_")
-        add_to_json(SOURCE_TO_DOC_ID_MAP, source, doc_id)
-        add_to_json(DOC_ID_TO_SOURCE_MAP, doc_id, source)
+        self.source_to_doc_kv.add(source, doc_id)
+        self.doc_to_source_kv.add(doc_id, source)
+        self.source_to_doc_kv.save()
+        self.doc_to_source_kv.save()
 
     def _embed_document(self, content, doc_id):
         excerpts = self._get_excerpts(content)
@@ -114,7 +131,7 @@ class SmolRag:
             self.embeddings_db.upsert([
                 {"__id__": excerpt_id, "__vector__": vector, "__doc_id__": doc_id, "__inserted_at__": time.time()}
             ])
-            add_to_json(EXCERPT_DB, excerpt_id, {
+            self.excerpt_kv.add(excerpt_id, {
                 "doc_id": doc_id,
                 "doc_order_index": i,
                 "excerpt": excerpt,
@@ -123,9 +140,10 @@ class SmolRag:
             })
             logger.info(f"created embedding for {excerpt_id} — {embedding_result}")
 
+        self.excerpt_kv.save()
         self.embeddings_db.save()
-        add_to_json(DOC_ID_TO_EXCERPT_IDS, doc_id, excerpt_ids)
-
+        self.doc_to_excerpt_kv.add(doc_id, excerpt_ids)
+        self.doc_to_excerpt_kv.save()
 
     def _get_excerpts(self, content, n=2000):
         """
@@ -211,7 +229,6 @@ class SmolRag:
 
         return excerpts
 
-
     def _get_excerpt_summary(self, full_doc, excerpt):
         prompt = excerpt_summary_prompt(full_doc, excerpt)
         summary = self.llm.get_completion(prompt)
@@ -219,7 +236,6 @@ class SmolRag:
         logger.info(f"Excerpt:\n{excerpt}\n\nSummary:\n{summary}")
 
         return summary
-
 
     def _extract_entities(self, content, doc_id):
         excerpts = self._get_excerpts(content)
@@ -300,11 +316,13 @@ class SmolRag:
                             existing_excerpt_ids = split_string_by_multi_markers(existing_edge["excerpt_id"], KG_SEP)
                             excerpt_ids = KG_SEP.join(set(list(existing_excerpt_ids) + [excerpt_id]))
                             weight = sum([weight, existing_edge["weight"]])
-                            self.graph.add_edge(source, target, description=descriptions, keywords=keywords, weight=weight,
-                                           excerpt_id=excerpt_ids)
+                            self.graph.add_edge(source, target, description=descriptions, keywords=keywords,
+                                                weight=weight,
+                                                excerpt_id=excerpt_ids)
                         else:
-                            self.graph.add_edge(source, target, description=description, keywords=keywords, weight=weight,
-                                           excerpt_id=excerpt_id)
+                            self.graph.add_edge(source, target, description=description, keywords=keywords,
+                                                weight=weight,
+                                                excerpt_id=excerpt_id)
                         relationship_id = make_hash(f"{source}_{target}", prefix="ent-")
                         embedding_content = f"{keywords} {source} {target} {description}"
                         embedding_result = self.llm.get_embedding(embedding_content)
@@ -328,7 +346,6 @@ class SmolRag:
 
         nx.write_graphml(self.graph, KG_DB)
 
-
     def query(self, text):
         logger.info(f"Received Query:\n{text}")
         excerpts = self._get_query_excerpts(text)
@@ -336,7 +353,6 @@ class SmolRag:
         system_prompt = get_query_system_prompt(excerpt_context)
 
         return self.llm.get_completion(text, context=system_prompt.strip(), use_cache=False)
-
 
     def _get_excerpt_context(self, excerpts):
         context = ""
@@ -354,16 +370,13 @@ class SmolRag:
 
         return context
 
-
     def _get_query_excerpts(self, text):
         embedding = self.llm.get_embedding(text)
         embedding_array = np.array(embedding)
         results = self.embeddings_db.query(query=embedding_array, top_k=5, better_than_threshold=0.02)
-        excerpt_db = get_json(EXCERPT_DB)
-        excerpts = [excerpt_db[result["__id__"]] for result in results]
+        excerpts = [self.excerpt_kv.get_by_key(result["__id__"]) for result in results]
         excerpts = truncate_list_by_token_size(excerpts, get_text_for_row=lambda x: x["excerpt"], max_token_size=4000)
         return excerpts
-
 
     def hybrid_kg_query(self, text):
         prompt = get_high_low_level_keywords_prompt(text)
@@ -384,7 +397,6 @@ class SmolRag:
 
         return self.llm.get_completion(text, context=system_prompt.strip(), use_cache=False)
 
-
     def local_kg_query(self, text):
         prompt = get_high_low_level_keywords_prompt(text)
         result = self.llm.get_completion(prompt)
@@ -402,7 +414,6 @@ class SmolRag:
 
         return self.llm.get_completion(text, context=system_prompt.strip(), use_cache=False)
 
-
     def global_kg_query(self, text):
         prompt = get_high_low_level_keywords_prompt(text)
         result = self.llm.get_completion(prompt)
@@ -419,7 +430,6 @@ class SmolRag:
         system_prompt = get_kg_query_system_prompt(context)
 
         return self.llm.get_completion(text, context=system_prompt.strip(), use_cache=False)
-
 
     def mix_query(self, text):
         prompt = get_high_low_level_keywords_prompt(text)
@@ -442,7 +452,6 @@ class SmolRag:
         system_prompt = get_mix_system_prompt(excerpt_context, kg_context)
 
         return self.llm.get_completion(text, context=system_prompt.strip(), use_cache=False)
-
 
     def _get_kg_query_context(self, entities, excerpts, relations):
         entity_csv = [["entity", "type", "description", "rank"]]
@@ -490,7 +499,6 @@ class SmolRag:
 
         return context
 
-
     def _get_high_level_dataset(self, keyword_data):
         hl_keywords = keyword_data.get("high_level_keywords", [])
         logger.info(f'hl_keywords: {hl_keywords}')
@@ -520,7 +528,6 @@ class SmolRag:
         logger.info(f'hl_relation_excerpts {hl_entities}')
         return hl_dataset, hl_entities, hl_entity_excerpts
 
-
     def _get_low_level_dataset(self, keyword_data):
         ll_keywords = keyword_data.get("low_level_keywords", [])
         logger.info(f'll_keywords: {ll_keywords}')
@@ -544,10 +551,7 @@ class SmolRag:
         logger.info(f'll_relations {ll_relations}')
         return ll_dataset, ll_entity_excerpts, ll_relations
 
-
     def _get_excerpts_for_entities(self, kg_dataset):
-        excerpt_db = get_json(EXCERPT_DB)
-
         excerpt_ids = [split_string_by_multi_markers(row["excerpt_id"], KG_SEP) for row in kg_dataset]
         logger.info(f'excerpt_ids: {excerpt_ids}')
         all_edges = [self.graph.edges(row["entity_name"]) for row in kg_dataset]
@@ -576,10 +580,11 @@ class SmolRag:
                 if edges:
                     for edge in edges:
                         sibling_name = edge[1]
-                        if sibling_name in sibling_excerpt_lookup and excerpt_id in sibling_excerpt_lookup[sibling_name]:
+                        if sibling_name in sibling_excerpt_lookup and excerpt_id in sibling_excerpt_lookup[
+                            sibling_name]:
                             relation_counts += 1
                 logger.info(f'excerpt_id: {excerpt_id}')
-                excerpt_data = excerpt_db.get(excerpt_id)
+                excerpt_data = self.excerpt_kv.get_by_key(excerpt_id)
                 logger.info(f'excerpt: {excerpt_data}')
                 if excerpt_data is not None and "excerpt" in excerpt_data:
                     all_excerpt_data_lookup[excerpt_id] = {
@@ -615,7 +620,6 @@ class SmolRag:
         logger.info(f'final_all_excerpts: {all_excerpts}')
 
         return all_excerpts
-
 
     def _get_relationships_from_entities(self, kg_dataset):
         node_edges_list = [self.graph.edges(row["entity_name"]) for row in kg_dataset]
@@ -656,10 +660,7 @@ class SmolRag:
 
         return edges_data
 
-
     def _get_excerpts_for_relationships(self, kg_dataset):
-        excerpt_db = get_json(EXCERPT_DB)
-
         excerpt_ids = [
             split_string_by_multi_markers(dp["excerpt_id"], [KG_SEP])
             for dp in kg_dataset
@@ -671,7 +672,7 @@ class SmolRag:
             for excerpt_id in excerpt_ids:
                 if excerpt_id not in all_excerpts_lookup:
                     all_excerpts_lookup[excerpt_id] = {
-                        "data": excerpt_db.get(excerpt_id),
+                        "data": self.excerpt_kv.get_by_key(excerpt_id),
                         "order": index,
                     }
 
@@ -690,7 +691,6 @@ class SmolRag:
         )
 
         return all_excerpts
-
 
     def _get_entities_from_relationships(self, kg_dataset):
         entity_names = []

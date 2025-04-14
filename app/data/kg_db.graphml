@@ -11,13 +11,13 @@
   <graph edgedefault="undirected">
     <node id="Wild Rabbit">
       <data key="d1">species</data>
-      <data key="d2">Wild rabbits are adaptable creatures that belong to the family Leporidae, characterized by their long ears, strong hind legs, and diverse habitats.:|:Wild Rabbits are small mammals that typically weigh between two and five pounds, adapted to evade predators with powerful hind legs and a keen sense of hearing.:|:Wild Rabbits are known for their gentle hops and complex daily lives, involving social organization and survival strategies.</data>
-      <data key="d3">excerpt_id_d0ebe649aa5992bf4c7fadf9e1c31ec1:|:excerpt_id_6f24db63ef4136289b90be0855a93491:|:excerpt_id_69eb284b952fb47c5e09219650d7e018</data>
+      <data key="d2">Wild Rabbits are small mammals that typically weigh between two and five pounds, adapted to evade predators with powerful hind legs and a keen sense of hearing.:|:Wild Rabbits are known for their gentle hops and complex daily lives, involving social organization and survival strategies.:|:Wild rabbits are adaptable creatures that belong to the family Leporidae, characterized by their long ears, strong hind legs, and diverse habitats.</data>
+      <data key="d3">excerpt_id_6f24db63ef4136289b90be0855a93491:|:excerpt_id_69eb284b952fb47c5e09219650d7e018:|:excerpt_id_d0ebe649aa5992bf4c7fadf9e1c31ec1</data>
     </node>
     <node id="European Rabbit">
       <data key="d1">species</data>
-      <data key="d2">The European rabbit is a species known for its rapid reproduction and significant impact on ecosystems where it has been introduced, particularly in Australia.:|:The European Rabbit is a specific species that has faced population declines due to diseases like myxomatosis and rabbit hemorrhagic disease (RHD).:|:European Rabbits are a species that has spread worldwide, known for their ability to create extensive underground tunnel systems called warrens.:|:The European Rabbit is a species that has been widely introduced outside its native range, impacting local ecosystems.:|:The European rabbit (*Oryctolagus cuniculus*) is a widely known species that originated in Europe and Africa, recognized for its adaptability to various environments.:|:The European Rabbit (*Oryctolagus cuniculus*) is a species that originated in the Iberian Peninsula and has been introduced globally, becoming invasive in some areas.:|:The European Rabbit is a social species that lives in complex burrow systems called warrens, establishing hierarchies and exhibiting prolific breeding habits.:|:The European Rabbit is a species that has thrived in its native range and has been introduced to various other continents, leading to ecological consequences.</data>
-      <data key="d3">excerpt_id_808ee8264e601aa4511197c538aa5314:|:excerpt_id_f8e7eacfd4c0d33cbb83cf7382856092:|:excerpt_id_d0ebe649aa5992bf4c7fadf9e1c31ec1:|:excerpt_id_f964480d725a4d174e7818397c873c64:|:excerpt_id_69eb284b952fb47c5e09219650d7e018:|:excerpt_id_6f24db63ef4136289b90be0855a93491:|:excerpt_id_60ccdc48df989fa51c0da15e6a143fb8:|:excerpt_id_f7a8ed2f75bf9531633b854a3250aef7</data>
+      <data key="d2">The European rabbit (*Oryctolagus cuniculus*) is a widely known species that originated in Europe and Africa, recognized for its adaptability to various environments.:|:European Rabbits are a species that has spread worldwide, known for their ability to create extensive underground tunnel systems called warrens.:|:The European Rabbit is a social species that lives in complex burrow systems called warrens, establishing hierarchies and exhibiting prolific breeding habits.:|:The European Rabbit is a species that has thrived in its native range and has been introduced to various other continents, leading to ecological consequences.:|:The European rabbit is a species known for its rapid reproduction and significant impact on ecosystems where it has been introduced, particularly in Australia.:|:The European Rabbit is a species that has been widely introduced outside its native range, impacting local ecosystems.:|:The European Rabbit (*Oryctolagus cuniculus*) is a species that originated in the Iberian Peninsula and has been introduced globally, becoming invasive in some areas.:|:The European Rabbit is a specific species that has faced population declines due to diseases like myxomatosis and rabbit hemorrhagic disease (RHD).</data>
+      <data key="d3">excerpt_id_60ccdc48df989fa51c0da15e6a143fb8:|:excerpt_id_f964480d725a4d174e7818397c873c64:|:excerpt_id_f8e7eacfd4c0d33cbb83cf7382856092:|:excerpt_id_6f24db63ef4136289b90be0855a93491:|:excerpt_id_808ee8264e601aa4511197c538aa5314:|:excerpt_id_f7a8ed2f75bf9531633b854a3250aef7:|:excerpt_id_d0ebe649aa5992bf4c7fadf9e1c31ec1:|:excerpt_id_69eb284b952fb47c5e09219650d7e018</data>
     </node>
     <node id="Cottontail Rabbit">
       <data key="d1">species</data>
@@ -25,9 +25,9 @@
       <data key="d3">excerpt_id_6f24db63ef4136289b90be0855a93491</data>
     </node>
     <node id="Warrens">
-      <data key="d1">ecosystem:|:ecology</data>
-      <data key="d2">Warrens are extensive underground tunnel systems created by wild European rabbits, providing shelter from predators and facilitating social interactions among family units.:|:Warrens are extensive burrow networks created by rabbits, impacting soil health and providing microhabitats for other species.:|:Warrens are complex burrow systems where European rabbits live, fostering social structures and hierarchies among individuals.</data>
-      <data key="d3">excerpt_id_808ee8264e601aa4511197c538aa5314:|:excerpt_id_6f24db63ef4136289b90be0855a93491:|:excerpt_id_f8e7eacfd4c0d33cbb83cf7382856092</data>
+      <data key="d1">ecology:|:ecosystem</data>
+      <data key="d2">Warrens are complex burrow systems where European rabbits live, fostering social structures and hierarchies among individuals.:|:Warrens are extensive underground tunnel systems created by wild European rabbits, providing shelter from predators and facilitating social interactions among family units.:|:Warrens are extensive burrow networks created by rabbits, impacting soil health and providing microhabitats for other species.</data>
+      <data key="d3">excerpt_id_6f24db63ef4136289b90be0855a93491:|:excerpt_id_f8e7eacfd4c0d33cbb83cf7382856092:|:excerpt_id_808ee8264e601aa4511197c538aa5314</data>
     </node>
     <node id="Forms">
       <data key="d1">ecology</data>
@@ -41,8 +41,8 @@
     </node>
     <node id="Rabbits">
       <data key="d1">animal:|:species</data>
-      <data key="d2">Rabbits are small mammals that occupy a pivotal role in various ecosystems, influencing soil health, biodiversity, and vegetation dynamics through their burrowing and grazing behaviors.:|:Rabbits are small mammals that play a vital role in their ecosystems through grazing, seed dispersal, and serving as prey for various predators.:|:Rabbits are small mammals belonging to the family Leporidae, known for their fast reproduction and adaptability to various environments.:|:Rabbits are small mammals known for their social behavior, rapid breeding, and communication methods that enhance group survival.:|:Rabbits are small mammals that exhibit various behaviors and adaptations for survival, including rapid reproduction, camouflage, and social interactions.:|:Rabbits are small mammals known for their specialized digestive systems, unique grazing behaviors, and their role as prey in the ecosystem.:|:Rabbits are members of the family Leporidae, fascinating herbivores known for their large ears, strong hind legs, and characteristic hopping locomotion. Their grazing habits and dietary preferences are crucial for their survival and the ecosystems they inhabit.:|:Rabbits are herbivores that play a foundational role in food webs, influencing vegetation dynamics and serving as prey for a variety of predators.</data>
-      <data key="d3">excerpt_id_e74a56bbec333430e87cff5ce3a241b5:|:excerpt_id_50dd871431b30f98abfea1ee4b2cd454:|:excerpt_id_f964480d725a4d174e7818397c873c64:|:excerpt_id_e7374c9185e3485df8e7072761d6f507:|:excerpt_id_0654ad0b907bcb79ecab1f2b296632c4:|:excerpt_id_f7a8ed2f75bf9531633b854a3250aef7:|:excerpt_id_9698e17ce8e2aad784ec32f9e9ca1309:|:excerpt_id_60ccdc48df989fa51c0da15e6a143fb8</data>
+      <data key="d2">Rabbits are small mammals known for their social behavior, rapid breeding, and communication methods that enhance group survival.:|:Rabbits are small mammals belonging to the family Leporidae, known for their fast reproduction and adaptability to various environments.:|:Rabbits are members of the family Leporidae, fascinating herbivores known for their large ears, strong hind legs, and characteristic hopping locomotion. Their grazing habits and dietary preferences are crucial for their survival and the ecosystems they inhabit.:|:Rabbits are small mammals that occupy a pivotal role in various ecosystems, influencing soil health, biodiversity, and vegetation dynamics through their burrowing and grazing behaviors.:|:Rabbits are herbivores that play a foundational role in food webs, influencing vegetation dynamics and serving as prey for a variety of predators.:|:Rabbits are small mammals that play a vital role in their ecosystems through grazing, seed dispersal, and serving as prey for various predators.:|:Rabbits are small mammals that exhibit various behaviors and adaptations for survival, including rapid reproduction, camouflage, and social interactions.:|:Rabbits are small mammals known for their specialized digestive systems, unique grazing behaviors, and their role as prey in the ecosystem.</data>
+      <data key="d3">excerpt_id_60ccdc48df989fa51c0da15e6a143fb8:|:excerpt_id_f964480d725a4d174e7818397c873c64:|:excerpt_id_9698e17ce8e2aad784ec32f9e9ca1309:|:excerpt_id_f7a8ed2f75bf9531633b854a3250aef7:|:excerpt_id_e74a56bbec333430e87cff5ce3a241b5:|:excerpt_id_50dd871431b30f98abfea1ee4b2cd454:|:excerpt_id_0654ad0b907bcb79ecab1f2b296632c4:|:excerpt_id_e7374c9185e3485df8e7072761d6f507</data>
     </node>
     <node id="Thump">
       <data key="d1">behaviour</data>
@@ -56,8 +56,8 @@
     </node>
     <node id="Kits">
       <data key="d1">animal:|:species</data>
-      <data key="d2">Kits are the newborn rabbits that are born blind and helpless, requiring their mother's care and nesting in burrows lined with fur.:|:Kits are the young rabbits born after a short gestation period, typically nurtured in a safe nest for their early development.</data>
-      <data key="d3">excerpt_id_e7374c9185e3485df8e7072761d6f507:|:excerpt_id_f8e7eacfd4c0d33cbb83cf7382856092</data>
+      <data key="d2">Kits are the young rabbits born after a short gestation period, typically nurtured in a safe nest for their early development.:|:Kits are the newborn rabbits that are born blind and helpless, requiring their mother's care and nesting in burrows lined with fur.</data>
+      <data key="d3">excerpt_id_f8e7eacfd4c0d33cbb83cf7382856092:|:excerpt_id_e7374c9185e3485df8e7072761d6f507</data>
     </node>
     <node id="Nest">
       <data key="d1">ecology</data>
@@ -93,8 +93,8 @@
     </node>
     <node id="Predators">
       <data key="d1">animal:|:ecology</data>
-      <data key="d2">Predators such as foxes, bobcats, and hawks rely on wild rabbits as a vital prey source, highlighting their role in the ecosystem.:|:Predators such as foxes, hawks, and coyotes rely on rabbits as a primary or secondary food source, contributing to the balance of the food web.:|:Predators such as foxes, birds of prey, and wild cats pose significant threats to wild rabbits, influencing their behavior and adaptations.:|:Predators such as hawks, foxes, coyotes, and snakes are natural threats to rabbits, influencing their behaviors and survival strategies.</data>
-      <data key="d3">excerpt_id_f7a8ed2f75bf9531633b854a3250aef7:|:excerpt_id_d0ebe649aa5992bf4c7fadf9e1c31ec1:|:excerpt_id_9698e17ce8e2aad784ec32f9e9ca1309:|:excerpt_id_f8e7eacfd4c0d33cbb83cf7382856092</data>
+      <data key="d2">Predators such as foxes, hawks, and coyotes rely on rabbits as a primary or secondary food source, contributing to the balance of the food web.:|:Predators such as foxes, birds of prey, and wild cats pose significant threats to wild rabbits, influencing their behavior and adaptations.:|:Predators such as hawks, foxes, coyotes, and snakes are natural threats to rabbits, influencing their behaviors and survival strategies.:|:Predators such as foxes, bobcats, and hawks rely on wild rabbits as a vital prey source, highlighting their role in the ecosystem.</data>
+      <data key="d3">excerpt_id_f7a8ed2f75bf9531633b854a3250aef7:|:excerpt_id_f8e7eacfd4c0d33cbb83cf7382856092:|:excerpt_id_9698e17ce8e2aad784ec32f9e9ca1309:|:excerpt_id_d0ebe649aa5992bf4c7fadf9e1c31ec1</data>
     </node>
     <node id="Adaptations">
       <data key="d1">evolution</data>
@@ -113,8 +113,8 @@
     </node>
     <node id="Rabbit">
       <data key="d1">animal:|:species</data>
-      <data key="d2">Rabbits are small mammals known for their reproductive capabilities and grazing behavior, which can impact vegetation and agricultural settings.:|:Rabbits possess ever-growing incisors and powerful hindlimbs, which enable them to gnaw on vegetation and hop with agility, showcasing strong adaptations for survival.:|:Rabbit is a species of prey animal that exhibits specific grazing habits, which are essential for their survival and ecological role.:|:Rabbits are mammals known for their reproductive capabilities, speed, and gentle nature, deeply rooted in cultural symbolism but also possessing a rich evolutionary history.</data>
-      <data key="d3">excerpt_id_2ff4eafa735fdcaa1071f1f17da57dae:|:excerpt_id_042b6fc3ae8ca842274c9cec18543515:|:excerpt_id_985bbfddfbe8f32b2b7f8361955e56ce:|:excerpt_id_b733b7d4531a0183d7c15a14ba6efbfd</data>
+      <data key="d2">Rabbit is a species of prey animal that exhibits specific grazing habits, which are essential for their survival and ecological role.:|:Rabbits are mammals known for their reproductive capabilities, speed, and gentle nature, deeply rooted in cultural symbolism but also possessing a rich evolutionary history.:|:Rabbits are small mammals known for their reproductive capabilities and grazing behavior, which can impact vegetation and agricultural settings.:|:Rabbits possess ever-growing incisors and powerful hindlimbs, which enable them to gnaw on vegetation and hop with agility, showcasing strong adaptations for survival.</data>
+      <data key="d3">excerpt_id_b733b7d4531a0183d7c15a14ba6efbfd:|:excerpt_id_985bbfddfbe8f32b2b7f8361955e56ce:|:excerpt_id_042b6fc3ae8ca842274c9cec18543515:|:excerpt_id_2ff4eafa735fdcaa1071f1f17da57dae</data>
     </node>
     <node id="Hare">
       <data key="d1">species</data>
@@ -128,8 +128,8 @@
     </node>
     <node id="Leporidae">
       <data key="d1">family:|:ecology</data>
-      <data key="d2">Leporidae is the family that includes both rabbits and hares, representing a significant group in the order Lagomorpha with distinct ecological roles.:|:Leporidae is the biological family that includes rabbits and hares, known for their unique adaptations and role in various ecosystems.:|:Leporidae is a family within the order Lagomorpha that consists of rabbits and hares, characterized by certain features that set them apart from other mammals.</data>
-      <data key="d3">excerpt_id_0654ad0b907bcb79ecab1f2b296632c4:|:excerpt_id_2ff4eafa735fdcaa1071f1f17da57dae:|:excerpt_id_69eb284b952fb47c5e09219650d7e018</data>
+      <data key="d2">Leporidae is the family that includes both rabbits and hares, representing a significant group in the order Lagomorpha with distinct ecological roles.:|:Leporidae is a family within the order Lagomorpha that consists of rabbits and hares, characterized by certain features that set them apart from other mammals.:|:Leporidae is the biological family that includes rabbits and hares, known for their unique adaptations and role in various ecosystems.</data>
+      <data key="d3">excerpt_id_69eb284b952fb47c5e09219650d7e018:|:excerpt_id_0654ad0b907bcb79ecab1f2b296632c4:|:excerpt_id_2ff4eafa735fdcaa1071f1f17da57dae</data>
     </node>
     <node id="Ochotonidae">
       <data key="d1">family</data>
@@ -168,8 +168,8 @@
     </node>
     <node id="Cecotrophy">
       <data key="d1">behaviour</data>
-      <data key="d2">Cecotrophy is a behavior exhibited by rabbits involving the re-ingestion of cecotropes to maximize nutrient absorption from their digested food.:|:Cecotrophy is a specific behavior exhibited by rabbits where they consume their soft feces to absorb nutrients more efficiently, showing their adaptation strategies.:|:Cecotrophy is the behavior of re-ingesting nutrient-rich cecal pellets by rabbits, allowing them to extract additional nutrients from their digestive process.</data>
-      <data key="d3">excerpt_id_60ccdc48df989fa51c0da15e6a143fb8:|:excerpt_id_e74a56bbec333430e87cff5ce3a241b5:|:excerpt_id_f964480d725a4d174e7818397c873c64</data>
+      <data key="d2">Cecotrophy is the behavior of re-ingesting nutrient-rich cecal pellets by rabbits, allowing them to extract additional nutrients from their digestive process.:|:Cecotrophy is a specific behavior exhibited by rabbits where they consume their soft feces to absorb nutrients more efficiently, showing their adaptation strategies.:|:Cecotrophy is a behavior exhibited by rabbits involving the re-ingestion of cecotropes to maximize nutrient absorption from their digested food.</data>
+      <data key="d3">excerpt_id_60ccdc48df989fa51c0da15e6a143fb8:|:excerpt_id_f964480d725a4d174e7818397c873c64:|:excerpt_id_e74a56bbec333430e87cff5ce3a241b5</data>
     </node>
     <node id="Reproductive Strategy">
       <data key="d1">ecology</data>
@@ -179,7 +179,7 @@
     <node id="Ecosystem">
       <data key="d1">ecosystem</data>
       <data key="d2">Ecosystems are complex systems composed of living organisms and their physical environment where rabbits play various roles, influencing species dynamics and ecological functions.:|:An ecosystem refers to a community of living organisms and their environment, where wild rabbits play a critical role, especially as herbivores and prey.:|:An ecosystem refers to the community of living organisms and their environment in which rabbits thrive, showcasing their adaptability in various habitats such as deserts, grasslands, and forests.</data>
-      <data key="d3">excerpt_id_50dd871431b30f98abfea1ee4b2cd454:|:excerpt_id_dd481aeca1474e693370cb83def902ff:|:excerpt_id_f964480d725a4d174e7818397c873c64</data>
+      <data key="d3">excerpt_id_f964480d725a4d174e7818397c873c64:|:excerpt_id_50dd871431b30f98abfea1ee4b2cd454:|:excerpt_id_dd481aeca1474e693370cb83def902ff</data>
     </node>
     <node id="Foxes">
       <data key="d1">animal</data>
@@ -233,8 +233,8 @@
     </node>
     <node id="Grazing Habits">
       <data key="d1">behaviour</data>
-      <data key="d2">Grazing habits refer to the feeding strategies that rabbits employ, influencing their nutritional needs and ecological roles within their ecosystems.:|:Grazing habits of rabbits reflect their adaptation to consume high-fiber, nutrient-rich vegetation while managing their impact on the ecosystem as a prey species.</data>
-      <data key="d3">excerpt_id_0654ad0b907bcb79ecab1f2b296632c4:|:excerpt_id_042b6fc3ae8ca842274c9cec18543515</data>
+      <data key="d2">Grazing habits of rabbits reflect their adaptation to consume high-fiber, nutrient-rich vegetation while managing their impact on the ecosystem as a prey species.:|:Grazing habits refer to the feeding strategies that rabbits employ, influencing their nutritional needs and ecological roles within their ecosystems.</data>
+      <data key="d3">excerpt_id_042b6fc3ae8ca842274c9cec18543515:|:excerpt_id_0654ad0b907bcb79ecab1f2b296632c4</data>
     </node>
     <node id="Plant Growth">
       <data key="d1">ecology</data>
@@ -289,8 +289,8 @@
     </node>
     <node id="Seed Dispersal">
       <data key="d1">ecology</data>
-      <data key="d2">Seed dispersal is a process whereby seeds are spread from one location to another, which can be aided by rabbits through their feeding and excretion habits.:|:Seed Dispersal is a process aided by rabbits through their grazing patterns, which can promote plant growth and biodiversity.</data>
-      <data key="d3">excerpt_id_f7a8ed2f75bf9531633b854a3250aef7:|:excerpt_id_b733b7d4531a0183d7c15a14ba6efbfd</data>
+      <data key="d2">Seed Dispersal is a process aided by rabbits through their grazing patterns, which can promote plant growth and biodiversity.:|:Seed dispersal is a process whereby seeds are spread from one location to another, which can be aided by rabbits through their feeding and excretion habits.</data>
+      <data key="d3">excerpt_id_b733b7d4531a0183d7c15a14ba6efbfd:|:excerpt_id_f7a8ed2f75bf9531633b854a3250aef7</data>
     </node>
     <node id="Habitat Restoration">
       <data key="d1">ecology</data>
@@ -300,7 +300,7 @@
     <node id="Invasive Species">
       <data key="d1">ecology</data>
       <data key="d2">Invasive species are organisms, like the European rabbit in Australia, that are introduced to an ecosystem and cause harm to native species and environments.:|:Invasive Species are non-native organisms, such as rabbits in Australia, that can disrupt local ecosystems and outcompete native species.</data>
-      <data key="d3">excerpt_id_f7a8ed2f75bf9531633b854a3250aef7:|:excerpt_id_b733b7d4531a0183d7c15a14ba6efbfd</data>
+      <data key="d3">excerpt_id_b733b7d4531a0183d7c15a14ba6efbfd:|:excerpt_id_f7a8ed2f75bf9531633b854a3250aef7</data>
     </node>
     <node id="Ecological Forces">
       <data key="d1">ecology</data>
@@ -369,8 +369,8 @@
     </node>
     <node id="Wild Rabbits">
       <data key="d1">species</data>
-      <data key="d2">Wild rabbits are valued native species known for their ecological importance as herbivores and prey animals, and their characteristics include long ears, powerful hind legs, and prolific breeding.:|:Wild Rabbits are adaptable mammals found in various habitats, known for their burrowing behavior and significant ecological contributions.</data>
-      <data key="d3">excerpt_id_dd481aeca1474e693370cb83def902ff:|:excerpt_id_808ee8264e601aa4511197c538aa5314</data>
+      <data key="d2">Wild Rabbits are adaptable mammals found in various habitats, known for their burrowing behavior and significant ecological contributions.:|:Wild rabbits are valued native species known for their ecological importance as herbivores and prey animals, and their characteristics include long ears, powerful hind legs, and prolific breeding.</data>
+      <data key="d3">excerpt_id_808ee8264e601aa4511197c538aa5314:|:excerpt_id_dd481aeca1474e693370cb83def902ff</data>
     </node>
     <node id="Australia">
       <data key="d1">location</data>
@@ -472,8 +472,8 @@
       <data key="d7">excerpt_id_d0ebe649aa5992bf4c7fadf9e1c31ec1</data>
     </edge>
     <edge source="European Rabbit" target="Warrens">
-      <data key="d4">European Rabbits construct warrens for social living, which helps them establish hierarchies and community structures.:|:European Rabbits create warrens as a protective and social living space, highlighting their advanced ecological adaptations.</data>
-      <data key="d5">adaptation, survival strategy:|:social structure, shelter</data>
+      <data key="d4">European Rabbits create warrens as a protective and social living space, highlighting their advanced ecological adaptations.:|:European Rabbits construct warrens for social living, which helps them establish hierarchies and community structures.</data>
+      <data key="d5">social structure, shelter:|:adaptation, survival strategy</data>
       <data key="d6">17.0</data>
       <data key="d7">excerpt_id_6f24db63ef4136289b90be0855a93491:|:excerpt_id_f8e7eacfd4c0d33cbb83cf7382856092</data>
     </edge>
@@ -598,7 +598,7 @@
       <data key="d7">excerpt_id_e7374c9185e3485df8e7072761d6f507</data>
     </edge>
     <edge source="Rabbits" target="Predators">
-      <data key="d4">Rabbits serve as a crucial food source for various predators, supporting the balance of the food web.:|:Rabbits must constantly evade various predators, impacting their behavior and evolutionary adaptations.</data>
+      <data key="d4">Rabbits must constantly evade various predators, impacting their behavior and evolutionary adaptations.:|:Rabbits serve as a crucial food source for various predators, supporting the balance of the food web.</data>
       <data key="d5">food source, predator-prey relationship:|:survival, predation</data>
       <data key="d6">17.0</data>
       <data key="d7">excerpt_id_f7a8ed2f75bf9531633b854a3250aef7:|:excerpt_id_9698e17ce8e2aad784ec32f9e9ca1309</data>
@@ -616,10 +616,10 @@
       <data key="d7">excerpt_id_9698e17ce8e2aad784ec32f9e9ca1309</data>
     </edge>
     <edge source="Rabbits" target="Cecotrophy">
-      <data key="d4">Rabbits exhibit ceotrophy as a crucial behavior that enables them to maximize nutrient absorption, impacting their survival and adaptability.:|:The behavior of cecotrophy showcases a unique adaptation strategy of rabbits to maximize nutrient intake.:|:Rabbits practice cecotrophy as a method to enhance their nutrient absorption from their food, directly linking their digestive strategy to their survival.</data>
+      <data key="d4">The behavior of cecotrophy showcases a unique adaptation strategy of rabbits to maximize nutrient intake.:|:Rabbits practice cecotrophy as a method to enhance their nutrient absorption from their food, directly linking their digestive strategy to their survival.:|:Rabbits exhibit ceotrophy as a crucial behavior that enables them to maximize nutrient absorption, impacting their survival and adaptability.</data>
       <data key="d5">nutritional strategy, survival adaptation:|:behavioral adaptation, nutrition:|:digestion, nutrient efficiency</data>
       <data key="d6">23.0</data>
-      <data key="d7">excerpt_id_60ccdc48df989fa51c0da15e6a143fb8:|:excerpt_id_e74a56bbec333430e87cff5ce3a241b5:|:excerpt_id_f964480d725a4d174e7818397c873c64</data>
+      <data key="d7">excerpt_id_60ccdc48df989fa51c0da15e6a143fb8:|:excerpt_id_f964480d725a4d174e7818397c873c64:|:excerpt_id_e74a56bbec333430e87cff5ce3a241b5</data>
     </edge>
     <edge source="Rabbits" target="Reproductive Strategy">
       <data key="d4">The reproductive strategy of rabbits is a key factor in their evolutionary success and ability to recover populations swiftly after disturbances.</data>
@@ -631,7 +631,7 @@
       <data key="d4">Rabbits are integral to various ecosystems, demonstrating adaptability across different habitats and contributing to ecological balance.:|:Rabbits contribute significantly to the ecosystem through their burrowing and grazing behaviors, influencing species dynamics and soil health.</data>
       <data key="d5">ecosystem contribution, species dynamics:|:ecological role, adaptability</data>
       <data key="d6">17.0</data>
-      <data key="d7">excerpt_id_50dd871431b30f98abfea1ee4b2cd454:|:excerpt_id_f964480d725a4d174e7818397c873c64</data>
+      <data key="d7">excerpt_id_f964480d725a4d174e7818397c873c64:|:excerpt_id_50dd871431b30f98abfea1ee4b2cd454</data>
     </edge>
     <edge source="Rabbits" target="Foxes">
       <data key="d4">Rabbits serve as a primary food source for foxes, illustrating the predator-prey relationship critical for ecosystem balance.</data>

@@ -1,13 +1,9 @@
 import inspect
-import os
-import re
 import time
 
-import networkx as nx
-import nltk
 import numpy as np
-from nltk import sent_tokenize
 
+from app.chunking import preserve_markdown_code_excerpts
 from app.definitions import INPUT_DOCS_DIR, SOURCE_TO_DOC_ID_KV_PATH, DOC_ID_TO_SOURCE_KV_PATH, EMBEDDINGS_DB, \
     EXCERPT_KV_PATH, DOC_ID_TO_EXCERPT_KV_PATH, KG_DB, ENTITIES_DB, RELATIONSHIPS_DB, KG_SEP, TUPLE_SEP, REC_SEP, \
     COMPLETE_TAG, DATA_DIR, LOG_DIR, COMPLETION_MODEL, EMBEDDING_MODEL
@@ -26,6 +22,7 @@ from app.vector_store import NanoVectorStore
 class SmolRag:
     def __init__(
             self,
+            excerpt_fn,
             llm=None,
             embeddings_db=None,
             entities_db=None,
@@ -35,10 +32,17 @@ class SmolRag:
             doc_to_excerpt_kv=None,
             excerpt_kv=None,
             query_cache_kv=None,
-            embedding_cache_kv=None
+            embedding_cache_kv=None,
+            graph_db=None,
+            dimensions=None,
+            excerpt_size=2000,
+            overlap=200
     ):
         set_logger("main.log")
-        nltk.download('punkt')
+
+        self.excerpt_fn = excerpt_fn
+        self.excerpt_size = excerpt_size
+        self.overlap = overlap
 
         self.llm = llm or OpenAiLlm(
             COMPLETION_MODEL,
@@ -47,7 +51,7 @@ class SmolRag:
             embedding_cache_kv=embedding_cache_kv
         )
 
-        self.dimensions = 1536
+        self.dimensions = dimensions or 1536
         self.embeddings_db = embeddings_db or NanoVectorStore(EMBEDDINGS_DB, self.dimensions)
         self.entities_db = entities_db or NanoVectorStore(ENTITIES_DB, self.dimensions)
         self.relationships_db = relationships_db or NanoVectorStore(RELATIONSHIPS_DB, self.dimensions)
@@ -57,7 +61,8 @@ class SmolRag:
         self.doc_to_excerpt_kv = doc_to_excerpt_kv or JsonKvStore(DOC_ID_TO_EXCERPT_KV_PATH)
         self.excerpt_kv = excerpt_kv or JsonKvStore(EXCERPT_KV_PATH)
 
-        self.graph = NetworkXGraphStore(KG_DB)
+        self.graph = graph_db or NetworkXGraphStore(KG_DB)
+
 
     def remove_document_by_id(self, doc_id):
         if self.doc_to_source_kv.has(doc_id):
@@ -106,7 +111,7 @@ class SmolRag:
 
     def _embed_document(self, content, doc_id):
         start_time = time.time()
-        excerpts = self._get_excerpts(content)
+        excerpts = self.excerpt_fn(content, self.excerpt_size, self.overlap)
         excerpt_ids = []
         for i, excerpt in enumerate(excerpts):
             excerpt_id = make_hash(excerpt, "excerpt_id_")
@@ -134,82 +139,6 @@ class SmolRag:
         elapsed = time.time() - start_time
         logger.info(f"Document {doc_id} processed with {len(excerpts)} excerpts in {elapsed:.2f} seconds.")
 
-    def _get_excerpts(self, content, n=2000):
-        """
-        Split `content` into code/text chunks up to `n` characters.
-
-        The function processes the content as follows:
-          1) Code blocks (denoted by triple backticks) remain whole, but the triple backticks
-             are removed from the output.
-          2) Regular text is split into paragraphs (using one or more newlines).
-          3) Paragraphs longer than `n` characters are further split into sentences using NLTK.
-          4) Any sentence that exceeds `n` characters is stored on its own.
-
-        All text excerpts stripped of leading and trailing whitespace.
-        """
-        parts = re.split(r'(```.*?```)', content, flags=re.DOTALL)
-        excerpts = []
-
-        for part in parts:
-            part_stripped = part.strip()
-            if part_stripped.startswith('```') and part_stripped.endswith('```'):
-                code_content = part_stripped[3:-3].strip()
-                excerpts.append(code_content)
-                continue
-
-            if len(part) <= n:
-                excerpts.append(part.strip())
-                continue
-
-            paragraphs = re.split(r'\n\n+', part)
-            current_excerpt = ""
-            for paragraph in paragraphs:
-                paragraph = paragraph.strip()
-                if not paragraph:
-                    continue
-
-                if len(paragraph) <= n:
-                    if current_excerpt:
-                        proposed_excerpt = current_excerpt + "\n\n" + paragraph
-                    else:
-                        proposed_excerpt = paragraph
-
-                    if len(proposed_excerpt) <= n:
-                        current_excerpt = proposed_excerpt
-                    else:
-                        if current_excerpt:
-                            excerpts.append(current_excerpt.strip())
-                        current_excerpt = paragraph
-                else:
-                    if current_excerpt:
-                        excerpts.append(current_excerpt.strip())
-                        current_excerpt = ""
-                    sentences = sent_tokenize(paragraph)
-                    sentence_excerpt = ""
-                    for sentence in sentences:
-                        sentence = sentence.strip()
-                        if len(sentence) > n:
-                            if sentence_excerpt:
-                                excerpts.append(sentence_excerpt.strip())
-                                sentence_excerpt = ""
-                            excerpts.append(sentence.strip())
-                            continue
-                        if sentence_excerpt:
-                            proposed_sentence_excerpt = sentence_excerpt + " " + sentence
-                        else:
-                            proposed_sentence_excerpt = sentence
-                        if len(proposed_sentence_excerpt) <= n:
-                            sentence_excerpt = proposed_sentence_excerpt
-                        else:
-                            excerpts.append(sentence_excerpt.strip())
-                            sentence_excerpt = sentence
-                    if sentence_excerpt:
-                        excerpts.append(sentence_excerpt.strip())
-            if current_excerpt:
-                excerpts.append(current_excerpt.strip())
-
-        return excerpts
-
     def _get_excerpt_summary(self, full_doc, excerpt):
         prompt = excerpt_summary_prompt(full_doc, excerpt)
         try:
@@ -223,7 +152,7 @@ class SmolRag:
         start_time = time.time()
         total_entities = 0
         total_relationships = 0
-        excerpts = self._get_excerpts(content)
+        excerpts = self.excerpt_fn(content, self.excerpt_size, self.overlap)
 
         for excerpt in excerpts:
             excerpt_id = make_hash(excerpt, "excerpt_id_")
@@ -662,7 +591,7 @@ if __name__ == '__main__':
     delete_all_files(DATA_DIR)
     delete_all_files(LOG_DIR)
 
-    smol_rag = SmolRag()
+    smol_rag = SmolRag(excerpt_fn=preserve_markdown_code_excerpts)
 
     smol_rag.import_documents()
 

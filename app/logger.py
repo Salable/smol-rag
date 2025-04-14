@@ -5,6 +5,7 @@ from app.definitions import LOG_DIR
 
 logger = logging.getLogger("mini-rag")
 
+
 def set_logger(log_file: str):
     logger.setLevel(logging.DEBUG)
     file_handler = logging.FileHandler(os.path.join(LOG_DIR, log_file))

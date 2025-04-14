@@ -4,9 +4,9 @@ from typing import Any, Dict, List, Optional
 from dotenv import load_dotenv
 from openai import OpenAI
 
+from app.definitions import QUERY_CACHE_KV_PATH, EMBEDDING_CACHE_KV_PATH
 from app.kv_store import JsonKvStore
 from app.logger import logger
-from app.definitions import QUERY_CACHE_KV_PATH, EMBEDDING_CACHE_KV_PATH
 from app.utilities import make_hash
 
 load_dotenv()
@@ -104,7 +104,7 @@ class OpenAiLlm:
             logger.info("Embedding cache hit")
             embedding = self.embedding_cache_kv.get_by_key(content_hash)
         else:
-            logger.info("New embedding computation")
+            logger.info("New embedding")
             try:
                 response = self.client.embeddings.create(
                     model=model,

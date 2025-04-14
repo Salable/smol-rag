@@ -4,26 +4,22 @@ import re
 import time
 
 import networkx as nx
+import nltk
 import numpy as np
-
 from nltk import sent_tokenize
-
-from app.kv_store import JsonKvStore
-from app.openai_llm import OpenAiLlm
-from app.logger import logger, set_logger
 
 from app.definitions import INPUT_DOCS_DIR, SOURCE_TO_DOC_ID_KV_PATH, DOC_ID_TO_SOURCE_KV_PATH, EMBEDDINGS_DB, \
     EXCERPT_KV_PATH, DOC_ID_TO_EXCERPT_KV_PATH, KG_DB, ENTITIES_DB, RELATIONSHIPS_DB, KG_SEP, TUPLE_SEP, REC_SEP, \
     COMPLETE_TAG, DATA_DIR, LOG_DIR, COMPLETION_MODEL, EMBEDDING_MODEL
+from app.graph_store import NetworkXGraphStore
+from app.kv_store import JsonKvStore
+from app.logger import logger, set_logger
+from app.openai_llm import OpenAiLlm
 from app.prompts import get_query_system_prompt, excerpt_summary_prompt, get_extract_entities_prompt, \
     get_high_low_level_keywords_prompt, get_kg_query_system_prompt, get_mix_system_prompt
-
-from app.utilities import get_json, read_file, get_docs, make_hash, split_string_by_multi_markers, clean_str, \
+from app.utilities import read_file, get_docs, make_hash, split_string_by_multi_markers, clean_str, \
     extract_json_from_text, is_float_regex, truncate_list_by_token_size, \
     list_of_list_to_csv, delete_all_files
-
-import nltk
-
 from app.vector_store import NanoVectorStore
 
 
@@ -61,16 +57,7 @@ class SmolRag:
         self.doc_to_excerpt_kv = doc_to_excerpt_kv or JsonKvStore(DOC_ID_TO_EXCERPT_KV_PATH)
         self.excerpt_kv = excerpt_kv or JsonKvStore(EXCERPT_KV_PATH)
 
-        if os.path.exists(KG_DB):
-            try:
-                self.graph = nx.read_graphml(KG_DB)
-                logger.info(f"Knowledge graph loaded from {KG_DB}")
-            except Exception as e:
-                logger.error(f"Error loading knowledge graph from {KG_DB}: {e}")
-                self.graph = nx.Graph()
-        else:
-            self.graph = nx.Graph()
-            logger.info("No existing knowledge graph found; creating a new one.")
+        self.graph = NetworkXGraphStore(KG_DB)
 
     def remove_document_by_id(self, doc_id):
         if self.doc_to_source_kv.has(doc_id):
@@ -265,7 +252,7 @@ class SmolRag:
                 if record_type == 'entity':
                     if len(fields) >= 4:
                         _, name, category, description = fields[:4]
-                        existing_node = self.graph.nodes.get(name)
+                        existing_node = self.graph.get_node(name)
                         if existing_node:
                             existing_descriptions = split_string_by_multi_markers(existing_node["description"], KG_SEP)
                             descriptions = KG_SEP.join(set(list(existing_descriptions) + [description]))
@@ -300,7 +287,7 @@ class SmolRag:
                         _, source, target, description, keywords, weight = fields[:6]
                         source, target = sorted([source, target])
                         # Todo: summarise descriptions with LLM query if they get too long
-                        existing_edge = self.graph.edges.get((source, target))
+                        existing_edge = self.graph.get_edge((source, target))
                         weight = float(weight) if is_float_regex(weight) else 1.0
                         if existing_edge:
                             existing_descriptions = split_string_by_multi_markers(existing_edge["description"], KG_SEP)
@@ -334,12 +321,12 @@ class SmolRag:
                         ])
                 elif record_type == 'content_keywords':
                     if len(fields) >= 2:
-                        self.graph.graph['content_keywords'] = fields[1]
+                        self.graph.set_field('content_keywords', fields[1])
 
         self.entities_db.save()
         self.relationships_db.save()
 
-        nx.write_graphml(self.graph, KG_DB)
+        self.graph.save()
         elapsed = time.time() - start_time
         logger.info(f"Extracted {total_entities} entities and {total_relationships} relationships "
                     f"from document {doc_id} in {elapsed:.2f} seconds.")
@@ -443,22 +430,22 @@ class SmolRag:
         entity_csv = [["entity", "type", "description", "rank"]]
         for entity in entities:
             entity_csv.append([
-                    entity["entity_name"],
-                    entity.get("category", "UNKNOWN"),
-                    entity.get("description", "UNKNOWN"),
-                    entity["rank"],
-                ])
+                entity["entity_name"],
+                entity.get("category", "UNKNOWN"),
+                entity.get("description", "UNKNOWN"),
+                entity["rank"],
+            ])
         entity_context = list_of_list_to_csv(entity_csv)
         relation_csv = [["source", "target", "description", "keywords", "weight", "rank"]]
         for relation in relations:
             relation_csv.append([
-                    relation["src_tgt"][0],
-                    relation["src_tgt"][1],
-                    relation["description"],
-                    relation["keywords"],
-                    relation["weight"],
-                    relation["rank"],
-                ])
+                relation["src_tgt"][0],
+                relation["src_tgt"][1],
+                relation["description"],
+                relation["keywords"],
+                relation["weight"],
+                relation["rank"],
+            ])
         relations_context = list_of_list_to_csv(relation_csv)
         excerpt_csv = [["excerpt"]]
         for excerpt in excerpts:
@@ -489,7 +476,7 @@ class SmolRag:
             hl_embedding = self.llm.get_embedding(hl_keywords)
             hl_embedding_array = np.array(hl_embedding)
             hl_results = self.relationships_db.query(query=hl_embedding_array, top_k=25, better_than_threshold=0.02)
-        hl_data = [self.graph.edges.get((r["__source__"], r["__target__"])) for r in hl_results]
+        hl_data = [self.graph.get_edge((r["__source__"], r["__target__"])) for r in hl_results]
         hl_degrees = [self.graph.degree(r["__source__"]) + self.graph.degree(r["__target__"]) for r in hl_results]
         hl_dataset = []
         for k, n, d in zip(hl_results, hl_data, hl_degrees):
@@ -512,7 +499,7 @@ class SmolRag:
             ll_embedding = self.llm.get_embedding(ll_keywords)
             ll_embedding_array = np.array(ll_embedding)
             ll_results = self.entities_db.query(query=ll_embedding_array, top_k=25, better_than_threshold=0.02)
-        ll_data = [self.graph.nodes.get(r["__entity_name__"]) for r in ll_results]
+        ll_data = [self.graph.get_node(r["__entity_name__"]) for r in ll_results]
         ll_degrees = [self.graph.degree(r["__entity_name__"]) for r in ll_results]
         ll_dataset = [
             {**n, "entity_name": k["__entity_name__"], "rank": d}
@@ -525,13 +512,13 @@ class SmolRag:
 
     def _get_excerpts_for_entities(self, kg_dataset):
         excerpt_ids = [split_string_by_multi_markers(row["excerpt_id"], KG_SEP) for row in kg_dataset]
-        all_edges = [self.graph.edges(row["entity_name"]) for row in kg_dataset]
+        all_edges = [self.graph.get_node_edges(row["entity_name"]) for row in kg_dataset]
         sibling_names = set()
         for edge in all_edges:
             if not edge:
                 continue
             sibling_names.update([e[1] for e in edge])
-        sibling_nodes = [self.graph.nodes.get(name) for name in list(sibling_names)]
+        sibling_nodes = [self.graph.get_node(name) for name in list(sibling_names)]
         sibling_excerpt_lookup = {
             k: set(split_string_by_multi_markers(v["excerpt_id"], [KG_SEP]))
             for k, v in zip(sibling_names, sibling_nodes)
@@ -579,7 +566,7 @@ class SmolRag:
         return all_excerpts
 
     def _get_relationships_from_entities(self, kg_dataset):
-        node_edges_list = [self.graph.edges(row["entity_name"]) for row in kg_dataset]
+        node_edges_list = [self.graph.get_node_edges(row["entity_name"]) for row in kg_dataset]
 
         edges = []
         seen = set()
@@ -591,7 +578,7 @@ class SmolRag:
                     seen.add(sorted_edge)
                     edges.append(sorted_edge)
 
-        edges_pack = [self.graph.edges.get((e[0], e[1])) for e in edges]
+        edges_pack = [self.graph.get_edge((e[0], e[1])) for e in edges]
         edges_degree = [self.graph.degree(e[0]) + self.graph.degree(e[1]) for e in edges]
 
         edges_data = [
@@ -652,7 +639,7 @@ class SmolRag:
                 entity_names.append(e["src_tgt"][1])
                 seen.add(e["src_tgt"][1])
 
-        data = [self.graph.nodes.get(entity_name) for entity_name in entity_names]
+        data = [self.graph.get_node(entity_name) for entity_name in entity_names]
         degrees = [self.graph.degree(entity_name) for entity_name in entity_names]
 
         # Todo: we need to filter out missing node data (ie no description) in case the node was added as an edge only

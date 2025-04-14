@@ -14,6 +14,7 @@ from app.definitions import COMPLETION_MODEL
 
 tiktoken_encoders = {}
 
+
 def create_file_if_not_exists(file_path, default_content=""):
     if not os.path.exists(file_path):
         write_file(file_path, default_content)
@@ -111,6 +112,7 @@ def extract_json_from_text(content: str):
             return None
     return None
 
+
 def truncate_list_by_token_size(data_list, get_text_for_row, max_token_size=4000, model=COMPLETION_MODEL):
     if max_token_size <= 0:
         return []
@@ -122,6 +124,7 @@ def truncate_list_by_token_size(data_list, get_text_for_row, max_token_size=4000
 
     return data_list
 
+
 def get_encoded_tokens(text, model=COMPLETION_MODEL):
     global tiktoken_encoders
     if not model in tiktoken_encoders:
@@ -129,8 +132,10 @@ def get_encoded_tokens(text, model=COMPLETION_MODEL):
 
     return tiktoken_encoders[model].encode(text)
 
+
 def is_float_regex(value):
     return bool(re.match(r"^[-+]?[0-9]*\.?[0-9]+$", value))
+
 
 def list_of_list_to_csv(data: List[List[str]]) -> str:
     output = io.StringIO()

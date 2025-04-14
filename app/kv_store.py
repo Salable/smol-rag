@@ -1,4 +1,3 @@
-
 from app.utilities import create_file_if_not_exists, get_json, write_json
 
 

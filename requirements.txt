@@ -10,3 +10,7 @@ requests==2.32.3
 tiktoken==0.9.0
 tqdm==4.67.1
 
+# API Dependencies
+fastapi==0.115.12
+pydantic==2.10.6
+uvicorn==0.34.1

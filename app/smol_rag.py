@@ -3,7 +3,7 @@ import time
 
 import numpy as np
 
-from app.chunking import preserve_markdown_code_excerpts
+from app.chunking import preserve_markdown_code_excerpts, naive_overlap_excerpts
 from app.definitions import INPUT_DOCS_DIR, SOURCE_TO_DOC_ID_KV_PATH, DOC_ID_TO_SOURCE_KV_PATH, EMBEDDINGS_DB, \
     EXCERPT_KV_PATH, DOC_ID_TO_EXCERPT_KV_PATH, KG_DB, ENTITIES_DB, RELATIONSHIPS_DB, KG_SEP, TUPLE_SEP, REC_SEP, \
     COMPLETE_TAG, DATA_DIR, LOG_DIR, COMPLETION_MODEL, EMBEDDING_MODEL
@@ -22,7 +22,7 @@ from app.vector_store import NanoVectorStore
 class SmolRag:
     def __init__(
             self,
-            excerpt_fn,
+            excerpt_fn=None,
             llm=None,
             embeddings_db=None,
             entities_db=None,
@@ -40,7 +40,7 @@ class SmolRag:
     ):
         set_logger("main.log")
 
-        self.excerpt_fn = excerpt_fn
+        self.excerpt_fn = excerpt_fn or naive_overlap_excerpts
         self.excerpt_size = excerpt_size
         self.overlap = overlap
 

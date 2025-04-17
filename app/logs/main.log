@@ -2408,3 +2408,18 @@
 2025-04-15 00:51:53,436 - mini-rag - INFO - Embedding cache hit
 2025-04-15 00:51:53,440 - mini-rag - INFO - KG query context built with 53 entities, 66 relationships, and 24 excerpts.
 2025-04-15 00:51:53,441 - mini-rag - INFO - New query
+2025-04-17 21:57:39,813 - mini-rag - INFO - Knowledge graph loaded from /Users/orderandchaos/code/minimal-light-rag/app/data/kg_db.graphml
+2025-04-17 22:03:18,295 - mini-rag - INFO - Knowledge graph loaded from /Users/orderandchaos/code/minimal-light-rag/app/data/kg_db.graphml
+2025-04-17 22:05:33,532 - mini-rag - INFO - Knowledge graph loaded from /Users/orderandchaos/code/minimal-light-rag/app/data/kg_db.graphml
+2025-04-17 22:05:52,522 - mini-rag - INFO - Received query: what do rabbits eat?
+2025-04-17 22:05:52,523 - mini-rag - INFO - Embedding cache hit
+2025-04-17 22:05:52,696 - mini-rag - INFO - Retrieved 5 excerpts for the query.
+2025-04-17 22:05:52,696 - mini-rag - INFO - New query
+2025-04-17 22:06:39,456 - mini-rag - INFO - Knowledge graph loaded from /Users/orderandchaos/code/minimal-light-rag/app/data/kg_db.graphml
+2025-04-17 22:07:25,420 - mini-rag - INFO - Knowledge graph loaded from /Users/orderandchaos/code/minimal-light-rag/app/data/kg_db.graphml
+2025-04-17 22:07:54,808 - mini-rag - INFO - Knowledge graph loaded from /Users/orderandchaos/code/minimal-light-rag/app/data/kg_db.graphml
+2025-04-17 22:07:59,570 - mini-rag - INFO - Received query: what do rabbits eat?
+2025-04-17 22:07:59,570 - mini-rag - INFO - Embedding cache hit
+2025-04-17 22:07:59,790 - mini-rag - INFO - Retrieved 5 excerpts for the query.
+2025-04-17 22:07:59,790 - mini-rag - INFO - New query
+2025-04-17 22:10:05,974 - mini-rag - INFO - Knowledge graph loaded from /Users/orderandchaos/code/minimal-light-rag/app/data/kg_db.graphml

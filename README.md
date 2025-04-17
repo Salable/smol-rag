@@ -1,6 +1,10 @@
-# SmolRAG
+### SmolRAG Overview
 
-SmolRAG is a lightweight retrieval-augmented generation system heavily inspired by and borrowing prompts and patterns from LightRAG. It supports multiple query types and includes a robust pipeline for ingesting, embedding, and updating documents.
+SmolRAG is a lightweight retrieval‑augmented generation system inspired by LightRAG, focused on fast, up‑to‑date querying of your own documents.
+
+Documents are split into ~2,000‑character overlapping chunks that keep Markdown code blocks intact. Long paragraphs are shortened at sentence boundaries so words never split. Each chunk is summarised to raise context quality before being embedded in NanoVectorDB, and its entities and relationships are stored in a local NetworkX knowledge graph for structured querying.
+
+Change detection is automatic. Every file’s full content is hashed. If the path already exists but the hash changes, the old embeddings and graph entries are deleted and the new content is reingested, so answers always reflect the latest versions of the documents.
 
 ## Docs
 
@@ -10,26 +14,11 @@ For setup instructions and general guidance, please refer to [SmolRAG Docs](DOCS
 
 ### Document Ingestion & Update Handling
 
-The document ingestion process is central to the system. Documents are split into excerpts, summarised, embedded, and checked for updates using hash-based deduplication. Each document is tracked using a combination of its file path and a hash of its content. If a file path already exists but the hash has changed, SmolRAG automatically removes the old version and re-ingests the updated content. This ensures that queries always reflect the most recent state of your source materials without unnecessary reprocessing.
-
-- **Smart Hashing for Change Detection**  
-  Each document's full content is hashed to generate a unique ID. This ensures:
-  - Identical content isn't reprocessed.
-  - Changes in the file will trigger a re-ingestion.
-
-- **Excerpt and Summary**  
-  Each document is split into overlapping chunks (~2000 characters), which are individually summarised to improve downstream context quality.
-
-- **Embeddings**  
-  Each excerpt and its summary are embedded using OpenAI’s embedding API and stored in NanoVectorDB.
-
-- **Entity & Relationship Extraction**  
-  Each excerpt is analysed for structured entities and relationships. These are saved in a local knowledge graph using NetworkX and also embedded for similarity queries.
-
-- **Update Lifecycle**  
-  When a document is updated:
-  1. The old doc is removed (its excerpts, embeddings, and KG entries).
-  2. The new content is reprocessed and indexed.
+Each document is split into overlapping chunks (approximately 2000 characters) using our default chunking class, which is optimised for code documentation by keeping code snippets intact.
+- Markdown code blocks are ingested in full, so be careful not to ingest documents with extremely long code blocks.
+- Text is then segmented into paragraphs and, if necessary, further divided into sentences at whitespace boundaries to avoid splitting words.
+- Each excerpt is then individually summarised with the whole document provided as context; the summary preserves details about where the excerpt fits in..
+- Documents are embedded and checked for updates using hash-based deduplication. Each document is tracked using a combination of its file path and a hash of its content. If a file path already exists but the hash has changed, SmolRAG automatically removes the old version and re-ingests the updated content to ensure that queries reflect the most recent state of your source materials without unnecessary reprocessing.
 
 ### Query Types
 

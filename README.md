@@ -1,10 +1,16 @@
-# Smol RAG
+# SmolRAG
 
-Smol RAG is a lightweight retrieval-augmented generation system heavily inspired by and borrowing prompts and patterns from LightRAG. It supports multiple query types and includes a robust pipeline for ingesting, embedding, and updating documents.
+SmolRAG is a lightweight retrieval-augmented generation system heavily inspired by and borrowing prompts and patterns from LightRAG. It supports multiple query types and includes a robust pipeline for ingesting, embedding, and updating documents.
 
-## Document Ingestion & Update Handling
+## Docs
 
-The document ingestion process is central to the system. Documents are split into excerpts, summarised, embedded, and checked for updates using hash-based deduplication. Each document is tracked using a combination of its file path and a hash of its content. If a file path already exists but the hash has changed, Smol RAG automatically removes the old version and re-ingests the updated content. This ensures that queries always reflect the most recent state of your source materials without unnecessary reprocessing.
+For setup instructions and general guidance, please refer to [SmolRAG Docs](DOCS.md).
+
+## Features
+
+### Document Ingestion & Update Handling
+
+The document ingestion process is central to the system. Documents are split into excerpts, summarised, embedded, and checked for updates using hash-based deduplication. Each document is tracked using a combination of its file path and a hash of its content. If a file path already exists but the hash has changed, SmolRAG automatically removes the old version and re-ingests the updated content. This ensures that queries always reflect the most recent state of your source materials without unnecessary reprocessing.
 
 - **Smart Hashing for Change Detection**  
   Each document's full content is hashed to generate a unique ID. This ensures:
@@ -25,13 +31,11 @@ The document ingestion process is central to the system. Documents are split int
   1. The old doc is removed (its excerpts, embeddings, and KG entries).
   2. The new content is reprocessed and indexed.
 
----
+### Query Types
 
-## Query Types
+SmolRAG supports multiple query methods that leverage both semantic embeddings and a structured knowledge graph (KG). These methods are designed to balance accuracy, flexibility, and reasoning depth depending on the type of user query.
 
-Smol RAG supports multiple query methods that leverage both semantic embeddings and a structured knowledge graph (KG). These methods are designed to balance accuracy, flexibility, and reasoning depth depending on the type of user query.
-
-### 1. **Vector Search Query** (`query`)
+#### 1. **Vector Search Query** (`query`)
 
 This method uses pure semantic similarity:
 
@@ -45,7 +49,7 @@ Use this when:
 - The question is directly answerable from document content.
 - You don’t need deeper relational understanding.
 
-### 2. **Local Knowledge Graph Query** (`local_kg_query`)
+#### 2. **Local Knowledge Graph Query** (`local_kg_query`)
 
 This method focuses on **low-level keywords** from the query:
 
@@ -58,7 +62,7 @@ Use this when:
 - You care about **fine-grained entity-level** information.
 - You need a graph-aware answer that highlights links between terms.
 
-### 3. **Global Knowledge Graph Query** (`global_kg_query`)
+#### 3. **Global Knowledge Graph Query** (`global_kg_query`)
 
 This focuses on **high-level keywords**:
 
@@ -70,7 +74,7 @@ Use this when:
 - You're looking for a **bird’s-eye view** of topic interconnections.
 - You want to reason about high-level concepts or broad themes.
 
-### 4. **Hybrid Knowledge Graph Query** (`hybrid_kg_query`)
+#### 4. **Hybrid Knowledge Graph Query** (`hybrid_kg_query`)
 
 A combination of **both low-level and high-level** keyword approaches:
 
@@ -82,7 +86,7 @@ Use this when:
 - You want the **best of both KG worlds**: precision + abstraction.
 - You have a query that blends specific terms with general topics.
 
-### 5. **Mix Query** (`mix_query`)
+#### 5. **Mix Query** (`mix_query`)
 
 This is the most comprehensive query type:
 
@@ -94,7 +98,3 @@ This is the most comprehensive query type:
 Use this when:
 - You want **maximum context and coverage**.
 - You have a complex query that benefits from both literal excerpts and conceptual links.
-
----
-
-Each query type is optimised for a different information need. You can start simple with vector search and progressively move toward hybrid or mix queries when interpretability and deeper reasoning matter.

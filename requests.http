@@ -7,3 +7,10 @@ Content-Type: application/json
 
 ###
 
+POST http://localhost:8000/query
+Content-Type: application/json
+
+{"text": "what do rabbits eat?"}
+
+###
+

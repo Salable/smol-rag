@@ -4,7 +4,8 @@ from typing import Any, Dict, List, Optional
 from dotenv import load_dotenv
 from openai import OpenAI
 
-from app.definitions import QUERY_CACHE_KV_PATH, EMBEDDING_CACHE_KV_PATH
+from app.definitions import QUERY_CACHE_KV_PATH, EMBEDDING_CACHE_KV_PATH, COMPLETION_MODEL, EMBEDDING_MODEL, \
+    OPENAI_API_KEY
 from app.kv_store import JsonKvStore
 from app.logger import logger
 from app.utilities import make_hash
@@ -13,15 +14,15 @@ load_dotenv()
 
 
 class OpenAiLlm:
-    def __init__(self, completion_model: str, embedding_model: str, query_cache_kv, embedding_cache_kv) -> None:
+    def __init__(self, completion_model=None, embedding_model=None, query_cache_kv=None, embedding_cache_kv=None, openai_api_key=None) -> None:
         """
         Initializes the OpenAiLlm instance with specified models and caches.
         """
-        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        self.client = openai_api_key or OpenAI(api_key=OPENAI_API_KEY)
         self.query_cache_kv = query_cache_kv or JsonKvStore(QUERY_CACHE_KV_PATH)
         self.embedding_cache_kv = embedding_cache_kv or JsonKvStore(EMBEDDING_CACHE_KV_PATH)
-        self.completion_model = completion_model
-        self.embedding_model = embedding_model
+        self.completion_model = completion_model or COMPLETION_MODEL
+        self.embedding_model = embedding_model or EMBEDDING_MODEL
 
     def get_completion(self, query: str, model: Optional[str] = None, context: str = "", use_cache: bool = True) -> str:
         """

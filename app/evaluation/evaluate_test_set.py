@@ -1,12 +1,16 @@
+import asyncio
 import inspect
 
 from app.definitions import EVALUATION_DATA_SET
-from app.openai_llm import get_completion
-from app.smol_rag import query, mix_query, local_kg_query, global_kg_query, hybrid_kg_query
-from app.utilities import get_json, create_file_if_not_exists
+from app.openai_llm import OpenAiLlm
+from app.smol_rag import SmolRag
+from app.utilities import get_json
+
+rag = SmolRag()
+llm = OpenAiLlm()
 
 
-def evaluate_accuracy(query, response, source):
+async def evaluate_accuracy(query, response, source):
     prompt = inspect.cleandoc(f"""
         Does the <response> accurately answer the <query> in relation to the <source>?
         
@@ -27,31 +31,41 @@ def evaluate_accuracy(query, response, source):
         </source>
     """)
 
-    responses = []
-    for _ in range(3):
-        response = get_completion(prompt, use_cache=False)
-        if response not in ['yes', 'no']:
+    tasks = [
+        rag.rate_limited_get_completion(prompt, use_cache=False)
+        for _ in range(3)
+    ]
+    results = await asyncio.gather(*tasks)
+
+    responses = [
+        1 if result == "yes" else 0
+        for result in results
+        if result in ("yes", "no")
+    ]
+
+    for result in results:
+        if result not in ("yes", "no"):
             print("failed to respond with yes or no")
-            continue
-        responses.append(1 if response == 'yes' else 0)
 
     return 1 if sum(responses) / len(responses) > 0.5 else 0
 
 
 if __name__ == '__main__':
-    data_set = get_json(EVALUATION_DATA_SET)
-    results = []
+    async def main():
 
-    for row in data_set:
+        data_set = get_json(EVALUATION_DATA_SET)
 
-        # response = query(row["query"])
-        # response = local_kg_query(row["query"])
-        # response = global_kg_query(row["query"])
-        # response = hybrid_kg_query(row["query"])
-        response = mix_query(row["query"])
+        query_tasks = [rag.mix_query(row["query"]) for row in data_set]
+        responses = await asyncio.gather(*query_tasks)
 
-        result = evaluate_accuracy(row["query"], response, row["pull_quote"])
-        results.append(result)
+        accuracy_tasks = [
+            evaluate_accuracy(row["query"], response, row["pull_quote"])
+            for row, response in zip(data_set, responses)
+        ]
+        results = await asyncio.gather(*accuracy_tasks)
 
-    score = sum(results) / len(results)
-    print(score)
+        score = sum(results) / len(results)
+        print(score)
+
+
+    asyncio.run(main())

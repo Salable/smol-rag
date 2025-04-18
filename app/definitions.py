@@ -1,7 +1,8 @@
 import os
 
-COMPLETION_MODEL = 'gpt-4o-mini'
-EMBEDDING_MODEL = 'text-embedding-3-small'
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+COMPLETION_MODEL = os.getenv('COMPLETION_MODEL', 'gpt-4o-mini')
+EMBEDDING_MODEL = os.getenv('EMBEDDING_MODEL', 'text-embedding-3-small')
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(ROOT_DIR, "data")

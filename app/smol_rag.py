@@ -1,7 +1,9 @@
+import asyncio
 import inspect
 import time
 
 import numpy as np
+from aiolimiter import AsyncLimiter
 
 from app.chunking import preserve_markdown_code_excerpts, naive_overlap_excerpts
 from app.definitions import INPUT_DOCS_DIR, SOURCE_TO_DOC_ID_KV_PATH, DOC_ID_TO_SOURCE_KV_PATH, EMBEDDINGS_DB, \
@@ -39,6 +41,7 @@ class SmolRag:
             overlap=200
     ):
         set_logger("main.log")
+        self.llm_limiter = AsyncLimiter(max_rate=100, time_period=1)
 
         self.excerpt_fn = excerpt_fn or naive_overlap_excerpts
         self.excerpt_size = excerpt_size
@@ -63,6 +66,13 @@ class SmolRag:
 
         self.graph = graph_db or NetworkXGraphStore(KG_DB)
 
+    async def rate_limited_get_completion(self, *args, **kwargs):
+        async with self.llm_limiter:
+            return self.llm.get_completion(*args, **kwargs)
+
+    async def rate_limited_get_embedding(self, *args, **kwargs):
+        async with self.llm_limiter:
+            return self.llm.get_embedding(*args, **kwargs)
 
     def remove_document_by_id(self, doc_id):
         if self.doc_to_source_kv.has(doc_id):
@@ -81,7 +91,7 @@ class SmolRag:
             self.embeddings_db.delete(excerpt_ids)
             self.embeddings_db.save()
 
-    def import_documents(self):
+    async def import_documents(self):
         sources = get_docs(INPUT_DOCS_DIR)
         for source in sources:
             content = read_file(source)
@@ -90,15 +100,15 @@ class SmolRag:
             if not self.source_to_doc_kv.has(source):
                 logger.info(f"Importing new document: {source} (ID: {doc_id})")
                 self._add_document_maps(source, content)
-                self._embed_document(content, doc_id)
-                self._extract_entities(content, doc_id)
+                await self._embed_document(content, doc_id)
+                await self._extract_entities(content, doc_id)
             elif not self.source_to_doc_kv.equal(source, doc_id):
                 logger.info(f"Updating document: {source} (New ID: {doc_id})")
                 old_doc_id = self.source_to_doc_kv.get_by_key(source)
                 self.remove_document_by_id(old_doc_id)
                 self._add_document_maps(source, content)
-                self._embed_document(content, doc_id)
-                self._extract_entities(content, doc_id)
+                await self._embed_document(content, doc_id)
+                await self._extract_entities(content, doc_id)
             else:
                 logger.debug(f"No changes detected for document: {source} (ID: {doc_id})")
 
@@ -109,7 +119,7 @@ class SmolRag:
         self.source_to_doc_kv.save()
         self.doc_to_source_kv.save()
 
-    def _embed_document(self, content, doc_id):
+    async def _embed_document(self, content, doc_id):
         start_time = time.time()
         excerpts = self.excerpt_fn(content, self.excerpt_size, self.overlap)
         excerpt_ids = []
@@ -118,7 +128,7 @@ class SmolRag:
             excerpt_ids.append(excerpt_id)
             summary = self._get_excerpt_summary(content, excerpt)
             embedding_content = f"{excerpt}\n\n{summary}"
-            embedding_result = self.llm.get_embedding(embedding_content)
+            embedding_result = await self.rate_limited_get_embedding(embedding_content)
             vector = np.array(embedding_result, dtype=np.float32)
             self.embeddings_db.upsert([
                 {"__id__": excerpt_id, "__vector__": vector, "__doc_id__": doc_id, "__inserted_at__": time.time()}
@@ -139,16 +149,16 @@ class SmolRag:
         elapsed = time.time() - start_time
         logger.info(f"Document {doc_id} processed with {len(excerpts)} excerpts in {elapsed:.2f} seconds.")
 
-    def _get_excerpt_summary(self, full_doc, excerpt):
+    async def _get_excerpt_summary(self, full_doc, excerpt):
         prompt = excerpt_summary_prompt(full_doc, excerpt)
         try:
-            summary = self.llm.get_completion(prompt)
+            summary = await self.rate_limited_get_completion(prompt)
         except Exception as e:
             logger.error(f"LLM call in _get_excerpt_summary failed: {e}")
             summary = "Summary unavailable."
         return summary
 
-    def _extract_entities(self, content, doc_id):
+    async def _extract_entities(self, content, doc_id):
         start_time = time.time()
         total_entities = 0
         total_relationships = 0
@@ -157,7 +167,7 @@ class SmolRag:
         for excerpt in excerpts:
             excerpt_id = make_hash(excerpt, "excerpt_id_")
             try:
-                result = self.llm.get_completion(get_extract_entities_prompt(excerpt))
+                result = await self.rate_limited_get_completion(get_extract_entities_prompt(excerpt))
             except Exception as e:
                 logger.error(f"LLM call for entity extraction failed for excerpt {excerpt_id}: {e}")
                 continue
@@ -167,7 +177,7 @@ class SmolRag:
             clean_records = []
             for record in records:
                 if record.startswith('(') and record.endswith(')'):
-                    record = record[1:-1]
+                    record = record = record[1:-1]
                 clean_records.append(clean_str(record))
             records = clean_records
 
@@ -183,11 +193,11 @@ class SmolRag:
                         _, name, category, description = fields[:4]
                         existing_node = self.graph.get_node(name)
                         if existing_node:
-                            existing_descriptions = split_string_by_multi_markers(existing_node["description"], KG_SEP)
+                            existing_descriptions = split_string_by_multi_markers(existing_node["description"], [KG_SEP])
                             descriptions = KG_SEP.join(set(list(existing_descriptions) + [description]))
-                            existing_categories = split_string_by_multi_markers(existing_node["category"], KG_SEP)
+                            existing_categories = split_string_by_multi_markers(existing_node["category"], [KG_SEP])
                             categories = KG_SEP.join(set(list(existing_categories) + [category]))
-                            existing_excerpt_ids = split_string_by_multi_markers(existing_node["excerpt_id"], KG_SEP)
+                            existing_excerpt_ids = split_string_by_multi_markers(existing_node["excerpt_id"], [KG_SEP])
                             excerpt_ids = KG_SEP.join(set(list(existing_excerpt_ids) + [excerpt_id]))
                             # Todo: summarise descriptions with LLM query if they get too long
                             self.graph.add_node(
@@ -201,7 +211,7 @@ class SmolRag:
                         total_entities += 1
                         entity_id = make_hash(name, prefix="ent-")
                         embedding_content = f"{name} {description}"
-                        embedding_result = self.llm.get_embedding(embedding_content)
+                        embedding_result = await self.rate_limited_get_embedding(embedding_content)
                         vector = np.array(embedding_result, dtype=np.float32)
                         self.entities_db.upsert([
                             {
@@ -219,11 +229,11 @@ class SmolRag:
                         existing_edge = self.graph.get_edge((source, target))
                         weight = float(weight) if is_float_regex(weight) else 1.0
                         if existing_edge:
-                            existing_descriptions = split_string_by_multi_markers(existing_edge["description"], KG_SEP)
+                            existing_descriptions = split_string_by_multi_markers(existing_edge["description"], [KG_SEP])
                             descriptions = KG_SEP.join(set(list(existing_descriptions) + [description]))
-                            existing_keywords = split_string_by_multi_markers(existing_edge["keywords"], KG_SEP)
+                            existing_keywords = split_string_by_multi_markers(existing_edge["keywords"], [KG_SEP])
                             keywords = KG_SEP.join(set(list(existing_keywords) + [keywords]))
-                            existing_excerpt_ids = split_string_by_multi_markers(existing_edge["excerpt_id"], KG_SEP)
+                            existing_excerpt_ids = split_string_by_multi_markers(existing_edge["excerpt_id"], [KG_SEP])
                             excerpt_ids = KG_SEP.join(set(list(existing_excerpt_ids) + [excerpt_id]))
                             weight = sum([weight, existing_edge["weight"]])
                             self.graph.add_edge(source, target, description=descriptions, keywords=keywords,
@@ -237,7 +247,7 @@ class SmolRag:
 
                         relationship_id = make_hash(f"{source}_{target}", prefix="ent-")
                         embedding_content = f"{keywords} {source} {target} {description}"
-                        embedding_result = self.llm.get_embedding(embedding_content)
+                        embedding_result = await self.rate_limited_get_embedding(embedding_content)
                         vector = np.array(embedding_result, dtype=np.float32)
                         self.relationships_db.upsert([
                             {
@@ -260,14 +270,14 @@ class SmolRag:
         logger.info(f"Extracted {total_entities} entities and {total_relationships} relationships "
                     f"from document {doc_id} in {elapsed:.2f} seconds.")
 
-    def query(self, text):
+    async def query(self, text):
         logger.info(f"Received query: {text}")
-        excerpts = self._get_query_excerpts(text)
+        excerpts = await self._get_query_excerpts(text)
         logger.info(f"Retrieved {len(excerpts)} excerpts for the query.")
         excerpt_context = self._get_excerpt_context(excerpts)
         system_prompt = get_query_system_prompt(excerpt_context)
 
-        return self.llm.get_completion(text, context=system_prompt.strip(), use_cache=False)
+        return await self.rate_limited_get_completion(text, context=system_prompt.strip(), use_cache=False)
 
     def _get_excerpt_context(self, excerpts):
         context = ""
@@ -285,17 +295,17 @@ class SmolRag:
 
         return context
 
-    def _get_query_excerpts(self, text):
-        embedding = self.llm.get_embedding(text)
+    async def _get_query_excerpts(self, text):
+        embedding = await self.rate_limited_get_embedding(text)
         embedding_array = np.array(embedding)
         results = self.embeddings_db.query(query=embedding_array, top_k=5, better_than_threshold=0.02)
         excerpts = [self.excerpt_kv.get_by_key(result["__id__"]) for result in results]
         excerpts = truncate_list_by_token_size(excerpts, get_text_for_row=lambda x: x["excerpt"], max_token_size=4000)
         return excerpts
 
-    def hybrid_kg_query(self, text):
+    async def hybrid_kg_query(self, text):
         prompt = get_high_low_level_keywords_prompt(text)
-        result = self.llm.get_completion(prompt)
+        result = await self.rate_limited_get_completion(prompt)
         keyword_data = extract_json_from_text(result)
         logger.info("Processed high/low level keywords for hybrid KG query.")
 
@@ -307,11 +317,11 @@ class SmolRag:
         excerpts = ll_entity_excerpts + hl_entity_excerpts
         context = self._get_kg_query_context(entities, excerpts, relations)
         system_prompt = get_kg_query_system_prompt(context)
-        return self.llm.get_completion(text, context=system_prompt.strip(), use_cache=False)
+        return await self.rate_limited_get_completion(text, context=system_prompt.strip(), use_cache=False)
 
-    def local_kg_query(self, text):
+    async def local_kg_query(self, text):
         prompt = get_high_low_level_keywords_prompt(text)
-        result = self.llm.get_completion(prompt)
+        result = await self.rate_limited_get_completion(prompt)
         keyword_data = extract_json_from_text(result)
         logger.info("Processed high/low level keywords for local KG query.")
 
@@ -321,11 +331,11 @@ class SmolRag:
         excerpts = ll_entity_excerpts
         context = self._get_kg_query_context(entities, excerpts, relations)
         system_prompt = get_kg_query_system_prompt(context)
-        return self.llm.get_completion(text, context=system_prompt.strip(), use_cache=False)
+        return await self.rate_limited_get_completion(text, context=system_prompt.strip(), use_cache=False)
 
-    def global_kg_query(self, text):
+    async def global_kg_query(self, text):
         prompt = get_high_low_level_keywords_prompt(text)
-        result = self.llm.get_completion(prompt)
+        result = await self.rate_limited_get_completion(prompt)
         keyword_data = extract_json_from_text(result)
         logger.info("Processed high/low level keywords for global KG query.")
 
@@ -335,25 +345,25 @@ class SmolRag:
         excerpts = hl_entity_excerpts
         context = self._get_kg_query_context(entities, excerpts, relations)
         system_prompt = get_kg_query_system_prompt(context)
-        return self.llm.get_completion(text, context=system_prompt.strip(), use_cache=False)
+        return await self.rate_limited_get_completion(text, context=system_prompt.strip(), use_cache=False)
 
-    def mix_query(self, text):
+    async def mix_query(self, text):
         prompt = get_high_low_level_keywords_prompt(text)
-        result = self.llm.get_completion(prompt)
+        result = await self.rate_limited_get_completion(prompt)
         keyword_data = extract_json_from_text(result)
         logger.info("Processed high/low level keywords for mixed KG query.")
 
-        ll_dataset, ll_entity_excerpts, ll_relations = self._get_low_level_dataset(keyword_data)
-        hl_dataset, hl_entities, hl_entity_excerpts = self._get_high_level_dataset(keyword_data)
+        ll_dataset, ll_entity_excerpts, ll_relations = await self._get_low_level_dataset(keyword_data)
+        hl_dataset, hl_entities, hl_entity_excerpts = await self._get_high_level_dataset(keyword_data)
 
         kg_entities = ll_dataset + hl_entities
         kg_relations = ll_relations + hl_dataset
         kg_excerpts = ll_entity_excerpts + hl_entity_excerpts
-        query_excerpts = self._get_query_excerpts(text)
+        query_excerpts = await self._get_query_excerpts(text)
         kg_context = self._get_kg_query_context(kg_entities, kg_excerpts, kg_relations)
         excerpt_context = self._get_excerpt_context(query_excerpts)
         system_prompt = get_mix_system_prompt(excerpt_context, kg_context)
-        return self.llm.get_completion(text, context=system_prompt.strip(), use_cache=False)
+        return await self.rate_limited_get_completion(text, context=system_prompt.strip(), use_cache=False)
 
     def _get_kg_query_context(self, entities, excerpts, relations):
         entity_csv = [["entity", "type", "description", "rank"]]
@@ -398,11 +408,12 @@ class SmolRag:
                     f"and {len(excerpts)} excerpts.")
         return context
 
-    def _get_high_level_dataset(self, keyword_data):
+    async def _get_high_level_dataset(self, keyword_data):
         hl_keywords = keyword_data.get("high_level_keywords", [])
         logger.info(f"Found {len(hl_keywords)} high-level keywords.")
+        hl_results = []
         if len(hl_keywords):
-            hl_embedding = self.llm.get_embedding(hl_keywords)
+            hl_embedding = await self.rate_limited_get_embedding(hl_keywords)
             hl_embedding_array = np.array(hl_embedding)
             hl_results = self.relationships_db.query(query=hl_embedding_array, top_k=25, better_than_threshold=0.02)
         hl_data = [self.graph.get_edge((r["__source__"], r["__target__"])) for r in hl_results]
@@ -421,11 +432,12 @@ class SmolRag:
         logger.info(f"High-level dataset: {len(hl_dataset)} relationships, {len(hl_entities)} entities extracted.")
         return hl_dataset, hl_entities, hl_entity_excerpts
 
-    def _get_low_level_dataset(self, keyword_data):
+    async def _get_low_level_dataset(self, keyword_data):
         ll_keywords = keyword_data.get("low_level_keywords", [])
         logger.info(f"Found {len(ll_keywords)} low-level keywords.")
+        ll_results = []
         if len(ll_keywords):
-            ll_embedding = self.llm.get_embedding(ll_keywords)
+            ll_embedding = await self.rate_limited_get_embedding(ll_keywords)
             ll_embedding_array = np.array(ll_embedding)
             ll_results = self.entities_db.query(query=ll_embedding_array, top_k=25, better_than_threshold=0.02)
         ll_data = [self.graph.get_node(r["__entity_name__"]) for r in ll_results]
@@ -440,7 +452,7 @@ class SmolRag:
         return ll_dataset, ll_entity_excerpts, ll_relations
 
     def _get_excerpts_for_entities(self, kg_dataset):
-        excerpt_ids = [split_string_by_multi_markers(row["excerpt_id"], KG_SEP) for row in kg_dataset]
+        excerpt_ids = [split_string_by_multi_markers(row["excerpt_id"], [KG_SEP]) for row in kg_dataset]
         all_edges = [self.graph.get_node_edges(row["entity_name"]) for row in kg_dataset]
         sibling_names = set()
         for edge in all_edges:
@@ -588,43 +600,45 @@ class SmolRag:
 
 
 if __name__ == '__main__':
-    delete_all_files(DATA_DIR)
-    delete_all_files(LOG_DIR)
+    async def main():
+        delete_all_files(DATA_DIR)
+        delete_all_files(LOG_DIR)
 
-    smol_rag = SmolRag(excerpt_fn=preserve_markdown_code_excerpts)
+        smol_rag = SmolRag(excerpt_fn=preserve_markdown_code_excerpts)
 
-    smol_rag.import_documents()
+        print(smol_rag.query("what is smol rag?"))  # Should answer
+        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        print(smol_rag.query("what do cats eat?"))  # Should reject
+        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        print(smol_rag.query("What's the subject matter we can discuss?"))  # Should answer
 
-    print(smol_rag.query("what do rabbits eat?"))  # Should answer
-    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-    print(smol_rag.query("what do cats eat?"))  # Should reject
-    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-    print(smol_rag.query("What's the subject matter we can discuss?"))  # Should answer
+        print(smol_rag.hybrid_kg_query("what is smol rag?"))  # Should answer
+        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        print(smol_rag.hybrid_kg_query("what do cows eat?"))  # Should reject
+        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        print(smol_rag.hybrid_kg_query("What's the subject matter we can discuss?"))
 
-    print(smol_rag.hybrid_kg_query("what do rabbits eat?"))  # Should answer
-    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-    print(smol_rag.hybrid_kg_query("what do cows eat?"))  # Should reject
-    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-    print(smol_rag.hybrid_kg_query("What's the subject matter we can discuss?"))
+        print(smol_rag.local_kg_query("what is smol rag?"))  # Should answer
+        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        print(smol_rag.local_kg_query("what do cows eat?"))  # Should reject
+        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        print(smol_rag.local_kg_query("What's the subject matter we can discuss?"))
 
-    print(smol_rag.local_kg_query("what do rabbits eat?"))  # Should answer
-    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-    print(smol_rag.local_kg_query("what do cows eat?"))  # Should reject
-    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-    print(smol_rag.local_kg_query("What's the subject matter we can discuss?"))
+        print(smol_rag.global_kg_query("what is smol rag?"))  # Should answer
+        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        print(smol_rag.global_kg_query("what do cows eat?"))  # Should reject
+        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        print(smol_rag.global_kg_query("What's the subject matter we can discuss?"))
 
-    print(smol_rag.global_kg_query("what do rabbits eat?"))  # Should answer
-    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-    print(smol_rag.global_kg_query("what do cows eat?"))  # Should reject
-    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-    print(smol_rag.global_kg_query("What's the subject matter we can discuss?"))
+        print(smol_rag.mix_query("what is smol rag?"))  # Should answer
+        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        print(smol_rag.mix_query("what do cows eat?"))  # Should reject
+        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        print(smol_rag.mix_query("What's the subject matter we can discuss?"))
 
-    print(smol_rag.mix_query("what do rabbits eat?"))  # Should answer
-    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-    print(smol_rag.mix_query("what do cows eat?"))  # Should reject
-    print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-    print(smol_rag.mix_query("What's the subject matter we can discuss?"))
+        # smol_rag.remove_document_by_id("doc_4c3f8100da0b90c1a44c94e6b4ffa041")
 
-    # smol_rag.remove_document_by_id("doc_4c3f8100da0b90c1a44c94e6b4ffa041")
+        # Todo: Use Jaal graph visualisation to inspect knowledge graph
 
-    # Todo: Use Jaal graph visualisation to inspect knowledge graph
+
+    asyncio.run(main())

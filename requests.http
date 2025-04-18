@@ -1,16 +1,51 @@
-###
-
+### Standard Vector Search Query
+# Uses pure semantic similarity to find relevant excerpts
 POST http://localhost:8000/query
 Content-Type: application/json
 
-{"text": "what do rabbits eat?"}
+{
+  "text": "What is SmolRAG?",
+  "query_type": "standard"
+}
 
-###
-
+### Local Knowledge Graph Query
+# Focuses on low-level keywords from the query
 POST http://localhost:8000/query
 Content-Type: application/json
 
-{"text": "what do rabbits eat?"}
+{
+  "text": "What entities are related to document chunking?",
+  "query_type": "local_kg"
+}
+
+### Global Knowledge Graph Query
+# Focuses on high-level keywords from the query
+POST http://localhost:8000/query
+Content-Type: application/json
+
+{
+  "text": "How are different components connected?",
+  "query_type": "global_kg"
+}
+
+### Hybrid Knowledge Graph Query
+# Combines local and global KG query approaches
+POST http://localhost:8000/query
+Content-Type: application/json
+
+{
+  "text": "What is the relationship between embeddings and queries?",
+  "query_type": "hybrid_kg"
+}
+
+### Mix Query
+# Most comprehensive, combines vector search and KG reasoning
+POST http://localhost:8000/query
+Content-Type: application/json
+
+{
+  "text": "How does SmolRAG process and retrieve information?",
+  "query_type": "mix"
+}
 
 ###
-

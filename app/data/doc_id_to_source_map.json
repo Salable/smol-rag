@@ -1,7 +1,14 @@
 {
-    "doc_800c5437713cbfd1d7ee583dc69121d9": "/Users/orderandchaos/code/minimal-light-rag/app/input_docs/rabbit-family-relationships.md",
-    "doc_2a9b6880cf3aebea2c23929f568cb9ca": "/Users/orderandchaos/code/minimal-light-rag/app/input_docs/rabbit-evolution.md",
-    "doc_bcf63ec195fbc1172e42e720ac302c26": "/Users/orderandchaos/code/minimal-light-rag/app/input_docs/rabbits-grazing.md",
-    "doc_2fcd94eb80adeb56d104d46bacb84963": "/Users/orderandchaos/code/minimal-light-rag/app/input_docs/rabbit-species.md",
-    "doc_a6b763a824e7236a0946b5f6b90bccae": "/Users/orderandchaos/code/minimal-light-rag/app/input_docs/rabbit-ecosystem.md"
+    "doc_8162fe51d3dbb054ddc104d860660c80": "/Users/orderandchaos/code/minimal-light-rag/app/input_docs/01-project-overview.md",
+    "doc_68ee570c562a4cdfb5c37cf96be2898d": "/Users/orderandchaos/code/minimal-light-rag/app/input_docs/04-similarity-search.md",
+    "doc_b117633f7a8a496b4f07a2327947e4d4": "/Users/orderandchaos/code/minimal-light-rag/app/input_docs/09-api-documentation.md",
+    "doc_527d38dfafb42e0277ca302149af6bdb": "/Users/orderandchaos/code/minimal-light-rag/app/input_docs/12-troubleshooting-guide.md",
+    "doc_10f1f958702af459069ddad427544c69": "/Users/orderandchaos/code/minimal-light-rag/app/input_docs/08-usage-examples.md",
+    "doc_45a79dc2abea34f697412f4eb7307752": "/Users/orderandchaos/code/minimal-light-rag/app/input_docs/03-excerpt-embeddings.md",
+    "doc_b97b885b35103b0344099aba7ce88c51": "/Users/orderandchaos/code/minimal-light-rag/app/input_docs/10-configuration-options.md",
+    "doc_785c7976a31a4fdb51c1594e85b0fcc6": "/Users/orderandchaos/code/minimal-light-rag/app/input_docs/02-document-ingestion.md",
+    "doc_2c751da5b112adc2cd611bbd9bb377fa": "/Users/orderandchaos/code/minimal-light-rag/app/input_docs/11-performance-considerations.md",
+    "doc_dd41b1cad448630c72186b53ef909f09": "/Users/orderandchaos/code/minimal-light-rag/app/input_docs/05-knowledge-graphs.md",
+    "doc_ceb1a98fb8763cb86ff874022055d4b7": "/Users/orderandchaos/code/minimal-light-rag/app/input_docs/07-implementation-details.md",
+    "doc_79b1966b0925f4513282c449c4e7dc0a": "/Users/orderandchaos/code/minimal-light-rag/app/input_docs/06-query-types.md"
 }

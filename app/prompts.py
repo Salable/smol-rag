@@ -39,8 +39,10 @@ def get_query_system_prompt(excerpts):
     return system_prompt
 
 
-def get_extract_entities_prompt(content,
-                                entity_types=["species", "animal", "ecology", "evolution", "behaviour", "ecosystem"]):
+def get_extract_entities_prompt(
+        content,
+        entity_types=["api", "configuration", "function", "variable", "feature", "example", "interface"]
+):
     context_base = dict(
         tuple_delimiter=TUPLE_SEP,
         record_delimiter=REC_SEP,

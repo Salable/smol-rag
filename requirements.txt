@@ -14,3 +14,4 @@ tqdm==4.67.1
 fastapi==0.115.12
 pydantic==2.10.6
 uvicorn==0.34.1
+aiolimiter~=1.2.1

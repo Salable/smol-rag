@@ -22,7 +22,7 @@ query_map = {
     "mix": smol_rag.mix_query,
 }
 
-def validate_request(request: QueryRequest) -> Callable:
+def get_query_function(request: QueryRequest) -> Callable:
     """Validate the query request and return the appropriate query function."""
     if not request.text.strip():
         raise HTTPException(status_code=400, detail="Query text cannot be empty")
@@ -44,9 +44,9 @@ async def query_endpoint(request: QueryRequest):
     Query types: standard, hybrid_kg, local_kg, global_kg, mix
     """
     try:
-        query_func = validate_request(request)
+        query_func = get_query_function(request)
         
-        result = query_func(request.text)
+        result = await query_func(request.text)
         return QueryResponse(result=result)
         
     except HTTPException:

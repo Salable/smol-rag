@@ -126,7 +126,7 @@ class SmolRag:
         for i, excerpt in enumerate(excerpts):
             excerpt_id = make_hash(excerpt, "excerpt_id_")
             excerpt_ids.append(excerpt_id)
-            summary = self._get_excerpt_summary(content, excerpt)
+            summary = await self._get_excerpt_summary(content, excerpt)
             embedding_content = f"{excerpt}\n\n{summary}"
             embedding_result = await self.rate_limited_get_embedding(embedding_content)
             vector = np.array(embedding_result, dtype=np.float32)
@@ -309,8 +309,8 @@ class SmolRag:
         keyword_data = extract_json_from_text(result)
         logger.info("Processed high/low level keywords for hybrid KG query.")
 
-        ll_dataset, ll_entity_excerpts, ll_relations = self._get_low_level_dataset(keyword_data)
-        hl_dataset, hl_entities, hl_entity_excerpts = self._get_high_level_dataset(keyword_data)
+        ll_dataset, ll_entity_excerpts, ll_relations = await self._get_low_level_dataset(keyword_data)
+        hl_dataset, hl_entities, hl_entity_excerpts = await self._get_high_level_dataset(keyword_data)
 
         entities = ll_dataset + hl_entities
         relations = ll_relations + hl_dataset
@@ -325,7 +325,7 @@ class SmolRag:
         keyword_data = extract_json_from_text(result)
         logger.info("Processed high/low level keywords for local KG query.")
 
-        ll_dataset, ll_entity_excerpts, ll_relations = self._get_low_level_dataset(keyword_data)
+        ll_dataset, ll_entity_excerpts, ll_relations = await self._get_low_level_dataset(keyword_data)
         entities = ll_dataset
         relations = ll_relations
         excerpts = ll_entity_excerpts
@@ -339,7 +339,7 @@ class SmolRag:
         keyword_data = extract_json_from_text(result)
         logger.info("Processed high/low level keywords for global KG query.")
 
-        hl_dataset, hl_entities, hl_entity_excerpts = self._get_high_level_dataset(keyword_data)
+        hl_dataset, hl_entities, hl_entity_excerpts = await self._get_high_level_dataset(keyword_data)
         entities = hl_entities
         relations = hl_dataset
         excerpts = hl_entity_excerpts
@@ -601,40 +601,42 @@ class SmolRag:
 
 if __name__ == '__main__':
     async def main():
-        delete_all_files(DATA_DIR)
+        # delete_all_files(DATA_DIR)
         delete_all_files(LOG_DIR)
 
         smol_rag = SmolRag(excerpt_fn=preserve_markdown_code_excerpts)
 
-        print(smol_rag.query("what is smol rag?"))  # Should answer
-        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(smol_rag.query("what do cats eat?"))  # Should reject
-        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(smol_rag.query("What's the subject matter we can discuss?"))  # Should answer
+        await smol_rag.import_documents()
 
-        print(smol_rag.hybrid_kg_query("what is smol rag?"))  # Should answer
+        print(await smol_rag.query("what is smol rag?"))  # Should answer
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(smol_rag.hybrid_kg_query("what do cows eat?"))  # Should reject
+        print(await smol_rag.query("what do cats eat?"))  # Should reject
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(smol_rag.hybrid_kg_query("What's the subject matter we can discuss?"))
+        print(await smol_rag.query("What's the subject matter we can discuss?"))  # Should answer
 
-        print(smol_rag.local_kg_query("what is smol rag?"))  # Should answer
+        print(await smol_rag.hybrid_kg_query("what is smol rag?"))  # Should answer
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(smol_rag.local_kg_query("what do cows eat?"))  # Should reject
+        print(await smol_rag.hybrid_kg_query("what do cows eat?"))  # Should reject
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(smol_rag.local_kg_query("What's the subject matter we can discuss?"))
+        print(await smol_rag.hybrid_kg_query("What's the subject matter we can discuss?"))
 
-        print(smol_rag.global_kg_query("what is smol rag?"))  # Should answer
+        print(await smol_rag.local_kg_query("what is smol rag?"))  # Should answer
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(smol_rag.global_kg_query("what do cows eat?"))  # Should reject
+        print(await smol_rag.local_kg_query("what do cows eat?"))  # Should reject
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(smol_rag.global_kg_query("What's the subject matter we can discuss?"))
+        print(await smol_rag.local_kg_query("What's the subject matter we can discuss?"))
 
-        print(smol_rag.mix_query("what is smol rag?"))  # Should answer
+        print(await smol_rag.global_kg_query("what is smol rag?"))  # Should answer
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(smol_rag.mix_query("what do cows eat?"))  # Should reject
+        print(await smol_rag.global_kg_query("what do cows eat?"))  # Should reject
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(smol_rag.mix_query("What's the subject matter we can discuss?"))
+        print(await smol_rag.global_kg_query("What's the subject matter we can discuss?"))
+
+        print(await smol_rag.mix_query("what is smol rag?"))  # Should answer
+        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        print(await smol_rag.mix_query("what do cows eat?"))  # Should reject
+        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        print(await smol_rag.mix_query("What's the subject matter we can discuss?"))
 
         # smol_rag.remove_document_by_id("doc_4c3f8100da0b90c1a44c94e6b4ffa041")
 

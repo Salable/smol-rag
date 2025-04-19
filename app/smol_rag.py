@@ -68,26 +68,23 @@ class SmolRag:
 
     async def rate_limited_get_completion(self, *args, **kwargs):
         async with self.llm_limiter:
-            return self.llm.get_completion(*args, **kwargs)
+            return await self.llm.get_completion(*args, **kwargs)
 
     async def rate_limited_get_embedding(self, *args, **kwargs):
         async with self.llm_limiter:
-            return self.llm.get_embedding(*args, **kwargs)
+            return await self.llm.get_embedding(*args, **kwargs)
 
-    def remove_document_by_id(self, doc_id):
-        if self.doc_to_source_kv.has(doc_id):
-            source = self.doc_to_source_kv.get_by_key(doc_id)
-            self.doc_to_source_kv.remove(doc_id)
-            self.source_to_doc_kv.remove(source)
-            self.doc_to_source_kv.save()
-            self.source_to_doc_kv.save()
-        if self.doc_to_excerpt_kv.has(doc_id):
-            excerpt_ids = self.doc_to_excerpt_kv.get_by_key(doc_id)
-            for excerpt_id in excerpt_ids:
-                self.excerpt_kv.remove(excerpt_id)
-            self.doc_to_excerpt_kv.remove(doc_id)
-            self.excerpt_kv.save()
-            self.doc_to_excerpt_kv.save()
+    async def remove_document_by_id(self, doc_id):
+        if await self.doc_to_source_kv.has(doc_id):
+            source = await self.doc_to_source_kv.get_by_key(doc_id)
+            await asyncio.gather(self.doc_to_source_kv.remove(doc_id), self.source_to_doc_kv.remove(source))
+            await asyncio.gather(self.doc_to_source_kv.save(), self.source_to_doc_kv.save())
+        if await self.doc_to_excerpt_kv.has(doc_id):
+            excerpt_ids = await self.doc_to_excerpt_kv.get_by_key(doc_id)
+            excerpts_to_remove = [self.excerpt_kv.remove(excerpt_id) for excerpt_id in excerpt_ids]
+            await asyncio.gather(*excerpts_to_remove)
+            await self.doc_to_excerpt_kv.remove(doc_id)
+            await asyncio.gather(self.excerpt_kv.save(), self.doc_to_excerpt_kv.save())
             self.embeddings_db.delete(excerpt_ids)
             self.embeddings_db.save()
 
@@ -97,16 +94,16 @@ class SmolRag:
         for source in sources:
             content = read_file(source)
             doc_id = make_hash(content, "doc_")
-            if not self.source_to_doc_kv.has(source):
+            if not await self.source_to_doc_kv.has(source):
                 logger.info(f"Importing new document: {source} (ID: {doc_id})")
-                self._add_document_maps(source, content)
+                tasks.append(self._add_document_maps(source, content))
                 tasks.append(self._embed_document(content, doc_id))
                 tasks.append(self._extract_entities(content, doc_id))
-            elif not self.source_to_doc_kv.equal(source, doc_id):
+            elif not await self.source_to_doc_kv.equal(source, doc_id):
                 logger.info(f"Updating document: {source} (New ID: {doc_id})")
-                old_doc_id = self.source_to_doc_kv.get_by_key(source)
-                self.remove_document_by_id(old_doc_id)
-                self._add_document_maps(source, content)
+                old_doc_id = await self.source_to_doc_kv.get_by_key(source)
+                tasks.append(self.remove_document_by_id(old_doc_id))
+                tasks.append(self._add_document_maps(source, content))
                 tasks.append(self._embed_document(content, doc_id))
                 tasks.append(self._extract_entities(content, doc_id))
             else:
@@ -114,12 +111,12 @@ class SmolRag:
 
         await asyncio.gather(*tasks)
 
-    def _add_document_maps(self, source, content):
+    async def _add_document_maps(self, source, content):
         doc_id = make_hash(content, "doc_")
-        self.source_to_doc_kv.add(source, doc_id)
-        self.doc_to_source_kv.add(doc_id, source)
-        self.source_to_doc_kv.save()
-        self.doc_to_source_kv.save()
+        await self.source_to_doc_kv.add(source, doc_id)
+        await self.doc_to_source_kv.add(doc_id, source)
+        await self.source_to_doc_kv.save()
+        await self.doc_to_source_kv.save()
 
     async def _embed_document(self, content, doc_id):
         start_time = time.time()
@@ -149,7 +146,7 @@ class SmolRag:
                     "__inserted_at__": time.time()
                 }
             ])
-            self.excerpt_kv.add(excerpt_id, {
+            await self.excerpt_kv.add(excerpt_id, {
                 "doc_id": doc_id,
                 "doc_order_index": i,
                 "excerpt": excerpt,
@@ -158,10 +155,10 @@ class SmolRag:
             })
             logger.info(f"Created embedding for excerpt {excerpt_id} associated with document {doc_id}")
 
-        self.excerpt_kv.save()
+        await self.excerpt_kv.save()
         self.embeddings_db.save()
-        self.doc_to_excerpt_kv.add(doc_id, excerpt_ids)
-        self.doc_to_excerpt_kv.save()
+        await self.doc_to_excerpt_kv.add(doc_id, excerpt_ids)
+        await self.doc_to_excerpt_kv.save()
         elapsed = time.time() - start_time
         logger.info(f"Document {doc_id} processed with {len(excerpts)} excerpts in {elapsed:.2f} seconds.")
 
@@ -329,6 +326,7 @@ class SmolRag:
         embedding_array = np.array(embedding)
         results = self.embeddings_db.query(query=embedding_array, top_k=5, better_than_threshold=0.02)
         excerpts = [self.excerpt_kv.get_by_key(result["__id__"]) for result in results]
+        excerpts = await asyncio.gather(*excerpts)
         excerpts = truncate_list_by_token_size(excerpts, get_text_for_row=lambda x: x["excerpt"], max_token_size=4000)
         return excerpts
 
@@ -456,7 +454,7 @@ class SmolRag:
             get_text_for_row=lambda x: x["description"],
             max_token_size=4000,
         )
-        hl_entity_excerpts = self._get_excerpts_for_relationships(hl_dataset)
+        hl_entity_excerpts = await self._get_excerpts_for_relationships(hl_dataset)
         hl_entities = self._get_entities_from_relationships(hl_dataset)
         logger.info(f"High-level dataset: {len(hl_dataset)} relationships, {len(hl_entities)} entities extracted.")
         return hl_dataset, hl_entities, hl_entity_excerpts
@@ -475,12 +473,12 @@ class SmolRag:
             {**n, "entity_name": k["__entity_name__"], "rank": d}
             for k, n, d in zip(ll_results, ll_data, ll_degrees)
         ]
-        ll_entity_excerpts = self._get_excerpts_for_entities(ll_dataset)
+        ll_entity_excerpts = await self._get_excerpts_for_entities(ll_dataset)
         ll_relations = self._get_relationships_from_entities(ll_dataset)
         logger.info(f"Low-level dataset: {len(ll_dataset)} entities, {len(ll_relations)} relationships extracted.")
         return ll_dataset, ll_entity_excerpts, ll_relations
 
-    def _get_excerpts_for_entities(self, kg_dataset):
+    async def _get_excerpts_for_entities(self, kg_dataset):
         excerpt_ids = [split_string_by_multi_markers(row["excerpt_id"], [KG_SEP]) for row in kg_dataset]
         all_edges = [self.graph.get_node_edges(row["entity_name"]) for row in kg_dataset]
         sibling_names = set()
@@ -506,7 +504,7 @@ class SmolRag:
                         if sibling_name in sibling_excerpt_lookup and excerpt_id in sibling_excerpt_lookup[
                             sibling_name]:
                             relation_counts += 1
-                excerpt_data = self.excerpt_kv.get_by_key(excerpt_id)
+                excerpt_data = await self.excerpt_kv.get_by_key(excerpt_id)
                 if excerpt_data is not None and "excerpt" in excerpt_data:
                     all_excerpt_data_lookup[excerpt_id] = {
                         "data": excerpt_data,
@@ -565,7 +563,7 @@ class SmolRag:
         logger.info(f"Extracted {len(edges_data)} relationships from low-level entities.")
         return edges_data
 
-    def _get_excerpts_for_relationships(self, kg_dataset):
+    async def _get_excerpts_for_relationships(self, kg_dataset):
         excerpt_ids = [
             split_string_by_multi_markers(dp["excerpt_id"], [KG_SEP])
             for dp in kg_dataset
@@ -577,7 +575,7 @@ class SmolRag:
             for excerpt_id in excerpt_ids:
                 if excerpt_id not in all_excerpts_lookup:
                     all_excerpts_lookup[excerpt_id] = {
-                        "data": self.excerpt_kv.get_by_key(excerpt_id),
+                        "data": await self.excerpt_kv.get_by_key(excerpt_id),
                         "order": index,
                     }
 
@@ -668,7 +666,7 @@ if __name__ == '__main__':
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
         print(await smol_rag.mix_query("What subjects we can discuss?"))
 
-        # smol_rag.remove_document_by_id("doc_4c3f8100da0b90c1a44c94e6b4ffa041")
+        # await smol_rag.remove_document_by_id("doc_68ee570c562a4cdfb5c37cf96be2898d")
 
         # Todo: Use Jaal graph visualisation to inspect knowledge graph
 

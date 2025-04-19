@@ -10,9 +10,9 @@
   <key id="d0" for="graph" attr.name="content_keywords" attr.type="string" />
   <graph edgedefault="undirected">
     <node id="SmolRAG">
-      <data key="d1">organization:|:interface:|:api:|:function:|:configuration:|:feature</data>
-      <data key="d2">SmolRAG is an API that allows users to manage documents, including importing, updating, and removing them using functions provided in a programming environment.:|:SmolRAG is a function designed to support the processing of individual files, indicating its purpose within a larger system.:|:SmolRAG is a feature that provides a sophisticated document ingestion process transforming raw documents into a queryable knowledge base.:|:SmolRAG is a system designed for similarity search that includes various evaluation and enhancement mechanisms to improve search quality.:|:SmolRAG is a system designed for document change detection, storage, and persistence with robust mechanisms for ensuring data accuracy and consistency.:|:SmolRAG is an application programming interface designed to enable parallel querying of document collections and optimize performance in handling document ingestion and processing.:|:SmolRAG is an application programming interface that facilitates document ingestion, entity extraction, and parallel processing using asyncio.:|:SmolRAG is a feature that utilizes mathematical measures for determining the similarity between vectors in language and meaning.:|:SmolRAG is an API designed for processing and analyzing text data efficiently, focusing on performance and scalability in handling large volumes of documents and queries.:|:SmolRAG is a framework that integrates document chunking and language model capabilities, enabling customized text processing and analysis.:|:SmolRAG is a dynamic API designed for various use cases including document querying, knowledge extraction, and reasoning tasks.:|:SmolRAG is a knowledge graph system designed to maintain and update a knowledge graph based on changes in associated documents, facilitating structured reasoning and effective querying.:|:SmolRAG is a system designed for creating vector embeddings and knowledge graphs from document content, enabling enhanced search capabilities.:|:SmolRAG is an API designed for constructing and managing knowledge graphs, transforming unstructured text into structured knowledge representations.:|:SmolRAG is a system designed for document ingestion, query processing, and performance optimization, specifically tailored to manage growing document collections efficiently.:|:SmolRAG is portrayed as a system designed to enhance text embeddings and improve information retrieval capabilities across diverse document collections.:|:SmolRAG is a system designed to enhance data ingestion speeds and maintain updated information through various mechanisms, including parallel processing and change detection.:|:SmolRAG is an API that provides similarity search capabilities, enabling users to find relevant document excerpts based on semantic similarity to a query using advanced vector embeddings.:|:SmolRAG is an API that offers a powerful framework for retrieving and reasoning with document-based knowledge, designed to provide accurate and relevant responses based on the type of query.:|:SmolRAG is a feature designed to ingest new information and retrieve it effectively, serving as an architecture for processing information.:|:SmolRAG is a framework that facilitates document chunking and uses LLM capabilities for managing and querying information.:|:SmolRAG is an API designed for similarity search, enabling the retrieval of relevant information based on semantic meaning and conceptually similar content.:|:SmolRAG is a cloud deployment feature that requires specific performance considerations for optimization in cloud environments.:|:SmolRAG is a feature that employs excerpt embeddings to enhance retrieval capabilities by capturing semantic meaning in text.:|:SmolRAG is a feature that provides robust similarity search capabilities, designed to address various challenges in information retrieval.:|:SmolRAG is described as an advanced feature that offers configuration options for integrating custom components into existing systems.:|:SmolRAG is a configuration for document retrieval and generation that includes specific parameters for customizing behavior, such as path definitions and initialization parameters.:|:SmolRAG is a software tool that offers customizable configuration options, enhancing its behavior to meet specific user needs related to model selection and data handling.:|:SmolRAG is the overarching system that builds the knowledge graph by extracting entities and relationships from documents.:|:SmolRAG is an API that facilitates the retrieval and processing of documents for various applications, focusing on efficiency and performance.:|:SmolRAG is a sophisticated system designed for document chunking, summarization, and vector embedding generation, optimizing information retrieval.:|:SmolRAG is a system that utilizes OpenAI's API for various operations including embeddings, completions, and entity extraction.:|:SmolRAG is an interface designed for document chunking and summarization, offering strategies to manage text while preserving context.:|:SmolRAG is an API that creates vector representations to capture semantic meaning, allowing for accurate and contextually relevant information retrieval.:|:SmolRAG is a modular and flexible data processing system designed for document ingestion, query processing, and efficient data handling.:|:SmolRAG is an API that generates response text based on user queries, providing various functionalities for data retrieval.:|:SmolRAG is an organization that utilizes knowledge graphs in conjunction with vector embeddings to enhance search and reasoning capabilities.:|:SmolRAG is a framework implementing techniques for managing document collections, including vector storage and optimization of search performance.:|:SmolRAG is a feature that utilizes key-value stores for metadata, mappings, and caching, enabling customizable extraction methods.:|:SmolRAG is an API that facilitates the ingestion of documents for processing and query handling, and it must be initialized before use.:|:SmolRAG is an API that supports multiple query types to retrieve and reason with document-based knowledge effectively.:|:SmolRAG is a system that leverages OpenAI's embedding models for generating vector representations of documents, enhancing search and retrieval processes.:|:SmolRAG is an API focused on document ingestion, transforming raw documents into a queryable knowledge base through various processes.:|:SmolRAG is an API that facilitates document ingestion and processing in various formats, especially targeting text-based documents like Markdown.:|:SmolRAG is an API integrated into a Flask web application designed for querying documents efficiently.:|:SmolRAG is the main class that orchestrates the system's components, providing a seamless user experience through its modular architecture and functionality.:|:SmolRAG is a system that employs embedding-based similarity search mechanisms to retrieve information based on semantic meaning, enhancing retrieval accuracy.:|:SmolRAG is a lightweight retrieval-augmented generation system designed for fast, up-to-date querying of documents, focusing on simplicity, efficiency, and flexibility.:|:SmolRAG is a knowledge graph system that incorporates both semantic search and structured knowledge representation to handle a variety of query types.:|:SmolRAG is a framework that utilizes different types of vector stores for embedding storage and retrieval, including customizable options for knowledge graphs and key-value stores.:|:SmolRAG is a lightweight retrieval-augmented generation system designed for fast, up-to-date querying of documents, utilizing vector embeddings, knowledge graphs, and large language models.:|:SmolRAG is an API that incorporates both structured graph representations and vector embeddings for entities and relationships, enabling advanced query processing.:|:SmolRAG is an application programming interface designed for various scenarios involving document querying, knowledge extraction, and reasoning tasks.:|:SmolRAG is an API designed to process and retrieve information based on various query types, indicating its role in information management and retrieval.:|:SmolRAG is an API designed for retrieval-augmented generation, providing powerful capabilities for semantic search, knowledge graphs, and large language models.:|:SmolRAG is an API designed to process and retrieve information based on queries related to various topics.:|:SmolRAG is a retrieval-augmented generation system designed to assist in document ingestion, querying, and general operation.:|:SmolRAG is an API that implements a modular and maintainable codebase for document guidance and retrieval, supporting various functionalities.:|:SmolRAG is an API that provides multiple query types to facilitate semantic search and knowledge graph interactions.:|:SmolRAG is a configuration or framework mentioned for advanced users, likely intended for managing query processes with custom components.:|:SmolRAG is a configurable framework that utilizes a specific directory structure for storing documents, data, and logs, enabling customization of its operational settings.:|:SmolRAG is an API that allows for various functionalities such as document management and interactions through a REST interface, supporting all the same query types as the Python interface.:|:SmolRAG is a feature that allows for flexible configuration and integration into existing systems, showcasing advanced capabilities for document querying and knowledge extraction.</data>
-      <data key="d3">excerpt_id_e67e24565dae8dec6e972c21f5e33ed4:|:excerpt_id_3e377a1f38aab6a7301bb88392d388d4:|:excerpt_id_e1f4404cf1e9a718f626b127f773cf70:|:excerpt_id_9e30dc3a8159dc93859b8664cf4db134:|:excerpt_id_d24dd08ee554d6069354fc456f67147f:|:excerpt_id_87030b6b3fa79706b6853abbb475c551:|:excerpt_id_a91137c719a0d5f9cb906bc3ae15bc3f:|:excerpt_id_d4a7e13bce25a456a78a4eef57373bf4:|:excerpt_id_9852e72fbe12ed839b385c87873fec09:|:excerpt_id_eb65f41dba3401c3f9ecff6a2b835fca:|:excerpt_id_7fedf9d4b30621d6c79f65db2d09ce1a:|:excerpt_id_19a4021fa6c980fe5768130b704cc56e:|:excerpt_id_63cd91bc48a4a86dbc4244526ba83736:|:excerpt_id_6d692b7f7ce26d7c5b94249c8453447e:|:excerpt_id_51c03df854681a0be44a0cb38da8ceed:|:excerpt_id_e22b8da6dcf20fed5f472fe57b90902b:|:excerpt_id_40ff8100b340e2bffbf37fe882a8ee48:|:excerpt_id_a94908d6a99d624559f006ef6ef883ec:|:excerpt_id_ebf9009be245dbd0ab60372e5369f496:|:excerpt_id_70868e98ba121059de996d38d21a0dd7:|:excerpt_id_13f0a88ca4ce9d7111d35d577b03200f:|:excerpt_id_59fb313f068a75f4e40be3bf7b095013:|:excerpt_id_6feed1d0b430f2139ef9246b1e1758d3:|:excerpt_id_9e82c97bd0829ec40084f1a45d364353:|:excerpt_id_ab0c2359f35ddf542e46336b81a7e409:|:excerpt_id_dcec4d38f0e3c0cff01b04e3b7bdf6ce:|:excerpt_id_dc80c8904c8ce4e245e92a5bec8771ed:|:excerpt_id_f2b7fbadfa83b8b0ea536a4b85fef7d6:|:excerpt_id_2d095921aff5b7f80aa22d08fd18411c:|:excerpt_id_98568b73e1554f3852d7cabeaa3a1878:|:excerpt_id_f1ef3b38067579dab39116dbfeca6ddc:|:excerpt_id_9a13bcbb5440ec94b603d6b198fcf7cc:|:excerpt_id_4b1d39bb3b412ccb5521449ed59095c6:|:excerpt_id_79e52f475952407e95cfdbc653290c6d:|:excerpt_id_1022857c40806a92372f49dc394cbcfe:|:excerpt_id_ce594558fb5aeae85f51870c652a415b:|:excerpt_id_57aae66702d1057a0462d26360d3ccef:|:excerpt_id_35ac427df33971aafd001dedc2094d13:|:excerpt_id_f8b124e0bd021d69415fab98214a7b6b:|:excerpt_id_7c686d971d2fea42e5ba02fc141455aa:|:excerpt_id_c86849cd9a6f6eb952b7842d703f3170:|:excerpt_id_2f91a07d0891228b7332afeffe8b7a42:|:excerpt_id_9bec674c65e1e71d106b31cafb5387bf:|:excerpt_id_8e74fbca347d63700a75f9a44ad95dec:|:excerpt_id_feb905edbf8fd771c7b080447258f0ba:|:excerpt_id_6c59f654d2d8c621cf5fea19de72d0fe:|:excerpt_id_cb26db70dcd624e7b0e4b4273956b799:|:excerpt_id_9b3e7699a2ad7cd3ed369e4a0e702290:|:excerpt_id_9c6c3d629e2b94029b3f534beffe4780:|:excerpt_id_d2ba6034366fcca143d67219ee341a22:|:excerpt_id_05e1658cae5a313a0bc5c4383179fbf5:|:excerpt_id_98340282e700c542414080ecac3ff4a6:|:excerpt_id_7f2443f5ebfc8f85347fa0ad3e1b4199:|:excerpt_id_f1fae642defef59936a03b705fb37221:|:excerpt_id_4df59d4084f8e159d0d92fc0fd19ada4:|:excerpt_id_31dbc989f689c5be27e9ae8b6d0588c4:|:excerpt_id_ccf53d07456b549a9c9785f0bc9519b8:|:excerpt_id_06064de98cbba1d78e30fa4dc9a3ba41:|:excerpt_id_f6b27b7a25013f2c5751328db6d6e0e3:|:excerpt_id_81db384c7c323402180915d5a9c65d67:|:excerpt_id_517fe6133908102185036fafd1625255:|:excerpt_id_3de9971b782eac586dc03f5864ad60f3:|:excerpt_id_6c06a295a7f56782823d65a71c55d286</data>
+      <data key="d1">organization:|:interface:|:api:|:function:|:feature:|:configuration</data>
+      <data key="d2">SmolRAG is an application programming interface designed for various scenarios involving document querying, knowledge extraction, and reasoning tasks.:|:SmolRAG is an API designed for processing and analyzing text data efficiently, focusing on performance and scalability in handling large volumes of documents and queries.:|:SmolRAG is the overarching system that builds the knowledge graph by extracting entities and relationships from documents.:|:SmolRAG is a feature that utilizes mathematical measures for determining the similarity between vectors in language and meaning.:|:SmolRAG is portrayed as a system designed to enhance text embeddings and improve information retrieval capabilities across diverse document collections.:|:SmolRAG is a system designed for similarity search that includes various evaluation and enhancement mechanisms to improve search quality.:|:SmolRAG is an API that creates vector representations to capture semantic meaning, allowing for accurate and contextually relevant information retrieval.:|:SmolRAG is a system that leverages OpenAI's embedding models for generating vector representations of documents, enhancing search and retrieval processes.:|:SmolRAG is a feature that utilizes key-value stores for metadata, mappings, and caching, enabling customizable extraction methods.:|:SmolRAG is an API that facilitates document ingestion and processing in various formats, especially targeting text-based documents like Markdown.:|:SmolRAG is an application programming interface that facilitates document ingestion, entity extraction, and parallel processing using asyncio.:|:SmolRAG is a system designed for document change detection, storage, and persistence with robust mechanisms for ensuring data accuracy and consistency.:|:SmolRAG is an API that generates response text based on user queries, providing various functionalities for data retrieval.:|:SmolRAG is a system designed for creating vector embeddings and knowledge graphs from document content, enabling enhanced search capabilities.:|:SmolRAG is an API that provides similarity search capabilities, enabling users to find relevant document excerpts based on semantic similarity to a query using advanced vector embeddings.:|:SmolRAG is a sophisticated system designed for document chunking, summarization, and vector embedding generation, optimizing information retrieval.:|:SmolRAG is an API that facilitates the ingestion of documents for processing and query handling, and it must be initialized before use.:|:SmolRAG is a framework that utilizes different types of vector stores for embedding storage and retrieval, including customizable options for knowledge graphs and key-value stores.:|:SmolRAG is an organization that utilizes knowledge graphs in conjunction with vector embeddings to enhance search and reasoning capabilities.:|:SmolRAG is a cloud deployment feature that requires specific performance considerations for optimization in cloud environments.:|:SmolRAG is a configuration or framework mentioned for advanced users, likely intended for managing query processes with custom components.:|:SmolRAG is a knowledge graph system designed to maintain and update a knowledge graph based on changes in associated documents, facilitating structured reasoning and effective querying.:|:SmolRAG is an API designed to process and retrieve information based on queries related to various topics.:|:SmolRAG is a feature that provides robust similarity search capabilities, designed to address various challenges in information retrieval.:|:SmolRAG is a function designed to support the processing of individual files, indicating its purpose within a larger system.:|:SmolRAG is an API integrated into a Flask web application designed for querying documents efficiently.:|:SmolRAG is an API that incorporates both structured graph representations and vector embeddings for entities and relationships, enabling advanced query processing.:|:SmolRAG is an API that provides multiple query types to facilitate semantic search and knowledge graph interactions.:|:SmolRAG is an API that supports multiple query types to retrieve and reason with document-based knowledge effectively.:|:SmolRAG is a framework implementing techniques for managing document collections, including vector storage and optimization of search performance.:|:SmolRAG is an API designed to process and retrieve information based on various query types, indicating its role in information management and retrieval.:|:SmolRAG is a configuration for document retrieval and generation that includes specific parameters for customizing behavior, such as path definitions and initialization parameters.:|:SmolRAG is a framework that facilitates document chunking and uses LLM capabilities for managing and querying information.:|:SmolRAG is a feature that employs excerpt embeddings to enhance retrieval capabilities by capturing semantic meaning in text.:|:SmolRAG is a software tool that offers customizable configuration options, enhancing its behavior to meet specific user needs related to model selection and data handling.:|:SmolRAG is a knowledge graph system that incorporates both semantic search and structured knowledge representation to handle a variety of query types.:|:SmolRAG is an API designed for similarity search, enabling the retrieval of relevant information based on semantic meaning and conceptually similar content.:|:SmolRAG is a framework that integrates document chunking and language model capabilities, enabling customized text processing and analysis.:|:SmolRAG is a system that employs embedding-based similarity search mechanisms to retrieve information based on semantic meaning, enhancing retrieval accuracy.:|:SmolRAG is a lightweight retrieval-augmented generation system designed for fast, up-to-date querying of documents, focusing on simplicity, efficiency, and flexibility.:|:SmolRAG is an API that allows for various functionalities such as document management and interactions through a REST interface, supporting all the same query types as the Python interface.:|:SmolRAG is described as an advanced feature that offers configuration options for integrating custom components into existing systems.:|:SmolRAG is a lightweight retrieval-augmented generation system designed for fast, up-to-date querying of documents, utilizing vector embeddings, knowledge graphs, and large language models.:|:SmolRAG is the main class that orchestrates the system's components, providing a seamless user experience through its modular architecture and functionality.:|:SmolRAG is an API designed for constructing and managing knowledge graphs, transforming unstructured text into structured knowledge representations.:|:SmolRAG is a feature designed to ingest new information and retrieve it effectively, serving as an architecture for processing information.:|:SmolRAG is a system that utilizes OpenAI's API for various operations including embeddings, completions, and entity extraction.:|:SmolRAG is an interface designed for document chunking and summarization, offering strategies to manage text while preserving context.:|:SmolRAG is an API that implements a modular and maintainable codebase for document guidance and retrieval, supporting various functionalities.:|:SmolRAG is a configurable framework that utilizes a specific directory structure for storing documents, data, and logs, enabling customization of its operational settings.:|:SmolRAG is a feature that provides a sophisticated document ingestion process transforming raw documents into a queryable knowledge base.:|:SmolRAG is a system designed to enhance data ingestion speeds and maintain updated information through various mechanisms, including parallel processing and change detection.:|:SmolRAG is an API focused on document ingestion, transforming raw documents into a queryable knowledge base through various processes.:|:SmolRAG is a dynamic API designed for various use cases including document querying, knowledge extraction, and reasoning tasks.:|:SmolRAG is an API that offers a powerful framework for retrieving and reasoning with document-based knowledge, designed to provide accurate and relevant responses based on the type of query.:|:SmolRAG is a feature that allows for flexible configuration and integration into existing systems, showcasing advanced capabilities for document querying and knowledge extraction.:|:SmolRAG is an API that facilitates the retrieval and processing of documents for various applications, focusing on efficiency and performance.:|:SmolRAG is a retrieval-augmented generation system designed to assist in document ingestion, querying, and general operation.:|:SmolRAG is an application programming interface designed to enable parallel querying of document collections and optimize performance in handling document ingestion and processing.:|:SmolRAG is a modular and flexible data processing system designed for document ingestion, query processing, and efficient data handling.:|:SmolRAG is an API designed for retrieval-augmented generation, providing powerful capabilities for semantic search, knowledge graphs, and large language models.:|:SmolRAG is an API that allows users to manage documents, including importing, updating, and removing them using functions provided in a programming environment.:|:SmolRAG is a system designed for document ingestion, query processing, and performance optimization, specifically tailored to manage growing document collections efficiently.</data>
+      <data key="d3">excerpt_id_98568b73e1554f3852d7cabeaa3a1878:|:excerpt_id_e1f4404cf1e9a718f626b127f773cf70:|:excerpt_id_6feed1d0b430f2139ef9246b1e1758d3:|:excerpt_id_19a4021fa6c980fe5768130b704cc56e:|:excerpt_id_9852e72fbe12ed839b385c87873fec09:|:excerpt_id_63cd91bc48a4a86dbc4244526ba83736:|:excerpt_id_a94908d6a99d624559f006ef6ef883ec:|:excerpt_id_9a13bcbb5440ec94b603d6b198fcf7cc:|:excerpt_id_ce594558fb5aeae85f51870c652a415b:|:excerpt_id_eb65f41dba3401c3f9ecff6a2b835fca:|:excerpt_id_06064de98cbba1d78e30fa4dc9a3ba41:|:excerpt_id_70868e98ba121059de996d38d21a0dd7:|:excerpt_id_6c59f654d2d8c621cf5fea19de72d0fe:|:excerpt_id_98340282e700c542414080ecac3ff4a6:|:excerpt_id_7f2443f5ebfc8f85347fa0ad3e1b4199:|:excerpt_id_9e82c97bd0829ec40084f1a45d364353:|:excerpt_id_f8b124e0bd021d69415fab98214a7b6b:|:excerpt_id_e22b8da6dcf20fed5f472fe57b90902b:|:excerpt_id_13f0a88ca4ce9d7111d35d577b03200f:|:excerpt_id_4df59d4084f8e159d0d92fc0fd19ada4:|:excerpt_id_f1fae642defef59936a03b705fb37221:|:excerpt_id_3de9971b782eac586dc03f5864ad60f3:|:excerpt_id_feb905edbf8fd771c7b080447258f0ba:|:excerpt_id_cb26db70dcd624e7b0e4b4273956b799:|:excerpt_id_7fedf9d4b30621d6c79f65db2d09ce1a:|:excerpt_id_dc80c8904c8ce4e245e92a5bec8771ed:|:excerpt_id_c86849cd9a6f6eb952b7842d703f3170:|:excerpt_id_f2b7fbadfa83b8b0ea536a4b85fef7d6:|:excerpt_id_9e30dc3a8159dc93859b8664cf4db134:|:excerpt_id_a91137c719a0d5f9cb906bc3ae15bc3f:|:excerpt_id_81db384c7c323402180915d5a9c65d67:|:excerpt_id_40ff8100b340e2bffbf37fe882a8ee48:|:excerpt_id_35ac427df33971aafd001dedc2094d13:|:excerpt_id_8e74fbca347d63700a75f9a44ad95dec:|:excerpt_id_ebf9009be245dbd0ab60372e5369f496:|:excerpt_id_9b3e7699a2ad7cd3ed369e4a0e702290:|:excerpt_id_4b1d39bb3b412ccb5521449ed59095c6:|:excerpt_id_d4a7e13bce25a456a78a4eef57373bf4:|:excerpt_id_6d692b7f7ce26d7c5b94249c8453447e:|:excerpt_id_3e377a1f38aab6a7301bb88392d388d4:|:excerpt_id_1022857c40806a92372f49dc394cbcfe:|:excerpt_id_d2ba6034366fcca143d67219ee341a22:|:excerpt_id_87030b6b3fa79706b6853abbb475c551:|:excerpt_id_9c6c3d629e2b94029b3f534beffe4780:|:excerpt_id_6c06a295a7f56782823d65a71c55d286:|:excerpt_id_2d095921aff5b7f80aa22d08fd18411c:|:excerpt_id_51c03df854681a0be44a0cb38da8ceed:|:excerpt_id_f6b27b7a25013f2c5751328db6d6e0e3:|:excerpt_id_79e52f475952407e95cfdbc653290c6d:|:excerpt_id_57aae66702d1057a0462d26360d3ccef:|:excerpt_id_517fe6133908102185036fafd1625255:|:excerpt_id_2f91a07d0891228b7332afeffe8b7a42:|:excerpt_id_9bec674c65e1e71d106b31cafb5387bf:|:excerpt_id_31dbc989f689c5be27e9ae8b6d0588c4:|:excerpt_id_e67e24565dae8dec6e972c21f5e33ed4:|:excerpt_id_dcec4d38f0e3c0cff01b04e3b7bdf6ce:|:excerpt_id_ccf53d07456b549a9c9785f0bc9519b8:|:excerpt_id_ab0c2359f35ddf542e46336b81a7e409:|:excerpt_id_d24dd08ee554d6069354fc456f67147f:|:excerpt_id_59fb313f068a75f4e40be3bf7b095013:|:excerpt_id_05e1658cae5a313a0bc5c4383179fbf5:|:excerpt_id_7c686d971d2fea42e5ba02fc141455aa:|:excerpt_id_f1ef3b38067579dab39116dbfeca6ddc</data>
     </node>
     <node id="LightRAG">
       <data key="d1">api</data>
@@ -46,8 +46,8 @@
     </node>
     <node id="Similarity Search">
       <data key="d1">feature:|:function</data>
-      <data key="d2">Similarity Search is a core feature of SmolRAG that allows for more effective information retrieval by understanding the semantic meaning of queries and documents rather than relying on exact word matches.:|:Similarity Search is a function within SmolRAG that allows finding relevant information based on the semantic meaning of queries rather than just keywords.</data>
-      <data key="d3">excerpt_id_6feed1d0b430f2139ef9246b1e1758d3:|:excerpt_id_8e74fbca347d63700a75f9a44ad95dec</data>
+      <data key="d2">Similarity Search is a function within SmolRAG that allows finding relevant information based on the semantic meaning of queries rather than just keywords.:|:Similarity Search is a core feature of SmolRAG that allows for more effective information retrieval by understanding the semantic meaning of queries and documents rather than relying on exact word matches.</data>
+      <data key="d3">excerpt_id_8e74fbca347d63700a75f9a44ad95dec:|:excerpt_id_6feed1d0b430f2139ef9246b1e1758d3</data>
     </node>
     <node id="Vector Representation">
       <data key="d1">function</data>
@@ -55,8 +55,8 @@
       <data key="d3">excerpt_id_8e74fbca347d63700a75f9a44ad95dec</data>
     </node>
     <node id="Embedding Models">
-      <data key="d1">variable:|:configuration</data>
-      <data key="d2">Embedding Models in SmolRAG refer to different configurations of models used for generating vector representations, including alternate models apart from the default one.:|:Embedding Models are foundational components in SmolRAG that have been trained on vast amounts of text to create vectors that capture semantic meaning for use in similarity search.</data>
+      <data key="d1">configuration:|:variable</data>
+      <data key="d2">Embedding Models are foundational components in SmolRAG that have been trained on vast amounts of text to create vectors that capture semantic meaning for use in similarity search.:|:Embedding Models in SmolRAG refer to different configurations of models used for generating vector representations, including alternate models apart from the default one.</data>
       <data key="d3">excerpt_id_8e74fbca347d63700a75f9a44ad95dec:|:excerpt_id_c86849cd9a6f6eb952b7842d703f3170</data>
     </node>
     <node id="Semantic Vectors">
@@ -200,9 +200,9 @@
       <data key="d3">excerpt_id_dc80c8904c8ce4e245e92a5bec8771ed</data>
     </node>
     <node id="NanoVectorStore">
-      <data key="d1">class:|:variable:|:interface:|:api:|:configuration:|:feature</data>
-      <data key="d2">NanoVectorStore is an interface responsible for storing and retrieving embeddings based on their dimensionality and configurations.:|:NanoVectorStore is a lightweight vector database designed for managing embeddings with features like efficient storage, metadata association, and persistence between runs.:|:NanoVectorStore is a lightweight vector database used for storing and retrieving embeddings associated with the processed documents.:|:NanoVectorStore is a configuration component used for storing vector representations, particularly useful for embeddings.:|:NanoVectorStore is a storage system for efficiently storing the embeddings generated from excerpts for fast retrieval.:|:NanoVectorStore is a lightweight implementation of a vector store used for storing and retrieving embeddings in SmolRAG.:|:The NanoVectorStore class provides a lightweight vector database for storing and retrieving embeddings, optimized for simplicity and efficiency.:|:NanoVectorStore is a lightweight implementation for storing and retrieving embeddings, allowing various configurations such as dimensionality and storage paths.:|:NanoVectorStore is a lightweight vector database used by SmolRAG to manage the embeddings generated by the text embedding models.:|:NanoVectorStore is a storage mechanism employed for efficiently storing embeddings for retrieval and search operations.:|:NanoVectorStore is the storage system where generated vectors and their metadata are stored for efficient semantic search.:|:NanoVectorStore is a specialized vector storage solution for managing document embeddings efficiently, optimized for performance and scalability.:|:The NanoVectorStore is a lightweight vector database designed for managing embeddings and performing similarity searches efficiently, using in-memory processing and optimized storage formats.:|:NanoVectorStore is a lightweight vector database employed by SmolRAG to manage embeddings and facilitate similarity searches.:|:NanoVectorStore is a class that implements a lightweight vector database to store and manage embeddings and their retrieval.</data>
-      <data key="d3">excerpt_id_2e0613b4c1b81b865a2002b59fe88b17:|:excerpt_id_40ff8100b340e2bffbf37fe882a8ee48:|:excerpt_id_5421cc029bd40962f8f839ecf4a8d136:|:excerpt_id_60a78091c7c8d6dae9b144963e93551a:|:excerpt_id_c86849cd9a6f6eb952b7842d703f3170:|:excerpt_id_9c6c3d629e2b94029b3f534beffe4780:|:excerpt_id_05e1658cae5a313a0bc5c4383179fbf5:|:excerpt_id_ebf9009be245dbd0ab60372e5369f496:|:excerpt_id_517fe6133908102185036fafd1625255:|:excerpt_id_70868e98ba121059de996d38d21a0dd7:|:excerpt_id_8c4cef197115ed13a173ace5189be819:|:excerpt_id_0e491c74d7a88194d22edb5dcf034178:|:excerpt_id_f6b27b7a25013f2c5751328db6d6e0e3:|:excerpt_id_dcec4d38f0e3c0cff01b04e3b7bdf6ce:|:excerpt_id_dc80c8904c8ce4e245e92a5bec8771ed</data>
+      <data key="d1">interface:|:api:|:feature:|:class:|:configuration:|:variable</data>
+      <data key="d2">NanoVectorStore is a storage system for efficiently storing the embeddings generated from excerpts for fast retrieval.:|:NanoVectorStore is a specialized vector storage solution for managing document embeddings efficiently, optimized for performance and scalability.:|:NanoVectorStore is a lightweight implementation of a vector store used for storing and retrieving embeddings in SmolRAG.:|:NanoVectorStore is a configuration component used for storing vector representations, particularly useful for embeddings.:|:NanoVectorStore is a lightweight vector database used for storing and retrieving embeddings associated with the processed documents.:|:NanoVectorStore is a lightweight vector database used by SmolRAG to manage the embeddings generated by the text embedding models.:|:NanoVectorStore is the storage system where generated vectors and their metadata are stored for efficient semantic search.:|:NanoVectorStore is a lightweight implementation for storing and retrieving embeddings, allowing various configurations such as dimensionality and storage paths.:|:NanoVectorStore is a lightweight vector database designed for managing embeddings with features like efficient storage, metadata association, and persistence between runs.:|:NanoVectorStore is a storage mechanism employed for efficiently storing embeddings for retrieval and search operations.:|:NanoVectorStore is a lightweight vector database employed by SmolRAG to manage embeddings and facilitate similarity searches.:|:NanoVectorStore is an interface responsible for storing and retrieving embeddings based on their dimensionality and configurations.:|:The NanoVectorStore class provides a lightweight vector database for storing and retrieving embeddings, optimized for simplicity and efficiency.:|:NanoVectorStore is a class that implements a lightweight vector database to store and manage embeddings and their retrieval.:|:The NanoVectorStore is a lightweight vector database designed for managing embeddings and performing similarity searches efficiently, using in-memory processing and optimized storage formats.</data>
+      <data key="d3">excerpt_id_0e491c74d7a88194d22edb5dcf034178:|:excerpt_id_60a78091c7c8d6dae9b144963e93551a:|:excerpt_id_dcec4d38f0e3c0cff01b04e3b7bdf6ce:|:excerpt_id_8c4cef197115ed13a173ace5189be819:|:excerpt_id_9c6c3d629e2b94029b3f534beffe4780:|:excerpt_id_dc80c8904c8ce4e245e92a5bec8771ed:|:excerpt_id_70868e98ba121059de996d38d21a0dd7:|:excerpt_id_c86849cd9a6f6eb952b7842d703f3170:|:excerpt_id_2e0613b4c1b81b865a2002b59fe88b17:|:excerpt_id_05e1658cae5a313a0bc5c4383179fbf5:|:excerpt_id_5421cc029bd40962f8f839ecf4a8d136:|:excerpt_id_f6b27b7a25013f2c5751328db6d6e0e3:|:excerpt_id_ebf9009be245dbd0ab60372e5369f496:|:excerpt_id_40ff8100b340e2bffbf37fe882a8ee48:|:excerpt_id_517fe6133908102185036fafd1625255</data>
     </node>
     <node id="OPENAI_API_KEY">
       <data key="d1">variable</data>
@@ -467,7 +467,7 @@
     </node>
     <node id="Cosine Similarity">
       <data key="d1">function</data>
-      <data key="d2">Cosine Similarity is a mathematical function used to measure the cosine of the angle between two non-zero vectors, determining their similarity.:|:Cosine Similarity is a function that measures the cosine of the angle between two vectors, indicating their similarity.</data>
+      <data key="d2">Cosine Similarity is a function that measures the cosine of the angle between two vectors, indicating their similarity.:|:Cosine Similarity is a mathematical function used to measure the cosine of the angle between two non-zero vectors, determining their similarity.</data>
       <data key="d3">excerpt_id_ad053b14f30e2ca2cbde4877068102ef:|:excerpt_id_f6b27b7a25013f2c5751328db6d6e0e3</data>
     </node>
     <node id="Similarity Scores">
@@ -477,8 +477,8 @@
     </node>
     <node id="Threshold Filtering">
       <data key="d1">feature:|:configuration</data>
-      <data key="d2">Threshold Filtering is a configurable method that filters out similarity scores that do not meet a specified threshold, with a default value of 0.02.:|:Threshold Filtering is a feature that allows for the elimination of results below a certain similarity threshold in the search results.</data>
-      <data key="d3">excerpt_id_f6b27b7a25013f2c5751328db6d6e0e3:|:excerpt_id_9c6c3d629e2b94029b3f534beffe4780</data>
+      <data key="d2">Threshold Filtering is a feature that allows for the elimination of results below a certain similarity threshold in the search results.:|:Threshold Filtering is a configurable method that filters out similarity scores that do not meet a specified threshold, with a default value of 0.02.</data>
+      <data key="d3">excerpt_id_9c6c3d629e2b94029b3f534beffe4780:|:excerpt_id_f6b27b7a25013f2c5751328db6d6e0e3</data>
     </node>
     <node id="Ranking">
       <data key="d1">function</data>
@@ -492,7 +492,7 @@
     </node>
     <node id="Query Embedding">
       <data key="d1">api:|:function</data>
-      <data key="d2">Query Embedding is the process of transforming query text into vector representation using a specific model for comparison purposes.:|:Query Embedding refers to a method used for comparing the similarity of query vectors against another set of vectors, utilizing cosine similarity.:|:Query Embedding is the process of transforming user queries into embeddings for effective comparison with excerpt embeddings.</data>
+      <data key="d2">Query Embedding refers to a method used for comparing the similarity of query vectors against another set of vectors, utilizing cosine similarity.:|:Query Embedding is the process of transforming query text into vector representation using a specific model for comparison purposes.:|:Query Embedding is the process of transforming user queries into embeddings for effective comparison with excerpt embeddings.</data>
       <data key="d3">excerpt_id_ad053b14f30e2ca2cbde4877068102ef:|:excerpt_id_f6b27b7a25013f2c5751328db6d6e0e3:|:excerpt_id_9c6c3d629e2b94029b3f534beffe4780</data>
     </node>
     <node id="Vector Comparison">
@@ -737,8 +737,8 @@
     </node>
     <node id="Caching">
       <data key="d1">feature:|:optimization:|:function:|:example</data>
-      <data key="d2">Caching is a strategy to store and reuse API responses to minimize unnecessary API calls, thus saving costs and time.:|:Caching is an optimization strategy that stores frequently used data to reduce the need for repeated processing and API calls.:|:Caching is a strategy employed to store query embeddings temporarily to prevent redundant API calls and improve efficiency.:|:Caching is a performance optimization technique used to improve the efficiency of API queries by storing frequently accessed data.:|:Caching is a function that stores frequently accessed data to improve retrieval times and resource usage.</data>
-      <data key="d3">excerpt_id_dcec4d38f0e3c0cff01b04e3b7bdf6ce:|:excerpt_id_b3a95e34944a889758e6b0c6d679b0e6:|:excerpt_id_81db384c7c323402180915d5a9c65d67:|:excerpt_id_eb65f41dba3401c3f9ecff6a2b835fca:|:excerpt_id_63cd91bc48a4a86dbc4244526ba83736</data>
+      <data key="d2">Caching is an optimization strategy that stores frequently used data to reduce the need for repeated processing and API calls.:|:Caching is a function that stores frequently accessed data to improve retrieval times and resource usage.:|:Caching is a strategy to store and reuse API responses to minimize unnecessary API calls, thus saving costs and time.:|:Caching is a performance optimization technique used to improve the efficiency of API queries by storing frequently accessed data.:|:Caching is a strategy employed to store query embeddings temporarily to prevent redundant API calls and improve efficiency.</data>
+      <data key="d3">excerpt_id_dcec4d38f0e3c0cff01b04e3b7bdf6ce:|:excerpt_id_63cd91bc48a4a86dbc4244526ba83736:|:excerpt_id_b3a95e34944a889758e6b0c6d679b0e6:|:excerpt_id_eb65f41dba3401c3f9ecff6a2b835fca:|:excerpt_id_81db384c7c323402180915d5a9c65d67</data>
     </node>
     <node id="NetworkX">
       <data key="d1">library</data>
@@ -872,8 +872,8 @@
     </node>
     <node id="Dimensionality Management">
       <data key="d1">feature:|:function</data>
-      <data key="d2">Dimensionality Management is a feature that balances embedding dimension with performance requirements, crucial for maintaining system efficiency.:|:Dimensionality Management involves balancing the dimensions of the vectors against performance requirements to optimize search efficiency.</data>
-      <data key="d3">excerpt_id_dcec4d38f0e3c0cff01b04e3b7bdf6ce:|:excerpt_id_46387a7852ed874c1b3ab073c392b95b</data>
+      <data key="d2">Dimensionality Management involves balancing the dimensions of the vectors against performance requirements to optimize search efficiency.:|:Dimensionality Management is a feature that balances embedding dimension with performance requirements, crucial for maintaining system efficiency.</data>
+      <data key="d3">excerpt_id_46387a7852ed874c1b3ab073c392b95b:|:excerpt_id_dcec4d38f0e3c0cff01b04e3b7bdf6ce</data>
     </node>
     <node id="Excerpt Retrieval">
       <data key="d1">function</data>
@@ -1298,8 +1298,8 @@
     </node>
     <node id="Threshold Tuning">
       <data key="d1">feature:|:function</data>
-      <data key="d2">Threshold Tuning is a process of adjusting similarity thresholds in SmolRAG to balance precision and recall.:|:Threshold Tuning is a feature that allows adjustable similarity thresholds to manage the balance between precision and recall in retrieval tasks.</data>
-      <data key="d3">excerpt_id_9852e72fbe12ed839b385c87873fec09:|:excerpt_id_46387a7852ed874c1b3ab073c392b95b</data>
+      <data key="d2">Threshold Tuning is a feature that allows adjustable similarity thresholds to manage the balance between precision and recall in retrieval tasks.:|:Threshold Tuning is a process of adjusting similarity thresholds in SmolRAG to balance precision and recall.</data>
+      <data key="d3">excerpt_id_46387a7852ed874c1b3ab073c392b95b:|:excerpt_id_9852e72fbe12ed839b385c87873fec09</data>
     </node>
     <node id="Evaluation Framework">
       <data key="d1">configuration</data>
@@ -4139,14 +4139,14 @@
     <edge source="SmolRAG" target="Cosine Similarity">
       <data key="d4">SmolRAG relies on Cosine Similarity as its primary metric for determining the similarity between vectors.</data>
       <data key="d5">similarity measurement, feature dependency</data>
-      <data key="d6">9.0</data>
+      <data key="d6">18.0</data>
       <data key="d7">excerpt_id_f6b27b7a25013f2c5751328db6d6e0e3</data>
     </edge>
     <edge source="SmolRAG" target="NanoVectorStore">
-      <data key="d4">NanoVectorStore is utilized within SmolRAG to store and retrieve embeddings, enhancing the feature's operation.:|:SmolRAG incorporates NanoVectorStore to manage the storage and retrieval of embeddings efficiently.:|:SmolRAG incorporates `NanoVectorStore` for embedding storage and retrieval, showcasing its role as a fundamental feature of the framework.:|:SmolRAG utilizes NanoVectorStore for managing embeddings, allowing for efficient storage and retrieval processes.:|:SmolRAG uses NanoVectorStore to store and manage embeddings, which is vital for maintaining the operational efficiency of the application.:|:NanoVectorStore supports SmolRAG in managing embeddings and conducting similarity searches efficiently.:|:SmolRAG utilizes the NanoVectorStore to manage its embeddings and perform similarity searches efficiently.</data>
-      <data key="d5">system integration, data management:|:storage, management:|:embedding management, efficiency:|:database support, efficiency:|:core functionality, embedding management:|:integration, functionality:|:data storage, retrieval</data>
-      <data key="d6">68.0</data>
-      <data key="d7">excerpt_id_dcec4d38f0e3c0cff01b04e3b7bdf6ce:|:excerpt_id_9c6c3d629e2b94029b3f534beffe4780:|:excerpt_id_ebf9009be245dbd0ab60372e5369f496:|:excerpt_id_70868e98ba121059de996d38d21a0dd7:|:excerpt_id_c86849cd9a6f6eb952b7842d703f3170:|:excerpt_id_f6b27b7a25013f2c5751328db6d6e0e3:|:excerpt_id_517fe6133908102185036fafd1625255</data>
+      <data key="d4">NanoVectorStore is utilized within SmolRAG to store and retrieve embeddings, enhancing the feature's operation.:|:SmolRAG incorporates NanoVectorStore to manage the storage and retrieval of embeddings efficiently.:|:SmolRAG utilizes the NanoVectorStore to manage its embeddings and perform similarity searches efficiently.:|:NanoVectorStore supports SmolRAG in managing embeddings and conducting similarity searches efficiently.:|:SmolRAG uses NanoVectorStore to store and manage embeddings, which is vital for maintaining the operational efficiency of the application.:|:SmolRAG incorporates `NanoVectorStore` for embedding storage and retrieval, showcasing its role as a fundamental feature of the framework.:|:SmolRAG utilizes NanoVectorStore for managing embeddings, allowing for efficient storage and retrieval processes.</data>
+      <data key="d5">system integration, data management:|:storage, management:|:embedding management, efficiency:|:integration, functionality:|:data storage, retrieval:|:database support, efficiency:|:core functionality, embedding management</data>
+      <data key="d6">86.0</data>
+      <data key="d7">excerpt_id_dcec4d38f0e3c0cff01b04e3b7bdf6ce:|:excerpt_id_9c6c3d629e2b94029b3f534beffe4780:|:excerpt_id_70868e98ba121059de996d38d21a0dd7:|:excerpt_id_c86849cd9a6f6eb952b7842d703f3170:|:excerpt_id_f6b27b7a25013f2c5751328db6d6e0e3:|:excerpt_id_ebf9009be245dbd0ab60372e5369f496:|:excerpt_id_517fe6133908102185036fafd1625255</data>
     </edge>
     <edge source="SmolRAG" target="result">
       <data key="d4">The SmolRAG API generates the result variable, which contains the text output based on user queries.</data>
@@ -4301,19 +4301,19 @@
     <edge source="SmolRAG" target="In-Memory Processing">
       <data key="d4">SmolRAG implements In-Memory Processing to enhance the speed of vector searches in conjunction with the NanoVectorStore.</data>
       <data key="d5">performance optimization, functionality</data>
-      <data key="d6">9.0</data>
+      <data key="d6">18.0</data>
       <data key="d7">excerpt_id_dcec4d38f0e3c0cff01b04e3b7bdf6ce</data>
     </edge>
     <edge source="SmolRAG" target="Caching">
-      <data key="d4">Caching can be implemented within the SmolRAG API to optimize performance for frequently made queries."+:|:SmolRAG employs Caching to reduce redundancy in API calls for enhanced search efficiency.</data>
+      <data key="d4">SmolRAG employs Caching to reduce redundancy in API calls for enhanced search efficiency.:|:Caching can be implemented within the SmolRAG API to optimize performance for frequently made queries."+</data>
       <data key="d5">performance improvement, efficiency:|:performance improvement</data>
-      <data key="d6">15.0</data>
+      <data key="d6">23.0</data>
       <data key="d7">excerpt_id_dcec4d38f0e3c0cff01b04e3b7bdf6ce:|:excerpt_id_63cd91bc48a4a86dbc4244526ba83736</data>
     </edge>
     <edge source="SmolRAG" target="Dimensionality Management">
       <data key="d4">SmolRAG utilizes Dimensionality Management to ensure vector performance aligns with system requirements.</data>
       <data key="d5">performance optimization, functionality</data>
-      <data key="d6">8.0</data>
+      <data key="d6">16.0</data>
       <data key="d7">excerpt_id_dcec4d38f0e3c0cff01b04e3b7bdf6ce</data>
     </edge>
     <edge source="SmolRAG" target="custom_chunking_strategy">
@@ -4403,61 +4403,61 @@
     <edge source="SmolRAG" target="Query Ambiguity">
       <data key="d4">SmolRAG addresses Query Ambiguity by implementing different query types to manage ambiguities effectively.</data>
       <data key="d5">query management, information retrieval</data>
-      <data key="d6">8.0</data>
+      <data key="d6">16.0</data>
       <data key="d7">excerpt_id_6c59f654d2d8c621cf5fea19de72d0fe</data>
     </edge>
     <edge source="SmolRAG" target="Semantic Gaps">
       <data key="d4">SmolRAG incorporates knowledge graph information to address Semantic Gaps in queries.</data>
       <data key="d5">semantic understanding, information enhancement</data>
-      <data key="d6">9.0</data>
+      <data key="d6">18.0</data>
       <data key="d7">excerpt_id_6c59f654d2d8c621cf5fea19de72d0fe</data>
     </edge>
     <edge source="SmolRAG" target="Out-of-Domain Queries">
       <data key="d4">SmolRAG gracefully handles Out-of-Domain Queries, improving the overall user experience.</data>
       <data key="d5">user experience, query handling</data>
-      <data key="d6">7.0</data>
+      <data key="d6">14.0</data>
       <data key="d7">excerpt_id_6c59f654d2d8c621cf5fea19de72d0fe</data>
     </edge>
     <edge source="SmolRAG" target="Long Documents">
       <data key="d4">SmolRAG improves retrieval of Long Documents by using chunking and summarization techniques.</data>
       <data key="d5">document management, retrieval efficiency</data>
-      <data key="d6">9.0</data>
+      <data key="d6">18.0</data>
       <data key="d7">excerpt_id_6c59f654d2d8c621cf5fea19de72d0fe</data>
     </edge>
     <edge source="SmolRAG" target="Rare Terms">
       <data key="d4">SmolRAG seeks to balance the importance of Rare Terms with overall semantic meaning in search results.</data>
       <data key="d5">term management, semantic balance</data>
-      <data key="d6">8.0</data>
+      <data key="d6">16.0</data>
       <data key="d7">excerpt_id_6c59f654d2d8c621cf5fea19de72d0fe</data>
     </edge>
     <edge source="SmolRAG" target="Knowledge Graph Integration">
       <data key="d4">SmolRAG employs Knowledge Graph Integration to enhance its similarity search capabilities.</data>
       <data key="d5">search enhancement, feature integration</data>
-      <data key="d6">10.0</data>
+      <data key="d6">20.0</data>
       <data key="d7">excerpt_id_6c59f654d2d8c621cf5fea19de72d0fe</data>
     </edge>
     <edge source="SmolRAG" target="Entity-Based Search">
       <data key="d4">SmolRAG includes Entity-Based Search to locate relevant entities effectively within the system.</data>
       <data key="d5">entity retrieval, effectiveness</data>
-      <data key="d6">8.0</data>
+      <data key="d6">16.0</data>
       <data key="d7">excerpt_id_6c59f654d2d8c621cf5fea19de72d0fe</data>
     </edge>
     <edge source="SmolRAG" target="Relationship-Based Search">
       <data key="d4">SmolRAG features Relationship-Based Search to identify relationships between entities in a semantic context.</data>
       <data key="d5">relationship management, semantic analysis</data>
-      <data key="d6">9.0</data>
+      <data key="d6">18.0</data>
       <data key="d7">excerpt_id_6c59f654d2d8c621cf5fea19de72d0fe</data>
     </edge>
     <edge source="SmolRAG" target="Hybrid Approaches">
       <data key="d4">SmolRAG uses Hybrid Approaches to blend multiple search strategies for better outcomes.</data>
       <data key="d5">strategy blending, search optimization</data>
-      <data key="d6">9.0</data>
+      <data key="d6">18.0</data>
       <data key="d7">excerpt_id_6c59f654d2d8c621cf5fea19de72d0fe</data>
     </edge>
     <edge source="SmolRAG" target="Weighted Combinations">
       <data key="d4">SmolRAG implements Weighted Combinations to adjust the influence of various search methods based on query types.</data>
       <data key="d5">method adjustment, query optimization</data>
-      <data key="d6">8.0</data>
+      <data key="d6">16.0</data>
       <data key="d7">excerpt_id_6c59f654d2d8c621cf5fea19de72d0fe</data>
     </edge>
     <edge source="SmolRAG" target="requests">
@@ -4547,55 +4547,55 @@
     <edge source="SmolRAG" target="Test Queries">
       <data key="d4">SmolRAG utilizes Test Queries to evaluate the performance of its similarity search functionality.</data>
       <data key="d5">evaluation, performance metrics</data>
-      <data key="d6">8.0</data>
+      <data key="d6">16.0</data>
       <data key="d7">excerpt_id_9852e72fbe12ed839b385c87873fec09</data>
     </edge>
     <edge source="SmolRAG" target="User Feedback">
       <data key="d4">SmolRAG incorporates User Feedback to continually improve the quality of its search results over time.</data>
       <data key="d5">improvement, user engagement</data>
-      <data key="d6">9.0</data>
+      <data key="d6">18.0</data>
       <data key="d7">excerpt_id_9852e72fbe12ed839b385c87873fec09</data>
     </edge>
     <edge source="SmolRAG" target="Precision and Recall">
       <data key="d4">SmolRAG measures its search accuracy and completeness using Precision and Recall metrics.</data>
       <data key="d5">performance evaluation, quality metrics</data>
-      <data key="d6">8.0</data>
+      <data key="d6">16.0</data>
       <data key="d7">excerpt_id_9852e72fbe12ed839b385c87873fec09</data>
     </edge>
     <edge source="SmolRAG" target="Question Answering">
       <data key="d4">SmolRAG facilitates Question Answering by finding relevant information to address specific questions.</data>
       <data key="d5">application, relevance</data>
-      <data key="d6">9.0</data>
+      <data key="d6">18.0</data>
       <data key="d7">excerpt_id_9852e72fbe12ed839b385c87873fec09</data>
     </edge>
     <edge source="SmolRAG" target="Document Exploration">
       <data key="d4">Document Exploration is an application of SmolRAG's similarity search to discover related content.</data>
       <data key="d5">application, discovery</data>
-      <data key="d6">9.0</data>
+      <data key="d6">18.0</data>
       <data key="d7">excerpt_id_9852e72fbe12ed839b385c87873fec09</data>
     </edge>
     <edge source="SmolRAG" target="Technical Support">
       <data key="d4">SmolRAG's similarity search assists in locating relevant documentation for Technical Support purposes.</data>
       <data key="d5">assistance, application</data>
-      <data key="d6">8.0</data>
+      <data key="d6">16.0</data>
       <data key="d7">excerpt_id_9852e72fbe12ed839b385c87873fec09</data>
     </edge>
     <edge source="SmolRAG" target="Knowledge Discovery">
       <data key="d4">SmolRAG aids in Knowledge Discovery by uncovering connections between various information pieces.</data>
       <data key="d5">application, connections</data>
-      <data key="d6">8.0</data>
+      <data key="d6">16.0</data>
       <data key="d7">excerpt_id_9852e72fbe12ed839b385c87873fec09</data>
     </edge>
     <edge source="SmolRAG" target="Multi-Modal Search">
       <data key="d4">SmolRAG is evolving to include Multi-Modal Search capabilities, thus enriching its functionality.</data>
       <data key="d5">evolution, expansion</data>
-      <data key="d6">8.0</data>
+      <data key="d6">16.0</data>
       <data key="d7">excerpt_id_9852e72fbe12ed839b385c87873fec09</data>
     </edge>
     <edge source="SmolRAG" target="Personalization">
       <data key="d4">SmolRAG adapts its search results through Personalization based on user preferences.</data>
       <data key="d5">adaptation, user-centric</data>
-      <data key="d6">9.0</data>
+      <data key="d6">18.0</data>
       <data key="d7">excerpt_id_9852e72fbe12ed839b385c87873fec09</data>
     </edge>
     <edge source="SmolRAG" target="Semantic Drift">
@@ -4673,7 +4673,7 @@
     <edge source="SmolRAG" target="Similarity Search">
       <data key="d4">SmolRAG includes the Similarity Search function that enhances information retrieval based on semantic meaning.</data>
       <data key="d5">information retrieval, semantic search</data>
-      <data key="d6">9.0</data>
+      <data key="d6">18.0</data>
       <data key="d7">excerpt_id_6feed1d0b430f2139ef9246b1e1758d3</data>
     </edge>
     <edge source="SmolRAG" target="high-quality embeddings">
@@ -4985,13 +4985,13 @@
     <edge source="Similarity Search" target="High-Dimensional Space">
       <data key="d4">The Similarity Search function operates within High-Dimensional Space by representing queries and documents as vectors.</data>
       <data key="d5">vector representation, search mechanism</data>
-      <data key="d6">8.0</data>
+      <data key="d6">16.0</data>
       <data key="d7">excerpt_id_6feed1d0b430f2139ef9246b1e1758d3</data>
     </edge>
     <edge source="Similarity Search" target="Retrieval Mechanisms">
       <data key="d4">Retrieval Mechanisms include the Similarity Search function, allowing for more accurate and relevant search results.</data>
       <data key="d5">search features, accuracy</data>
-      <data key="d6">7.0</data>
+      <data key="d6">14.0</data>
       <data key="d7">excerpt_id_6feed1d0b430f2139ef9246b1e1758d3</data>
     </edge>
     <edge source="Embedding Models" target="text-embedding-3-small">
@@ -5231,13 +5231,13 @@
     <edge source="NanoVectorStore" target="Efficient Storage">
       <data key="d4">Efficient Storage is a key feature of the NanoVectorStore that allows for optimized retrieval.</data>
       <data key="d5">feature, performance</data>
-      <data key="d6">8.0</data>
+      <data key="d6">16.0</data>
       <data key="d7">excerpt_id_dcec4d38f0e3c0cff01b04e3b7bdf6ce</data>
     </edge>
     <edge source="NanoVectorStore" target="CRUD Operations">
       <data key="d4">CRUD Operations are essential functionalities provided by the NanoVectorStore, allowing users to manage vectors effectively.</data>
       <data key="d5">management, capability</data>
-      <data key="d6">9.0</data>
+      <data key="d6">18.0</data>
       <data key="d7">excerpt_id_dcec4d38f0e3c0cff01b04e3b7bdf6ce</data>
     </edge>
     <edge source="NanoVectorStore" target="embeddings_db">
@@ -5807,7 +5807,7 @@
     <edge source="Cosine Similarity" target="Similarity Scores">
       <data key="d4">Cosine Similarity produces Similarity Scores based on the angle between vectors, indicating their level of similarity.</data>
       <data key="d5">score generation, mathematical relationship</data>
-      <data key="d6">8.0</data>
+      <data key="d6">16.0</data>
       <data key="d7">excerpt_id_f6b27b7a25013f2c5751328db6d6e0e3</data>
     </edge>
     <edge source="Cosine Similarity" target="Query Embedding">
@@ -5819,13 +5819,13 @@
     <edge source="Similarity Scores" target="Threshold Filtering">
       <data key="d4">Threshold Filtering uses Similarity Scores to determine which results should be filtered based on the defined threshold.</data>
       <data key="d5">filtering mechanism, configuration impact</data>
-      <data key="d6">7.0</data>
+      <data key="d6">14.0</data>
       <data key="d7">excerpt_id_f6b27b7a25013f2c5751328db6d6e0e3</data>
     </edge>
     <edge source="Similarity Scores" target="Ranking">
       <data key="d4">Ranking orders the Similarity Scores to present the most relevant results first.</data>
       <data key="d5">ordering process, relevance</data>
-      <data key="d6">8.0</data>
+      <data key="d6">16.0</data>
       <data key="d7">excerpt_id_f6b27b7a25013f2c5751328db6d6e0e3</data>
     </edge>
     <edge source="Threshold Filtering" target="Similarity Computation">
@@ -5837,13 +5837,13 @@
     <edge source="Normalization" target="Vector Comparison">
       <data key="d4">Normalization ensures that Vectors are compared fairly during the Vector Comparison process.</data>
       <data key="d5">fair comparison, mathematical process</data>
-      <data key="d6">8.0</data>
+      <data key="d6">16.0</data>
       <data key="d7">excerpt_id_f6b27b7a25013f2c5751328db6d6e0e3</data>
     </edge>
     <edge source="Query Embedding" target="Vector Comparison">
       <data key="d4">Query Embedding is conducted to facilitate Vector Comparison by creating a comparable query vector.</data>
       <data key="d5">preparation process, similarity search</data>
-      <data key="d6">9.0</data>
+      <data key="d6">18.0</data>
       <data key="d7">excerpt_id_f6b27b7a25013f2c5751328db6d6e0e3</data>
     </edge>
     <edge source="Query Embedding" target="Strengths and Weaknesses">
@@ -6629,13 +6629,13 @@
     <edge source="Excerpt Retrieval" target="Summary Inclusion">
       <data key="d4">Excerpt Retrieval includes Summary Inclusion to provide context for the excerpts that are selected during the search process.</data>
       <data key="d5">contextual relevance, information management</data>
-      <data key="d6">8.0</data>
+      <data key="d6">16.0</data>
       <data key="d7">excerpt_id_dcec4d38f0e3c0cff01b04e3b7bdf6ce</data>
     </edge>
     <edge source="Excerpt Retrieval" target="Prompt Construction">
       <data key="d4">Excerpt Retrieval flows into Prompt Construction, where the retrieved texts are used to build prompts for language models.</data>
       <data key="d5">workflow, integration</data>
-      <data key="d6">9.0</data>
+      <data key="d6">18.0</data>
       <data key="d7">excerpt_id_dcec4d38f0e3c0cff01b04e3b7bdf6ce</data>
     </edge>
     <edge source="APIKeyHeader" target="query_endpoint">
@@ -7109,13 +7109,13 @@
     <edge source="Test Queries" target="Precision and Recall">
       <data key="d4">Test Queries serve to assess the Precision and Recall of the similarity search results.</data>
       <data key="d5">evaluation process, metrics</data>
-      <data key="d6">7.0</data>
+      <data key="d6">14.0</data>
       <data key="d7">excerpt_id_9852e72fbe12ed839b385c87873fec09</data>
     </edge>
     <edge source="Model Selection" target="Advanced Models">
       <data key="d4">The process of Model Selection in SmolRAG focuses on incorporating Advanced Models for better performance.</data>
       <data key="d5">enhancement, model comparison</data>
-      <data key="d6">7.0</data>
+      <data key="d6">14.0</data>
       <data key="d7">excerpt_id_9852e72fbe12ed839b385c87873fec09</data>
     </edge>
     <edge source="v1_router" target="query_endpoint_v1">
@@ -8396,6 +8396,6 @@
       <data key="d6">6.0</data>
       <data key="d7">excerpt_id_dc65135b9ad9bfac43cc3ae95a7b4158</data>
     </edge>
-    <data key="d0">document ingestion, data storage, metadata management, error handling, system reliability</data>
+    <data key="d0">similarity search, semantic meaning, information retrieval, vector representation</data>
   </graph>
 </graphml>

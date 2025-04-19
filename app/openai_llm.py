@@ -1,4 +1,3 @@
-import os
 from typing import Any, Dict, List, Optional
 
 from dotenv import load_dotenv
@@ -14,7 +13,8 @@ load_dotenv()
 
 
 class OpenAiLlm:
-    def __init__(self, completion_model=None, embedding_model=None, query_cache_kv=None, embedding_cache_kv=None, openai_api_key=None) -> None:
+    def __init__(self, completion_model=None, embedding_model=None, query_cache_kv=None, embedding_cache_kv=None,
+                 openai_api_key=None) -> None:
         """
         Initializes the OpenAiLlm instance with specified models and caches.
         """
@@ -24,7 +24,8 @@ class OpenAiLlm:
         self.completion_model = completion_model or COMPLETION_MODEL
         self.embedding_model = embedding_model or EMBEDDING_MODEL
 
-    def get_completion(self, query: str, model: Optional[str] = None, context: str = "", use_cache: bool = True) -> str:
+    async def get_completion(self, query: str, model: Optional[str] = None, context: str = "",
+                             use_cache: bool = True) -> str:
         """
         Gets a completion from the API with optional caching.
 
@@ -36,9 +37,10 @@ class OpenAiLlm:
         """
         model = model or self.completion_model
         query_hash = make_hash(query, 'qry-')
-        if use_cache and self.query_cache_kv.has(query_hash):
+        if use_cache and await self.query_cache_kv.has(query_hash):
             logger.info("Query cache hit")
-            return self.query_cache_kv.get_by_key(query_hash)["result"]
+            cache_data = await self.query_cache_kv.get_by_key(query_hash)
+            return cache_data["result"]
 
         logger.info("New query")
         system_message = [{"role": "system", "content": context}] if context else []
@@ -55,8 +57,8 @@ class OpenAiLlm:
             logger.error(f"Error getting completion: {e}")
             raise
 
-        self.query_cache_kv.add(query_hash, {"query": query, "result": result})
-        self.query_cache_kv.save()
+        await self.query_cache_kv.add(query_hash, {"query": query, "result": result})
+        await self.query_cache_kv.save()
 
         return result
 
@@ -90,7 +92,7 @@ class OpenAiLlm:
         messages.append({"role": "assistant", "content": assistant_reply})
         return messages
 
-    def get_embedding(self, content: Any, model: Optional[str] = None) -> List[float]:
+    async def get_embedding(self, content: Any, model: Optional[str] = None) -> List[float]:
         """
         Gets the embedding for the provided content using the specified model.
 
@@ -101,9 +103,9 @@ class OpenAiLlm:
         model = model or self.embedding_model
         content_hash = make_hash(str(content), 'emb-')
 
-        if self.embedding_cache_kv.has(content_hash):
+        if await self.embedding_cache_kv.has(content_hash):
             logger.info("Embedding cache hit")
-            embedding = self.embedding_cache_kv.get_by_key(content_hash)
+            embedding = await self.embedding_cache_kv.get_by_key(content_hash)
         else:
             logger.info("New embedding")
             try:
@@ -115,7 +117,7 @@ class OpenAiLlm:
             except Exception as e:
                 logger.error(f"Error getting embedding: {e}")
                 raise
-            self.embedding_cache_kv.add(content_hash, embedding)
-            self.embedding_cache_kv.save()
+            await self.embedding_cache_kv.add(content_hash, embedding)
+            await self.embedding_cache_kv.save()
 
         return embedding

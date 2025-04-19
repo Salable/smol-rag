@@ -8,7 +8,7 @@ from aiolimiter import AsyncLimiter
 from app.chunking import preserve_markdown_code_excerpts, naive_overlap_excerpts
 from app.definitions import INPUT_DOCS_DIR, SOURCE_TO_DOC_ID_KV_PATH, DOC_ID_TO_SOURCE_KV_PATH, EMBEDDINGS_DB, \
     EXCERPT_KV_PATH, DOC_ID_TO_EXCERPT_KV_PATH, KG_DB, ENTITIES_DB, RELATIONSHIPS_DB, KG_SEP, TUPLE_SEP, REC_SEP, \
-    COMPLETE_TAG, DATA_DIR, LOG_DIR, COMPLETION_MODEL, EMBEDDING_MODEL
+    COMPLETE_TAG, LOG_DIR, COMPLETION_MODEL, EMBEDDING_MODEL, DATA_DIR
 from app.graph_store import NetworkXGraphStore
 from app.kv_store import JsonKvStore
 from app.logger import logger, set_logger
@@ -93,24 +93,26 @@ class SmolRag:
 
     async def import_documents(self):
         sources = get_docs(INPUT_DOCS_DIR)
+        tasks = []
         for source in sources:
             content = read_file(source)
             doc_id = make_hash(content, "doc_")
-
             if not self.source_to_doc_kv.has(source):
                 logger.info(f"Importing new document: {source} (ID: {doc_id})")
                 self._add_document_maps(source, content)
-                await self._embed_document(content, doc_id)
-                await self._extract_entities(content, doc_id)
+                tasks.append(self._embed_document(content, doc_id))
+                tasks.append(self._extract_entities(content, doc_id))
             elif not self.source_to_doc_kv.equal(source, doc_id):
                 logger.info(f"Updating document: {source} (New ID: {doc_id})")
                 old_doc_id = self.source_to_doc_kv.get_by_key(source)
                 self.remove_document_by_id(old_doc_id)
                 self._add_document_maps(source, content)
-                await self._embed_document(content, doc_id)
-                await self._extract_entities(content, doc_id)
+                tasks.append(self._embed_document(content, doc_id))
+                tasks.append(self._extract_entities(content, doc_id))
             else:
                 logger.debug(f"No changes detected for document: {source} (ID: {doc_id})")
+
+        await asyncio.gather(*tasks)
 
     def _add_document_maps(self, source, content):
         doc_id = make_hash(content, "doc_")
@@ -123,15 +125,29 @@ class SmolRag:
         start_time = time.time()
         excerpts = self.excerpt_fn(content, self.excerpt_size, self.overlap)
         excerpt_ids = []
-        for i, excerpt in enumerate(excerpts):
+
+        summary_tasks = [self._get_excerpt_summary(content, excerpt) for excerpt in excerpts]
+        summaries = await asyncio.gather(*summary_tasks)
+
+        embedding_tasks = []
+        for excerpt, summary in zip(excerpts, summaries):
+            embedding_content = f"{excerpt}\n\n{summary}"
+            embedding_tasks.append(self.rate_limited_get_embedding(embedding_content))
+        embedding_results = await asyncio.gather(*embedding_tasks)
+
+        for i, (excerpt, summary, embedding_result) in enumerate(
+                zip(excerpts, summaries, embedding_results)
+        ):
             excerpt_id = make_hash(excerpt, "excerpt_id_")
             excerpt_ids.append(excerpt_id)
-            summary = await self._get_excerpt_summary(content, excerpt)
-            embedding_content = f"{excerpt}\n\n{summary}"
-            embedding_result = await self.rate_limited_get_embedding(embedding_content)
             vector = np.array(embedding_result, dtype=np.float32)
             self.embeddings_db.upsert([
-                {"__id__": excerpt_id, "__vector__": vector, "__doc_id__": doc_id, "__inserted_at__": time.time()}
+                {
+                    "__id__": excerpt_id,
+                    "__vector__": vector,
+                    "__doc_id__": doc_id,
+                    "__inserted_at__": time.time()
+                }
             ])
             self.excerpt_kv.add(excerpt_id, {
                 "doc_id": doc_id,
@@ -164,22 +180,25 @@ class SmolRag:
         total_relationships = 0
         excerpts = self.excerpt_fn(content, self.excerpt_size, self.overlap)
 
-        for excerpt in excerpts:
-            excerpt_id = make_hash(excerpt, "excerpt_id_")
-            try:
-                result = await self.rate_limited_get_completion(get_extract_entities_prompt(excerpt))
-            except Exception as e:
-                logger.error(f"LLM call for entity extraction failed for excerpt {excerpt_id}: {e}")
-                continue
+        extract_entity_tasks = [self.rate_limited_get_completion(get_extract_entities_prompt(excerpt)) for excerpt in
+                                excerpts]
+        entity_results = await asyncio.gather(*extract_entity_tasks)
 
+        for (excerpt, result) in zip(excerpts, entity_results):
+            excerpt_id = make_hash(excerpt, "excerpt_id_")
             data_str = result.replace(COMPLETE_TAG, '').strip()
             records = split_string_by_multi_markers(data_str, [REC_SEP])
+
             clean_records = []
             for record in records:
                 if record.startswith('(') and record.endswith(')'):
-                    record = record = record[1:-1]
+                    record = record[1:-1]
                 clean_records.append(clean_str(record))
             records = clean_records
+
+            tasks = []
+            entities_to_upsert = []
+            relationships_to_upsert = []
 
             for record in records:
                 fields = split_string_by_multi_markers(record, [TUPLE_SEP])
@@ -193,7 +212,8 @@ class SmolRag:
                         _, name, category, description = fields[:4]
                         existing_node = self.graph.get_node(name)
                         if existing_node:
-                            existing_descriptions = split_string_by_multi_markers(existing_node["description"], [KG_SEP])
+                            existing_descriptions = split_string_by_multi_markers(existing_node["description"],
+                                                                                  [KG_SEP])
                             descriptions = KG_SEP.join(set(list(existing_descriptions) + [description]))
                             existing_categories = split_string_by_multi_markers(existing_node["category"], [KG_SEP])
                             categories = KG_SEP.join(set(list(existing_categories) + [category]))
@@ -211,16 +231,12 @@ class SmolRag:
                         total_entities += 1
                         entity_id = make_hash(name, prefix="ent-")
                         embedding_content = f"{name} {description}"
-                        embedding_result = await self.rate_limited_get_embedding(embedding_content)
-                        vector = np.array(embedding_result, dtype=np.float32)
-                        self.entities_db.upsert([
-                            {
-                                "__id__": entity_id,
-                                "__vector__": vector,
-                                "__entity_name__": name,
-                                "__inserted_at__": time.time(),
-                            }
-                        ])
+                        tasks.append(self.rate_limited_get_embedding(embedding_content))
+                        entities_to_upsert.append({
+                            "__id__": entity_id,
+                            "__entity_name__": name,
+                            "__inserted_at__": time.time(),
+                        })
                 elif record_type == 'relationship':
                     if len(fields) >= 6:
                         _, source, target, description, keywords, weight = fields[:6]
@@ -229,7 +245,8 @@ class SmolRag:
                         existing_edge = self.graph.get_edge((source, target))
                         weight = float(weight) if is_float_regex(weight) else 1.0
                         if existing_edge:
-                            existing_descriptions = split_string_by_multi_markers(existing_edge["description"], [KG_SEP])
+                            existing_descriptions = split_string_by_multi_markers(existing_edge["description"],
+                                                                                  [KG_SEP])
                             descriptions = KG_SEP.join(set(list(existing_descriptions) + [description]))
                             existing_keywords = split_string_by_multi_markers(existing_edge["keywords"], [KG_SEP])
                             keywords = KG_SEP.join(set(list(existing_keywords) + [keywords]))
@@ -247,20 +264,32 @@ class SmolRag:
 
                         relationship_id = make_hash(f"{source}_{target}", prefix="ent-")
                         embedding_content = f"{keywords} {source} {target} {description}"
-                        embedding_result = await self.rate_limited_get_embedding(embedding_content)
-                        vector = np.array(embedding_result, dtype=np.float32)
-                        self.relationships_db.upsert([
-                            {
-                                "__id__": relationship_id,
-                                "__vector__": vector,
-                                "__source__": source,
-                                "__target__": target,
-                                "__inserted_at__": time.time(),
-                            }
-                        ])
+                        tasks.append(self.rate_limited_get_embedding(embedding_content))
+                        relationships_to_upsert.append({
+                            "__id__": relationship_id,
+                            "__source__": source,
+                            "__target__": target,
+                            "__inserted_at__": time.time(),
+                        })
                 elif record_type == 'content_keywords':
                     if len(fields) >= 2:
                         self.graph.set_field('content_keywords', fields[1])
+
+            results = await asyncio.gather(*tasks)
+
+            idx = 0
+            for entity in entities_to_upsert:
+                vector = np.array(results[idx], dtype=np.float32)
+                entity["__vector__"] = vector
+                idx += 1
+
+            for relation in relationships_to_upsert:
+                vector = np.array(results[idx], dtype=np.float32)
+                relation["__vector__"] = vector
+                idx += 1
+
+            self.entities_db.upsert(entities_to_upsert)
+            self.relationships_db.upsert(relationships_to_upsert)
 
         self.entities_db.save()
         self.relationships_db.save()

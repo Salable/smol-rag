@@ -73,7 +73,7 @@ def __init__(
 
 **Key Parameters**:
 
-- `excerpt_fn`: Function for chunking documents (default: `naive_overlap_excerpts`)
+- `excerpt_fn`: Function for chunking documents (default: `preserve_markdown_code_excerpts`)
 - `llm`: LLM interface instance (default: new `OpenAiLlm` instance)
 - `dimensions`: Embedding dimensions (default: 1536)
 - `excerpt_size`: Target size for document chunks in characters (default: 2000)
@@ -90,7 +90,12 @@ Document chunking is a critical part of the RAG process, and SmolRAG provides se
 **Built-in Chunking Functions**:
 
 1. `naive_overlap_excerpts(text, excerpt_size, overlap)`: A simple chunking strategy that splits text at regular intervals with overlap.
-2. `preserve_markdown_code_excerpts(text, excerpt_size, overlap)`: An advanced strategy that respects Markdown structure and code blocks.
+2. `preserve_markdown_code_excerpts(text, excerpt_size, overlap)`: An advanced strategy that respects Markdown structure and code blocks, which:
+   - Identifies and extracts fenced code blocks (``` ... ```) from the document
+   - Keeps entire code blocks intact, ensuring they remain functional and readable
+   - Merges code blocks with neighboring paragraphs when they fit within the chunk size limit
+   - Splits plain-text paragraphs at sentence boundaries when necessary
+   - Applies optional overlap between chunks to maintain context continuity
 
 **Chunking Parameters**:
 
@@ -331,7 +336,42 @@ async def query_endpoint(request: QueryRequest):
 
 ---
 
-### **13. Advanced Customization**
+### **13. Parallel Processing Configuration**
+
+SmolRAG uses Python's asyncio library for parallel processing during document ingestion, which significantly improves performance:
+
+**Asyncio Implementation**:
+
+- Multiple documents are processed simultaneously
+- Embedding and completion requests are executed concurrently
+- The `asyncio.gather()` function combines multiple asynchronous tasks
+- Rate limiting is applied to API calls to prevent throttling
+
+**Rate Limiting Configuration**:
+
+```python
+# In SmolRag.__init__
+self.llm_limiter = AsyncLimiter(max_rate=100, time_period=1)
+```
+
+You can adjust the rate limiting parameters by extending the `SmolRag` class:
+
+```python
+from app.smol_rag import SmolRag
+from aiolimiter import AsyncLimiter
+
+class CustomRateLimitedSmolRag(SmolRag):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Customize rate limiting
+        self.llm_limiter = AsyncLimiter(max_rate=50, time_period=1)
+```
+
+This parallel processing approach dramatically reduces ingestion time, especially for large document collections.
+
+---
+
+### **14. Advanced Customization**
 
 For more advanced customization, you can extend the core classes of SmolRAG:
 
@@ -344,11 +384,11 @@ class CustomSmolRag(SmolRag):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Add custom initialization
-    
+
     def custom_query(self, text):
         # Implement custom query method
         # ...
-    
+
     # Override existing methods
     def query(self, text):
         # Custom implementation of query
@@ -369,7 +409,7 @@ These custom components can be passed to the `SmolRag` constructor to replace th
 
 ---
 
-### **14. Configuration Best Practices**
+### **15. Configuration Best Practices**
 
 Here are some best practices for configuring SmolRAG:
 

@@ -21,9 +21,15 @@ from app.smol_rag import SmolRag
 # Initialize SmolRAG with default settings
 rag = SmolRag()
 
-# If you want to customize the chunking strategy
-from app.chunking import preserve_markdown_code_excerpts
+# SmolRAG now uses preserve_markdown_code_excerpts as the default chunking strategy
+# This strategy keeps code blocks intact and splits text at sentence boundaries
+from app.chunking import preserve_markdown_code_excerpts, naive_overlap_excerpts
+
+# The default is already preserve_markdown_code_excerpts, but you can specify it explicitly:
 rag = SmolRag(excerpt_fn=preserve_markdown_code_excerpts)
+
+# Or use the simpler naive chunking if preferred:
+# rag = SmolRag(excerpt_fn=naive_overlap_excerpts)
 
 # If you want to customize dimensions or other parameters
 rag = SmolRag(
@@ -248,17 +254,17 @@ def custom_chunking_strategy(text, excerpt_size, overlap):
     paragraphs = text.split("\n\n")
     chunks = []
     current_chunk = ""
-    
+
     for paragraph in paragraphs:
         if len(current_chunk) + len(paragraph) <= excerpt_size:
             current_chunk += paragraph + "\n\n"
         else:
             chunks.append(current_chunk)
             current_chunk = paragraph + "\n\n"
-    
+
     if current_chunk:
         chunks.append(current_chunk)
-    
+
     return chunks
 
 # Initialize SmolRAG with the custom chunking strategy
@@ -291,10 +297,10 @@ def query():
     data = request.json
     query_text = data.get('text', '')
     query_type = data.get('query_type', 'standard')
-    
+
     if not query_text:
         return jsonify({'error': 'Query text is required'}), 400
-    
+
     try:
         if query_type == 'standard':
             result = rag.query(query_text)
@@ -308,7 +314,7 @@ def query():
             result = rag.mix_query(query_text)
         else:
             return jsonify({'error': f'Invalid query type: {query_type}'}), 400
-        
+
         return jsonify({'result': result})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -358,7 +364,7 @@ for query in queries:
         result = rag.mix_query(query["text"])
     else:
         result = f"Invalid query type: {query['type']}"
-    
+
     results.append({"query": query["text"], "type": query["type"], "result": result})
 
 # Print results
@@ -373,7 +379,39 @@ This example shows how to process multiple queries in batch, which can be useful
 
 ---
 
-### **12. Advanced Configuration Example**
+### **12. Parallel Processing with Asyncio**
+
+SmolRAG now uses asyncio for parallel processing during document ingestion, which significantly improves performance:
+
+```python
+import asyncio
+from app.smol_rag import SmolRag
+
+# Initialize SmolRAG
+rag = SmolRag()
+
+# The import_documents method uses asyncio internally
+# It processes multiple documents, embeddings, and entity extractions in parallel
+async def import_docs():
+    await rag.import_documents()
+
+# Run the async function
+asyncio.run(import_docs())
+
+# Or in an existing async context:
+# await rag.import_documents()
+```
+
+This example demonstrates how SmolRAG leverages asyncio for parallel processing. The system automatically:
+- Processes multiple documents simultaneously
+- Generates embeddings for multiple excerpts concurrently
+- Extracts entities and relationships from different excerpts in parallel
+
+This parallel processing approach dramatically reduces ingestion time, especially for large document collections.
+
+---
+
+### **13. Advanced Configuration Example**
 
 For advanced users, here's how to configure SmolRAG with custom components:
 
@@ -447,7 +485,7 @@ This advanced example demonstrates how to configure SmolRAG with custom componen
 
 ---
 
-### **13. Conclusion**
+### **14. Conclusion**
 
 These examples demonstrate the versatility and power of SmolRAG for various use cases. Whether you need simple document querying, complex knowledge extraction, or integration with web applications, SmolRAG provides the tools you need.
 

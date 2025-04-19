@@ -19,7 +19,7 @@ SmolRAG ingests documents from the `app/input_docs/` directory. The system suppo
 - **File Identification**: Each file is identified by its path and a content hash for change detection.
 - **Metadata Extraction**: File paths and other metadata are preserved for context and reference.
 
-When adding new documents to SmolRAG, simply place them in the input_docs directory and run the import_documents method. The system will automatically process new files and update any changed ones.
+When adding new documents to SmolRAG, place them in the input_docs directory and run the import_documents method. The system will automatically process new files and update any changed ones.
 
 ---
 
@@ -37,6 +37,13 @@ The chunking process is configurable, allowing users to adjust chunk size and ov
 
 1. `naive_overlap_excerpts`: A simple chunking strategy that splits text at regular intervals with overlap.
 2. `preserve_markdown_code_excerpts`: An advanced strategy that respects Markdown structure and code blocks.
+
+The `preserve_markdown_code_excerpts` function, which is now the default, uses a sophisticated algorithm to:
+- Identify and extract fenced code blocks (``` ... ```) from the document
+- Keep entire code blocks intact, ensuring they remain functional and readable
+- Merge code blocks with neighboring paragraphs when they fit within the chunk size limit
+- Split plain-text paragraphs at sentence boundaries when necessary
+- Apply optional overlap between chunks to maintain context continuity
 
 ---
 
@@ -81,7 +88,24 @@ The extracted entities and relationships form a knowledge graph that enables str
 
 ---
 
-### **7. Change Detection and Updates**
+### **7. Parallel Processing with Asyncio**
+
+SmolRAG leverages Python's asyncio library to significantly improve data ingestion speed:
+
+- **Concurrent Processing**: Multiple documents are processed simultaneously.
+- **Parallel API Calls**: Embedding and completion requests are executed concurrently.
+- **Task Gathering**: The `asyncio.gather()` function combines multiple asynchronous tasks.
+- **Rate Limiting**: An `AsyncLimiter` controls API call rates to prevent throttling.
+- **Resource Efficiency**: Parallel processing makes better use of available system resources.
+
+This asynchronous approach dramatically reduces ingestion time, especially for large document collections, by:
+- Processing multiple document chunks in parallel
+- Generating embeddings for multiple excerpts concurrently
+- Extracting entities and relationships from different excerpts simultaneously
+
+---
+
+### **8. Change Detection and Updates**
 
 SmolRAG includes a robust change detection mechanism to ensure information stays current:
 
@@ -95,7 +119,7 @@ This change detection mechanism is crucial for maintaining up-to-date informatio
 
 ---
 
-### **8. Storage and Persistence**
+### **9. Storage and Persistence**
 
 SmolRAG uses several storage mechanisms to persist processed documents:
 
@@ -109,7 +133,7 @@ These storage mechanisms ensure that processed documents are available for query
 
 ---
 
-### **9. Error Handling and Logging**
+### **10. Error Handling and Logging**
 
 The document ingestion process includes comprehensive error handling and logging:
 
@@ -123,7 +147,7 @@ This robust error handling ensures that the ingestion process is reliable and re
 
 ---
 
-### **10. Conclusion**
+### **11. Conclusion**
 
 SmolRAG's document ingestion process is a sophisticated pipeline that transforms raw documents into a rich, queryable knowledge base. By combining chunking, summarization, embedding, and knowledge graph extraction, the system creates a comprehensive representation of document content that enables accurate and contextually relevant responses to queries.
 

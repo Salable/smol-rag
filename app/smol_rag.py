@@ -5,10 +5,10 @@ import time
 import numpy as np
 from aiolimiter import AsyncLimiter
 
-from app.chunking import preserve_markdown_code_excerpts, naive_overlap_excerpts
+from app.chunking import preserve_markdown_code_excerpts
 from app.definitions import INPUT_DOCS_DIR, SOURCE_TO_DOC_ID_KV_PATH, DOC_ID_TO_SOURCE_KV_PATH, EMBEDDINGS_DB, \
     EXCERPT_KV_PATH, DOC_ID_TO_EXCERPT_KV_PATH, KG_DB, ENTITIES_DB, RELATIONSHIPS_DB, KG_SEP, TUPLE_SEP, REC_SEP, \
-    COMPLETE_TAG, LOG_DIR, COMPLETION_MODEL, EMBEDDING_MODEL, DATA_DIR
+    COMPLETE_TAG, LOG_DIR, COMPLETION_MODEL, EMBEDDING_MODEL
 from app.graph_store import NetworkXGraphStore
 from app.kv_store import JsonKvStore
 from app.logger import logger, set_logger
@@ -43,7 +43,7 @@ class SmolRag:
         set_logger("main.log")
         self.llm_limiter = AsyncLimiter(max_rate=100, time_period=1)
 
-        self.excerpt_fn = excerpt_fn or naive_overlap_excerpts
+        self.excerpt_fn = excerpt_fn or preserve_markdown_code_excerpts
         self.excerpt_size = excerpt_size
         self.overlap = overlap
 
@@ -587,7 +587,8 @@ class SmolRag:
             {"id": k, **v} for k, v in all_excerpts_lookup.items() if v is not None
         ]
         all_excerpts = sorted(all_excerpts, key=lambda x: x["order"])
-        all_excerpts = [t["data"] for t in all_excerpts]
+        # Todo: figure out how t["data"] is None
+        all_excerpts = [t["data"] for t in all_excerpts if t["data"] is not None]
 
         all_excerpts = truncate_list_by_token_size(
             all_excerpts,
@@ -633,39 +634,39 @@ if __name__ == '__main__':
         # delete_all_files(DATA_DIR)
         delete_all_files(LOG_DIR)
 
-        smol_rag = SmolRag(excerpt_fn=preserve_markdown_code_excerpts)
+        smol_rag = SmolRag()
 
         await smol_rag.import_documents()
 
-        print(await smol_rag.query("what is smol rag?"))  # Should answer
+        print(await smol_rag.query("what is SmolRag?"))  # Should answer
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
         print(await smol_rag.query("what do cats eat?"))  # Should reject
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(await smol_rag.query("What's the subject matter we can discuss?"))  # Should answer
+        print(await smol_rag.query("What subjects we can discuss?"))  # Should answer
 
-        print(await smol_rag.hybrid_kg_query("what is smol rag?"))  # Should answer
+        print(await smol_rag.hybrid_kg_query("what is SmolRag?"))  # Should answer
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
         print(await smol_rag.hybrid_kg_query("what do cows eat?"))  # Should reject
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(await smol_rag.hybrid_kg_query("What's the subject matter we can discuss?"))
+        print(await smol_rag.hybrid_kg_query("What subjects we can discuss?"))
 
-        print(await smol_rag.local_kg_query("what is smol rag?"))  # Should answer
+        print(await smol_rag.local_kg_query("what is SmolRag?"))  # Should answer
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(await smol_rag.local_kg_query("what do cows eat?"))  # Should reject
+        print(await smol_rag.local_kg_query("what do ducks eat?"))  # Should reject
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(await smol_rag.local_kg_query("What's the subject matter we can discuss?"))
+        print(await smol_rag.local_kg_query("What subjects we can discuss?"))
 
-        print(await smol_rag.global_kg_query("what is smol rag?"))  # Should answer
+        print(await smol_rag.global_kg_query("what is SmolRag?"))  # Should answer
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(await smol_rag.global_kg_query("what do cows eat?"))  # Should reject
+        print(await smol_rag.global_kg_query("what do frogs eat?"))  # Should reject
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(await smol_rag.global_kg_query("What's the subject matter we can discuss?"))
+        print(await smol_rag.global_kg_query("What subjects we can discuss?"))
 
-        print(await smol_rag.mix_query("what is smol rag?"))  # Should answer
+        print(await smol_rag.mix_query("what is SmolRag?"))  # Should answer
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(await smol_rag.mix_query("what do cows eat?"))  # Should reject
+        print(await smol_rag.mix_query("what do jellyfish eat?"))  # Should reject
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(await smol_rag.mix_query("What's the subject matter we can discuss?"))
+        print(await smol_rag.mix_query("What subjects we can discuss?"))
 
         # smol_rag.remove_document_by_id("doc_4c3f8100da0b90c1a44c94e6b4ffa041")
 

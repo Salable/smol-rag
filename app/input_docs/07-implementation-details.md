@@ -49,9 +49,14 @@ Document chunking is implemented in `chunking.py`, which provides strategies for
 
 **Key Functions**:
 - `naive_overlap_excerpts(text, excerpt_size, overlap)`: A simple chunking strategy that splits text at regular intervals with overlap
-- `preserve_markdown_code_excerpts(text, excerpt_size, overlap)`: An advanced strategy that respects Markdown structure and code blocks
+- `preserve_markdown_code_excerpts(text, excerpt_size, overlap)`: An advanced strategy that respects Markdown structure and code blocks, which:
+  - Identifies and extracts fenced code blocks (``` ... ```) from the document
+  - Keeps entire code blocks intact, ensuring they remain functional and readable
+  - Merges code blocks with neighboring paragraphs when they fit within the chunk size limit
+  - Splits plain-text paragraphs at sentence boundaries when necessary
+  - Applies optional overlap between chunks to maintain context continuity
 
-The chunking functions are designed to be interchangeable, allowing users to select the most appropriate strategy for their documents or implement custom strategies.
+The chunking functions are designed to be interchangeable, allowing users to select the most appropriate strategy for their documents or implement custom strategies. The `preserve_markdown_code_excerpts` function is now the default chunking strategy in SmolRAG, providing better handling of technical documentation with code examples.
 
 ---
 
@@ -212,10 +217,13 @@ The data flow in SmolRAG follows well-defined processing pipelines:
 
 **Document Ingestion Pipeline**:
 1. Documents are read from the input directory
-2. Each document is chunked into excerpts
-3. Each excerpt is summarized
-4. Excerpts and summaries are embedded
-5. Entities and relationships are extracted
+2. Each document is chunked into excerpts using the `preserve_markdown_code_excerpts` function
+3. Multiple processing tasks are created and executed in parallel using asyncio:
+   - Excerpt summarization tasks are gathered and processed concurrently
+   - Embedding generation tasks are gathered and processed concurrently
+   - Entity and relationship extraction tasks are gathered and processed concurrently
+4. The asyncio.gather() function combines these asynchronous tasks for efficient parallel processing
+5. Rate limiting is applied to API calls to prevent throttling
 6. All data is stored in the appropriate stores
 
 **Query Processing Pipeline**:
@@ -224,7 +232,7 @@ The data flow in SmolRAG follows well-defined processing pipelines:
 3. The query is processed according to the specific pipeline for that query type
 4. The results are formatted and returned
 
-These pipelines ensure consistent processing and make it easy to understand and modify the system's behavior.
+These pipelines ensure consistent processing and make it easy to understand and modify the system's behavior. The use of asyncio for parallel processing significantly improves data ingestion speed, especially for large document collections.
 
 ---
 

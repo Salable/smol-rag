@@ -4,7 +4,7 @@
 
 ### **1. Introduction to SmolRAG**
 
-SmolRAG is a lightweight retrieval-augmented generation system inspired by LightRAG, designed for fast, up-to-date querying of your own documents. It combines the power of vector embeddings, knowledge graphs, and large language models to provide accurate and contextually relevant answers to queries about your documents.
+SmolRAG is a lightweight retrieval-augmented generation system inspired by LightRAG, designed for fast, up-to-date querying of your own documents. It combines the power of vector embeddings, knowledge graphs, and large language models to provide accurate and relevant answers to queries about your documents.
 
 The system is built with a focus on simplicity, efficiency, and flexibility, making it accessible for developers who need to implement RAG capabilities without the complexity of larger systems. SmolRAG is particularly well-suited for applications where document content changes frequently and where maintaining up-to-date information is critical.
 
@@ -54,7 +54,7 @@ The data flow in SmolRAG follows two main paths: document ingestion and query pr
 
 **Query Processing Flow**:
 1. User submits a query through the API
-2. Query is processed based on the specified query type
+2. The query is processed based on the specified query type
 3. Relevant information is retrieved from the vector store and/or knowledge graph
 4. Retrieved information is used to generate a response using the LLM
 5. Response is returned to the user

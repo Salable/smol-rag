@@ -14,11 +14,12 @@ For setup instructions and general guidance, please refer to [SmolRAG Docs](DOCS
 
 ### Document Ingestion & Update Handling
 
-Each document is split into overlapping chunks (approximately 2000 characters) using our default chunking class, which is optimised for code documentation by keeping code snippets intact.
-- Markdown code blocks are ingested in full, so be careful not to ingest documents with extremely long code blocks.
+Each document is split into overlapping chunks (approximately 2000 characters) using our `preserve_markdown_code_excerpts` function, which is optimised for code documentation by keeping code blocks intact.
+- Markdown code blocks are preserved in their entirety, ensuring code examples remain functional and readable.
 - Text is then segmented into paragraphs and, if necessary, further divided into sentences at whitespace boundaries to avoid splitting words.
-- Each excerpt is then individually summarised with the whole document provided as context; the summary preserves details about where the excerpt fits in..
+- Each excerpt is then individually summarised with the whole document provided as context; the summary preserves details about where the excerpt fits in.
 - Documents are embedded and checked for updates using hash-based deduplication. Each document is tracked using a combination of its file path and a hash of its content. If a file path already exists but the hash has changed, SmolRAG automatically removes the old version and re-ingests the updated content to ensure that queries reflect the most recent state of your source materials without unnecessary reprocessing.
+- The ingestion process uses asyncio and gather for parallel processing, significantly improving data ingestion speed by processing multiple documents, generating embeddings, and extracting entities concurrently.
 
 ### Query Types
 

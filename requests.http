@@ -14,7 +14,7 @@ POST http://localhost:8000/query
 Content-Type: application/json
 
 {
-  "text": "What entities are related to document chunking?",
+  "text": "How are entities are related to document chunking?",
   "query_type": "local_kg"
 }
 

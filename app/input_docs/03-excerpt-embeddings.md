@@ -58,6 +58,7 @@ SmolRAG uses a lightweight vector database called NanoVectorStore to manage embe
 - **Metadata Association**: Each embedding is associated with metadata including document ID, excerpt ID, and timestamp.
 - **Indexing**: The store supports efficient similarity search through appropriate indexing.
 - **Persistence**: Embeddings are serialized to disk to persist between runs.
+- **Asynchronous Operations**: All vector store operations (upsert, delete, query, save) are fully asynchronous, using async/await patterns for optimized performance.
 - **CRUD Operations**: The store supports creating, reading, updating, and deleting embeddings.
 
 The NanoVectorStore is designed to be simple yet effective, providing the necessary functionality without the complexity of larger vector database systems.

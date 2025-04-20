@@ -149,13 +149,22 @@ To ingest documents into SmolRAG:
 3. Run the ingestion process:
 
 ```python
+import asyncio
 from app.smol_rag import SmolRag
 
 # Initialize SmolRAG
 rag = SmolRag()
 
 # Import documents from the input_docs directory
-rag.import_documents()
+# This is an async method, so it needs to be awaited
+async def import_docs():
+    await rag.import_documents()
+
+# Run the async function
+asyncio.run(import_docs())
+
+# Or in an existing async context:
+# await rag.import_documents()
 ```
 
 ### Querying Documents
@@ -163,18 +172,29 @@ rag.import_documents()
 After ingesting documents, you can query them:
 
 ```python
+import asyncio
 from app.smol_rag import SmolRag
 
 # Initialize SmolRAG
 rag = SmolRag()
 
 # Query using the default method (vector search)
-result = rag.query("What is SmolRAG?")
-print(result)
+# All query methods are async and need to be awaited
+async def run_queries():
+    # Vector search query
+    result = await rag.query("What is SmolRAG?")
+    print(result)
 
-# Query using the knowledge graph
-kg_result = rag.hybrid_kg_query("How does SmolRAG handle document updates?")
-print(kg_result)
+    # Query using the knowledge graph
+    kg_result = await rag.hybrid_kg_query("How does SmolRAG handle document updates?")
+    print(kg_result)
+
+# Run the async function
+asyncio.run(run_queries())
+
+# Or in an existing async context:
+# result = await rag.query("What is SmolRAG?")
+# kg_result = await rag.hybrid_kg_query("How does SmolRAG handle document updates?")
 ```
 
 ### Query Types
@@ -183,27 +203,32 @@ SmolRAG supports multiple query types, each optimized for different use cases:
 
 1. **Vector Search Query** (`query`):
    ```python
-   result = rag.query("What is SmolRAG?")
+   # Async method - must be awaited
+   result = await rag.query("What is SmolRAG?")
    ```
 
 2. **Local Knowledge Graph Query** (`local_kg_query`):
    ```python
-   result = rag.local_kg_query("What entities are related to document chunking?")
+   # Async method - must be awaited
+   result = await rag.local_kg_query("What entities are related to document chunking?")
    ```
 
 3. **Global Knowledge Graph Query** (`global_kg_query`):
    ```python
-   result = rag.global_kg_query("How are different components connected?")
+   # Async method - must be awaited
+   result = await rag.global_kg_query("How are different components connected?")
    ```
 
 4. **Hybrid Knowledge Graph Query** (`hybrid_kg_query`):
    ```python
-   result = rag.hybrid_kg_query("What is the relationship between embeddings and queries?")
+   # Async method - must be awaited
+   result = await rag.hybrid_kg_query("What is the relationship between embeddings and queries?")
    ```
 
 5. **Mix Query** (`mix_query`):
    ```python
-   result = rag.mix_query("How does SmolRAG process and retrieve information?")
+   # Async method - must be awaited
+   result = await rag.mix_query("How does SmolRAG process and retrieve information?")
    ```
 
 ## API Reference
@@ -289,6 +314,7 @@ SmolRAG consists of the following main components:
    - Each document is split into overlapping chunks
    - Chunks are summarized and embedded
    - Entities and relationships are extracted and stored in the knowledge graph
+   - The entire process is fully asynchronous, with both key-value store (JsonKvStore) and vector store (NanoVectorStore) operations completely asynchronous, using async/await patterns. This optimizes performance, especially for large document collections
 
 2. **Query Processing**:
    - User submits a query through the API
@@ -369,21 +395,26 @@ minimal-light-rag/
 
 1. **SmolRag** (`app/smol_rag.py`):
    - `__init__()`: Initialize the RAG system
-   - `import_documents()`: Import documents from the input directory
-   - `query()`: Vector search query
-   - `local_kg_query()`: Local knowledge graph query
-   - `global_kg_query()`: Global knowledge graph query
-   - `hybrid_kg_query()`: Hybrid knowledge graph query
-   - `mix_query()`: Mix query (combines vector search and knowledge graph)
-   - `remove_document_by_id()`: Remove a document from the system
+   - `async import_documents()`: Import documents from the input directory (asynchronous)
+   - `async query()`: Vector search query (asynchronous)
+   - `async local_kg_query()`: Local knowledge graph query (asynchronous)
+   - `async global_kg_query()`: Global knowledge graph query (asynchronous)
+   - `async hybrid_kg_query()`: Hybrid knowledge graph query (asynchronous)
+   - `async mix_query()`: Mix query (combines vector search and knowledge graph) (asynchronous)
+   - `async remove_document_by_id()`: Remove a document from the system (asynchronous)
 
 2. **NanoVectorStore** (`app/vector_store.py`):
-   - Handles vector embeddings and similarity search
+   - Handles vector embeddings and similarity search with asynchronous operations
+   - Provides async methods for upsert, delete, query, and save operations
 
 3. **NetworkXGraphStore** (`app/graph_store.py`):
    - Manages the knowledge graph
 
-4. **OpenAiLlm** (`app/openai_llm.py`):
+4. **JsonKvStore** (`app/kv_store.py`):
+   - Manages key-value storage with asynchronous operations
+   - Provides async methods for add, remove, has, equal, get_all, get_by_key, and save operations
+
+5. **OpenAiLlm** (`app/openai_llm.py`):
    - Interfaces with OpenAI's API for embeddings and completions
 
 ### Debugging Tips

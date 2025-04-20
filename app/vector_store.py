@@ -1,3 +1,5 @@
+import asyncio
+
 from nano_vectordb import NanoVectorDB
 
 
@@ -6,15 +8,20 @@ class NanoVectorStore:
         self.storage_file = storage_file
         self.dimensions = dimensions
         self.db = NanoVectorDB(self.dimensions, storage_file=storage_file)
+        self._lock = asyncio.Lock()
 
-    def upsert(self, rows):
-        self.db.upsert(rows)
+    async def upsert(self, rows):
+        async with self._lock:
+            self.db.upsert(rows)
 
-    def delete(self, ids):
-        self.db.delete(ids)
+    async def delete(self, ids):
+        async with self._lock:
+            self.db.delete(ids)
 
-    def query(self, query, top_k=10, better_than_threshold=0.02):
-        return self.db.query(query=query, top_k=top_k, better_than_threshold=better_than_threshold)
+    async def query(self, query, top_k=10, better_than_threshold=0.02):
+        async with self._lock:
+            return self.db.query(query=query, top_k=top_k, better_than_threshold=better_than_threshold)
 
-    def save(self):
-        self.db.save()
+    async def save(self):
+        async with self._lock:
+            self.db.save()

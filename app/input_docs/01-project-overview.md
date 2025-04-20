@@ -52,6 +52,8 @@ The data flow in SmolRAG follows two main paths: document ingestion and query pr
 5. Entities and relationships are extracted and stored in the knowledge graph
 6. Document hashes are stored to track changes
 
+The entire document ingestion process is fully asynchronous, with both key-value store and vector store operations implemented using async/await patterns. This approach optimizes performance, especially for large document collections.
+
 **Query Processing Flow**:
 1. User submits a query through the API
 2. The query is processed based on the specified query type

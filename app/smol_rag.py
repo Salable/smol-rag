@@ -81,12 +81,12 @@ class SmolRag:
             await asyncio.gather(self.doc_to_source_kv.save(), self.source_to_doc_kv.save())
         if await self.doc_to_excerpt_kv.has(doc_id):
             excerpt_ids = await self.doc_to_excerpt_kv.get_by_key(doc_id)
+            print(excerpt_ids)
             excerpts_to_remove = [self.excerpt_kv.remove(excerpt_id) for excerpt_id in excerpt_ids]
-            await asyncio.gather(*excerpts_to_remove)
+            await asyncio.gather(self.embeddings_db.delete(excerpt_ids), *excerpts_to_remove)
             await self.doc_to_excerpt_kv.remove(doc_id)
             await asyncio.gather(self.excerpt_kv.save(), self.doc_to_excerpt_kv.save())
-            self.embeddings_db.delete(excerpt_ids)
-            self.embeddings_db.save()
+            await self.embeddings_db.save()
 
     async def import_documents(self):
         sources = get_docs(INPUT_DOCS_DIR)
@@ -131,32 +131,31 @@ class SmolRag:
             embedding_content = f"{excerpt}\n\n{summary}"
             embedding_tasks.append(self.rate_limited_get_embedding(embedding_content))
         embedding_results = await asyncio.gather(*embedding_tasks)
-
-        for i, (excerpt, summary, embedding_result) in enumerate(
-                zip(excerpts, summaries, embedding_results)
-        ):
+        storage_tasks = []
+        for i, (excerpt, summary, embedding_result) in enumerate(zip(excerpts, summaries, embedding_results)):
             excerpt_id = make_hash(excerpt, "excerpt_id_")
             excerpt_ids.append(excerpt_id)
             vector = np.array(embedding_result, dtype=np.float32)
-            self.embeddings_db.upsert([
+            storage_tasks.append(self.embeddings_db.upsert([
                 {
                     "__id__": excerpt_id,
                     "__vector__": vector,
                     "__doc_id__": doc_id,
                     "__inserted_at__": time.time()
                 }
-            ])
-            await self.excerpt_kv.add(excerpt_id, {
+            ]))
+            storage_tasks.append(self.excerpt_kv.add(excerpt_id, {
                 "doc_id": doc_id,
                 "doc_order_index": i,
                 "excerpt": excerpt,
                 "summary": summary,
                 "indexed_at": time.time()
-            })
+            }))
             logger.info(f"Created embedding for excerpt {excerpt_id} associated with document {doc_id}")
+        await asyncio.gather(*storage_tasks)
 
         await self.excerpt_kv.save()
-        self.embeddings_db.save()
+        await self.embeddings_db.save()
         await self.doc_to_excerpt_kv.add(doc_id, excerpt_ids)
         await self.doc_to_excerpt_kv.save()
         elapsed = time.time() - start_time
@@ -285,11 +284,9 @@ class SmolRag:
                 relation["__vector__"] = vector
                 idx += 1
 
-            self.entities_db.upsert(entities_to_upsert)
-            self.relationships_db.upsert(relationships_to_upsert)
+            await asyncio.gather(self.entities_db.upsert(entities_to_upsert), self.relationships_db.upsert(relationships_to_upsert))
 
-        self.entities_db.save()
-        self.relationships_db.save()
+        await asyncio.gather(self.entities_db.save(), self.relationships_db.save())
 
         self.graph.save()
         elapsed = time.time() - start_time
@@ -324,7 +321,7 @@ class SmolRag:
     async def _get_query_excerpts(self, text):
         embedding = await self.rate_limited_get_embedding(text)
         embedding_array = np.array(embedding)
-        results = self.embeddings_db.query(query=embedding_array, top_k=5, better_than_threshold=0.02)
+        results = await self.embeddings_db.query(query=embedding_array, top_k=5, better_than_threshold=0.02)
         excerpts = [self.excerpt_kv.get_by_key(result["__id__"]) for result in results]
         excerpts = await asyncio.gather(*excerpts)
         excerpts = truncate_list_by_token_size(excerpts, get_text_for_row=lambda x: x["excerpt"], max_token_size=4000)
@@ -442,7 +439,7 @@ class SmolRag:
         if len(hl_keywords):
             hl_embedding = await self.rate_limited_get_embedding(hl_keywords)
             hl_embedding_array = np.array(hl_embedding)
-            hl_results = self.relationships_db.query(query=hl_embedding_array, top_k=25, better_than_threshold=0.02)
+            hl_results = await self.relationships_db.query(query=hl_embedding_array, top_k=25, better_than_threshold=0.02)
         hl_data = [self.graph.get_edge((r["__source__"], r["__target__"])) for r in hl_results]
         hl_degrees = [self.graph.degree(r["__source__"]) + self.graph.degree(r["__target__"]) for r in hl_results]
         hl_dataset = []
@@ -466,7 +463,7 @@ class SmolRag:
         if len(ll_keywords):
             ll_embedding = await self.rate_limited_get_embedding(ll_keywords)
             ll_embedding_array = np.array(ll_embedding)
-            ll_results = self.entities_db.query(query=ll_embedding_array, top_k=25, better_than_threshold=0.02)
+            ll_results = await self.entities_db.query(query=ll_embedding_array, top_k=25, better_than_threshold=0.02)
         ll_data = [self.graph.get_node(r["__entity_name__"]) for r in ll_results]
         ll_degrees = [self.graph.degree(r["__entity_name__"]) for r in ll_results]
         ll_dataset = [

@@ -6,7 +6,7 @@
 
 Document ingestion is the first critical step in the SmolRAG pipeline. This process transforms raw documents into a format that can be efficiently queried and analyzed. SmolRAG's ingestion process is designed to be automatic, efficient, and change-aware, ensuring that the system always has access to the most up-to-date information.
 
-The ingestion process handles various document formats, preserves important structural elements like code blocks, and extracts both semantic content and structured knowledge. This comprehensive approach enables SmolRAG to provide rich, contextually relevant responses to queries.
+The ingestion process is fully asynchronous, providing optimized performance especially for large document collections. It handles various document formats, preserves important structural elements like code blocks, and extracts both semantic content and structured knowledge. This comprehensive approach enables SmolRAG to provide rich, contextually relevant responses to queries.
 
 ---
 
@@ -97,11 +97,18 @@ SmolRAG leverages Python's asyncio library to significantly improve data ingesti
 - **Task Gathering**: The `asyncio.gather()` function combines multiple asynchronous tasks.
 - **Rate Limiting**: An `AsyncLimiter` controls API call rates to prevent throttling.
 - **Resource Efficiency**: Parallel processing makes better use of available system resources.
+- **Fully Asynchronous Storage**: Both key-value store (JsonKvStore) and vector store (NanoVectorStore) operations are completely asynchronous, with all methods implemented using async/await patterns.
+- **Non-blocking I/O**: File operations use asynchronous I/O to prevent blocking the event loop.
+- **Thread Safety**: Asynchronous locks ensure data consistency during concurrent operations.
 
-This asynchronous approach dramatically reduces ingestion time, especially for large document collections, by:
+This fully asynchronous approach dramatically reduces ingestion time, especially for large document collections, by:
 - Processing multiple document chunks in parallel
 - Generating embeddings for multiple excerpts concurrently
 - Extracting entities and relationships from different excerpts simultaneously
+- Performing storage operations (read/write) without blocking the main processing flow
+- Optimizing the entire document ingestion pipeline for maximum throughput
+
+The complete document ingestion process is now asynchronous from start to finish, providing significant performance improvements over synchronous approaches, particularly when dealing with large document collections or when running on systems with limited resources.
 
 ---
 

@@ -665,7 +665,6 @@ if __name__ == '__main__':
 
         # await smol_rag.remove_document_by_id("doc_68ee570c562a4cdfb5c37cf96be2898d")
 
-        # Todo: Use Jaal graph visualisation to inspect knowledge graph
 
 
     asyncio.run(main())

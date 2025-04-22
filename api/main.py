@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 from app.smol_rag import SmolRag
 
-app = FastAPI(title="SmolRag API")
+app = FastAPI(title="Salable Docs RAG API")
 
 smol_rag = SmolRag()
 

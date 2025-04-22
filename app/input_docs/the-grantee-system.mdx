@@ -1,0 +1,28 @@
+---
+sidebar_position: 4
+---
+
+# The Grantee System
+
+To faciliate access to functionality in your product, you create and assign licenses. The license broadly describes two things: what features and capabilities can be accessed, and the _thing_ that the license belongs to.
+
+This _thing_ could be just about anything. It could be a user, an organisation, a Trello board, a Miro team; if it can be uniquely identified in some way, a license can belong to it.
+
+In Salable we call this _thing_ that the license belongs to the **Grantee**.
+
+From a technical perspective, this “Grantee” is no more complicated than a string. It is just a sequence of characters that describes the license holder.
+
+This set of characters only needs to meet three criteria:
+1. It needs to uniquely describe the _thing_ that the license will belong to. For example, a User ID from your database or a Board ID from Trello.
+2. It should be a value that doesn’t change. For example, an email address might not be a good Grantee ID if you allow the user to update it within your system.
+3. It shouldn't contain any commas. We use commas to determine where one grantee definition ends and another begins.
+
+You can change the Grantee a license belongs to—but these should always be intentional changes, not changes that happen by accident as illustrated in criteria two.
+
+And because the Grantee ID is represented by a string, we’re free to join together any combination of values we see fit to represent _what_ the license belongs to. It could be that the license just belongs to a `user_id`, or just to a `board_id` or to a `user_id board_id` (a specific user, on a specific board). The possibilities that this system offers are virtually limitless.
+
+So you’ve got options, what you assign your licenses too will really come down to your business model and how you plan to monetise your application.
+
+Now go and build something great.
+
+*The Salable Team*

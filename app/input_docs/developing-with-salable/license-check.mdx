@@ -1,0 +1,175 @@
+---
+sidebar_position: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# License check
+
+Check whether a grantee is licensed to perform actions in your system.
+
+Features, capabilities, and plans that belong to your user are checkable.
+
+:::info Salable API V2 update
+
+The `publicHash` and `capsHashed` properties have been removed and the `capabilities` and `capabilitiesEndDates` properties have been consolidated into a single `capabilities` property.
+The `capabilities` contains an array of objects containing the name and expiration date of each capability / feature / plan 
+
+:::
+
+<Tabs>
+<TabItem value="@salable/js" label="@salable/js">
+
+```js
+import { getGrantee } from '@salable/js';
+
+const { hasCapability } = await getGrantee({
+  apiKey: 'your-salable-api-key',
+  productUuid: 'your-products-uuid',
+  granteeId: 'your-grantees-id',
+});
+
+// Check for a capability
+const isUserLicensedToPerformAction = hasCapability('acme-inc-whitelabelling');
+// or a feature
+const isUserLicensedToPerformAction = hasCapability('csv-export');
+// or a plan
+const isUserLicensedToPerformAction = hasCapability('pro');
+```
+
+</TabItem>
+
+<TabItem value="node" label="Node.js">
+
+```js
+import { Salable } from '@salable/node-sdk';
+
+const salable = new Salable('your-salable-api-key', 'v2');
+
+const { capabilities } = await salable.licenses.check({
+  productUuid: 'your-product-uuid',
+  granteeIds: ['your-grantees-id'],
+  grace: 3 // Optional: number of days grace period.
+});
+const isUserLicensedToPerformAction = capabilities.includes((c) => {c.capability === 'your-capability-name'});
+```
+
+</TabItem>
+
+<TabItem value="curl" label="cURL">
+
+```bash
+curl
+  -XGET
+  -H 'x-api-key: YOUR_SALABLE_API_KEY'
+  -H 'version: v2'
+  'https://api.salable.app/licenses/check?productUuid=YOUR_PRODUCT_UUID&granteeIds=your-grantees-id&grace=3'
+```
+
+</TabItem>
+</Tabs>
+
+:::tip Grace Period
+
+If the customer's payment fails, and you would like to give them a grace period
+to rectify this — you can use the optional `grace` parameter to extend the
+license capability check by a specified number of days.
+
+This is not currently supported on `@salable/js`.
+
+:::
+
+### Verifying Signatures
+
+Signatures can be verified using the `signature` and `capabilities` from the license check and your organisations public key
+
+:::tip ECDSA Encryption and Signatures
+
+We use **ECDSA cryptography** to generate signatures for license checks. Signatures are signed with a **private key** (which we keep **encrypted** on our end) and can be verified using your organisations **public key**
+
+:::
+
+> NOTE: You can request license-check signatures to be encoded in the P1363 encoding using the "sigEncode=P1363" query string in the request 
+- The P1363 encoding allows for signature verification on web browsers
+
+
+Signature verification examples:
+
+<Tabs>
+<TabItem value="@salable/js" label="@salable/js">
+
+```js
+
+import { verifyLicenseCheck } from '@salable/js';
+
+var isValid = await verifyLicenseCheck({
+  publicKey: 'your_public_key',
+  signature: 'license_check_signature',
+  payload: 'license_check_payload'
+});
+
+```
+
+</TabItem>
+<TabItem value="js" label="Javascript">
+
+```js
+<script>
+
+  // Utility Functions
+  function importPublicKey(publicKeyPem) {
+    const pemContents = publicKeyPem.replace(/-{5}.*?-{5}|\s/gm, '');
+
+    const binaryDerString = window.atob(pemContents);
+    const binaryDer = stringToArrayBuffer(binaryDerString);
+
+    return window.crypto.subtle.importKey(
+      "spki",
+      binaryDer,
+      {
+        name: "ECDSA",
+        namedCurve: "P-256",
+      },
+      true,
+      ["verify"],
+    );
+  }
+
+function stringToArrayBuffer(str) {
+  const buf = new ArrayBuffer(str.length);
+  const bufView = new Uint8Array(buf);
+  for (let i = 0, strLen = str.length; i < strLen; i++) {
+    bufView[i] = str.charCodeAt(i);
+  }
+  return buf;
+}
+
+function hexStringToUint8Array(hexString: string) {
+  const result = new Uint8Array(hexString.length / 2);
+  for (let i = 0; i < hexString.length; i += 2) {
+    result[i / 2] = parseInt(hexString.substring(i, i + 2), 16);
+  }
+  return result;
+}
+
+async function verifyLicenseCheck(yourPublicKey, signature, capabilities) {
+  const publicKey = await importPublicKey(yourPublicKey);
+  const rawSignature = hexStringToUint8Array(signature);
+
+  return await window.crypto.subtle.verify(
+    {
+      name: 'ECDSA',
+      hash: { name: 'SHA-256' }
+    },
+    publicKey,
+    rawSignature.buffer,
+    new TextEncoder().encode(capabilities)
+  );
+}
+
+</script>
+```
+
+</TabItem>
+</Tabs>

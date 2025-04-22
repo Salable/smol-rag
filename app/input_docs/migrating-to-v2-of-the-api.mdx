@@ -1,0 +1,86 @@
+---
+title: Migrating to V2 of the API
+---
+
+V2 of the Salable API is the result of an effort to consolidate and fortify the
+elements that make Salable what it is end-to-end. During this process, we have
+improved the security and performance of multiple endpoints.
+
+It is our recommendation that all customers migrate to V2 as soon as possible.
+
+## How do I use V2 of the API?
+
+In order to start using the new and improved V2 endpoints, you'll want to
+provide a `version` header with a value of `v2` to each request you send to the
+API.
+
+## What has changed since V1?
+
+### Licenses are now paginated
+
+This used to return all licenses for an organisation in one response. The
+response in v2 is now paginated, changing the response type. The array of
+licenses is now on a data property instead of the entire response being an
+array. Ensure you are using the data property to access the license data and
+implement pagination using the first, last and cursor parameters if required.
+
+In V1, this endpoint returned all licenses for an organisation in a single
+response. Starting from V2, this response will be paginated which alters the
+data shape returned by the endpoint.
+
+While before the response was an array, it is now an object with a `data`
+property, among others.
+
+Old V1 shape:
+
+```json
+[
+  // License objects here...
+]
+```
+
+New V2 shape:
+
+```json
+{
+  first: '' // ID of first returned license, useful for pagination.
+  last: '' // ID of last returned license, useful for pagination.
+  data: [
+    // Subset of License objects now here...
+  ]
+}
+```
+
+
+### Change to fetching Licenses for a given Subscription
+
+Previously if you wanted to fetch the Licenses associated with a Subscription
+you could use the `GET /subscriptions/{id}` endpoint with an `expand` value of
+`licenses`. As of V2, this data has been removed from the get subscription
+endpoint.
+
+Now if you want this data, the way to fetch it is by providing a
+`subscriptionUuid` to the `GET /licenses` endpoint.
+
+V1: `GET /subscriptions/123?expand=licenses`
+
+V2: `GET /licenses?subscriptionUuid=123`
+
+### A new way to modify a Subscription's Plan
+
+The [update Subscription's plan endpoint](https://docs.salable.app/api#tag/Subscriptions/operation/updateSubscriptionPlan)
+has been deprecated. You can achieve the same with the
+[change Subscription plan endpoint](https://docs.salable.app/api/v2#tag/Subscriptions/operation/changeSubscriptionsPlan).
+The latter endpoint also offers additional parameters to modify the proration
+behaviour applied when your customer's plan changes.
+
+
+### Removal of checkout links from pricing table endpoint
+
+V2 no longer generates Stripe checkout links for each plan on the pricing table
+endpoint. Our own pricing table components have moved to dynamically fetching
+the checkout links when the user clicks the purchase button. This change lead to
+better performance as a result of fewer calls to the Stripe API.
+
+If you need to get the checkout link for a plan, you can still do so with the
+[get Plan checkout link endpoint](https://docs.salable.app/api/v2#tag/Plans/operation/getPlanCheckoutLink).

@@ -1,0 +1,4479 @@
+openapi: 3.0.0
+info:
+  title: Salable API
+  version: v2
+  description: |
+    # Salable API
+    
+    Salable is a comprehensive solution tailored for SaaS businesses, streamlining the design and management of pricing models, subscriptions, and licensing.
+    
+    This documentation is designed to guide you through integrating with Salable's features via our REST API.
+
+    ## HTTP Endpoints
+    
+     - Use HTTP endpoints to access different features.
+     - Send requests using JSON and receive JSON responses.
+    
+    ## Authentication
+
+    Secure your requests by sending your api key on the `x-api-key` request header for authentication. Or, if the endpoint supports it, a session token with the correct scope sent on the `Authorization` request header.
+    
+    The API Key can be created in the Salable dashboard. Select only the scopes you need will to access. If you're using this in combination with our SDKs be sure to only select read only scopes.
+
+    > NOTE: If you'd like to use test mode via the API, make sure to use an API key generated in test mode (prefixed with `test_`).
+
+    ## Quick Start
+    
+    To get up and running, you need to work through the following steps.
+    
+    - Set up a Salable Account and Organization
+    - Connect Stripe to Salable (You can skip this for a free product)
+    - Build your products and plans
+    - Generate your API key
+    - Make your first API call with the request header "version" set to "v2" 
+    
+    ## HTTP Status Codes
+
+    We use standard HTTP status codes for both success and failure responses.
+
+    | HTTP Code | What it means                                                                                                                                           |
+    | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | 200       | The request was successful and the action has been completed.                                                                                           |
+    | 201       | This will be sent for the successful completion of POST requests and indicates that the new item was created, eg. a new license.                        |
+    | 204       | The request was successful, no content to returned.                                                                                                     |
+    | 206       | The request was partially successful.                                                                                                                   |
+    | 400       | There was a request validation error and the request couldn't be completed.                                                                             |
+    | 401       | There was an authentication problem. If you get this error you should make sure your API key is included in the `x-api-key` header. Or, your session token is valid for the endpoint being requested and it has not expired.                     |
+    | 403       | There was an authorisation issue. If you get this error you should check your API key has the correct scopes and that you're in the right organisation  |
+    | 404       | The request couldn't be completed as the requested resource(s) doesn't exist.                                                                           |
+    | 500       | A problem on our side. If you experience one of these errors, reach out to us and we will help.                                                         |
+
+servers:
+  - url: https://api.salable.app
+
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: x-api-key
+      in: header
+    sessionToken:
+      type: sessionToken
+      name: Authorization
+      in: header
+
+  parameters:
+    VersionHeader:
+      in: header
+      name: version
+      required: true
+      description: The version of the api.
+      schema:
+        type: string
+        enum:
+          - v2
+
+    UniqueKey:
+      in: header
+      name: unique-key
+      required: true
+      description: A unique key for idempotent requests
+      schema:
+        type: string
+
+    ProductUuidPathParam:
+      in: path
+      name: productUuid
+      schema:
+        type: string
+      required: true
+      description: The unique identifier for the product.
+
+    ProductUuidQueryParam:
+      in: query
+      name: productUuid
+      schema:
+        type: string
+      required: true
+      description: The unique identifier for the product.
+
+    PlanUuidPathParam:
+      in: path
+      name: planUuid
+      schema:
+        type: string
+      required: true
+      description: The unique identifier for the plan.
+
+    EventUuidPathParam:
+      in: path
+      name: eventUuid
+      schema:
+        type: string
+      required: true
+      description: The unique identifier for the event.
+
+    SubscriptionUuidPathParam:
+      in: path
+      name: subscriptionUuid
+      schema:
+        type: string
+      required: true
+      description: The unique identifier for the subscription.
+
+    SubscriptionUuidQueryParam:
+      in: query
+      name: subscriptionUuid
+      schema:
+        type: string
+      description: The unique identifier for the subscription.
+
+    LicenseUuidPathParam:
+      in: path
+      name: licenseUuid
+      schema:
+        type: string
+      required: true
+      description: The unique identifier for the license.
+
+    PricingTableUuidPathParam:
+      in: path
+      name: pricingTableUuid
+      schema:
+        type: string
+      required: true
+      description: The unique identifier for the pricingTable.
+
+    PurchaserQueryParam:
+      in: query
+      name: purchaser
+      required: true
+      description: An identifier for the owner of the license.
+      schema:
+        type: string
+
+    LicenseStatusQueryParam:
+      name: status
+      in: query
+      description: The status of the licenses.
+      required: false
+      schema:
+        type: string
+        enum:
+          - active
+          - canceled
+          - evaluation
+          - scheduled
+          - trialing
+          - inactive
+
+    SubscriptionStatusQueryParam:
+      name: status
+      in: query
+      description: The status of the subscription.
+      required: false
+      schema:
+        type: string
+        enum:
+          - active
+          - canceled
+          - paused
+          - trialing
+          - deleted
+          - past_due
+          - incomplete
+
+    SubscriptionEmailQueryParam:
+      name: email
+      in: query
+      description: The email of who purchased the subscription.
+      required: false
+      schema:
+        type: string
+
+    UsageStatusQueryParam:
+      in: query
+      name: status
+      required: false
+      description: Filter by the status of the license
+      schema:
+        type: string
+
+    UsageTypeQueryParam:
+      in: query
+      name: type
+      required: false
+      description: Filter by the type of usage record
+      schema:
+        type: string
+
+    UsagePlanUuidQueryParam:
+      in: query
+      name: planUuid
+      required: false
+      description: The uuid of the plan the license belongs to.
+      schema:
+        type: string
+
+    UsageSubscriptionUuidQueryParam:
+      in: query
+      name: subscriptionUuid
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Filters usage records by their license's subscription.
+
+    UsageSortQueryParam:
+      in: query
+      name: sort
+      required: false
+      schema:
+        type: string
+        default: asc
+        enum:
+          - asc
+          - desc
+      description: Sorts usage records by createdAt field.
+
+    UsagePlanUuidRequiredQueryParam:
+      in: query
+      name: planUuid
+      required: true
+      description: The uuid of the plan the license belongs to.
+      schema:
+        type: string
+
+    UsageGranteeIdRequiredQueryParam:
+      in: query
+      name: granteeId
+      required: true
+      description: The granteeId of the license belongs.
+      schema:
+        type: string
+
+    CursorQueryParam:
+      name: cursor
+      in: query
+      description: A unique identifier for the last item of one page to get the next page. This will be either the `first` or `last` property from the previous response. No cursor is required on the first request.
+      required: false
+      schema:
+        type: string
+
+    CursorTakeQueryParam:
+      name: take
+      in: query
+      description: The number of records to take before or after cursor. A positive or negative in the range of -100 to 100. Use a number below 0 to take the previous records before the cursor.
+      required: false
+      schema:
+        type: string
+        default: "20"
+
+    GraceQueryParam:
+      name: grace
+      in: query
+      description: The number of days to add to the capabilitiesEndDates. Values of <=0 will return an error.
+      schema:
+        type: integer
+        minimum: 1
+        format: int
+
+    GranteeIdPathParam:
+      in: path
+      name: granteeId
+      schema:
+        type: string
+      required: true
+      description: The unique identifier for the grantee.
+
+    GranteeIdQueryParam:
+      in: query
+      name: granteeId
+      schema:
+        type: string
+      description: The unique identifier for the grantee.
+
+    GranteeIdQueryParamRequired:
+      in: query
+      name: granteeId
+      schema:
+        type: string
+      required: true
+      description: The unique identifier for the grantee.
+
+    GranteeIdPricingTableQueryParamRequired:
+      in: query
+      name: granteeId
+      schema:
+        type: string
+      required: false
+      description: The unique identifier for the grantee.
+
+    GranteeIdsQueryParam:
+      in: query
+      name: granteeIds
+      description: Comma-separated unique identifiers of the grantees
+      required: true
+      style: form
+      explode: false
+      example: "123,456"
+      schema:
+        type: string
+
+    SuccessUrlQueryParamRequired:
+      in: query
+      name: successUrl
+      description: The URL to send users to if they successfully complete a purchase. It must be an absolute URL.
+      schema:
+        type: string
+        format: uri
+      required: true
+
+    GlobalSuccessUrlQueryParam:
+      in: query
+      name: globalSuccessUrl
+      description: The URL to send users to if they successfully complete a purchase of any plan. It must be an absolute URL.
+      schema:
+        type: string
+        format: uri
+      required: true
+
+    CancelUrlQueryParamRequired:
+      in: query
+      name: cancelUrl
+      description: The URL to send users to if the transaction fails. It must be an absolute URL.
+      schema:
+        type: string
+        format: uri
+      required: true
+
+    GlobalCancelUrlQueryParam:
+      in: query
+      name: globalCancelUrl
+      description: The URL to send users to if the transaction fails for any plan purchase. It must be an absolute URL.
+      schema:
+        type: string
+        format: uri
+      required: true
+
+    MemberQueryParamRequired:
+      in: query
+      name: member
+      description: The ID of the member who will manage the license.
+      schema:
+        type: string
+      required: true
+
+    SuccessUrlQueryParam:
+      in: query
+      name: successUrl
+      description: The URL to send users to if they successfully complete a purchase. It must be an absolute URL.
+      schema:
+        type: string
+        format: uri
+
+    CancelUrlQueryParam:
+      in: query
+      name: cancelUrl
+      description: The URL to send users to if the transaction fails. It must be an absolute URL.
+      schema:
+        type: string
+        format: uri
+
+    MemberQueryParam:
+      in: query
+      name: member
+      description: The ID of the member who will manage the license.
+      schema:
+        type: string
+
+    PromoCodeQueryParam:
+      in: query
+      name: promoCode
+      description: Used to pre-fill the promo code in Stripe checkout, use the promo code ID from the Stripe dashboard. Customers cannot edit this field during checkout. If you prefer to allow customers to enter the promo code themselves, use allowPromoCode instead.
+      schema:
+        type: string
+
+    AllowPromoCodeQueryParam:
+      in: query
+      name: allowPromoCode
+      description: Enables the promo code field in Stripe checkout. Cannot be used with promoCode.
+      schema:
+        type: string
+        enum:
+          - true
+          - false
+
+    CustomerEmailQueryParam:
+      in: query
+      name: customerEmail
+      description: Pre-fills the customer email in Stripe checkout
+      schema:
+        type: string
+        format: email
+
+    CustomerIdQueryParam:
+      in: query
+      name: customerId
+      description: The ID of an existing customer in your payment integration. This will pre-fill the email, card details and postcode at checkout.
+      schema:
+        type: string
+
+    CurrencyQueryParam:
+      in: query
+      name: currency
+      description: Uses the currency short name e.g. USD, defaults to the default currency on the Product which the Plan is linked to.
+      schema:
+        type: string
+
+    AutomaticTaxQueryParam:
+      in: query
+      name: automaticTax
+      description: Automatically calculate tax on checkout based on customers location and your Stripe settings.
+      schema:
+        type: string
+
+    QuantityQueryParam:
+      in: query
+      name: quantity
+      description: Set the amount of seats a customer will pay for in the checkout. This value cannot be lower than the Plan's minimum seat amount. (Only available on per seat plans)
+      schema:
+        type: string
+
+    ChangeQuantityQueryParam:
+      in: query
+      name: changeQuantity
+      description: Allows the customer to set how many seats they will purchase in the checkout but will not be able to go below the plan's minimum seat amount. (Only available on per seat plans)
+      schema:
+        type: string
+
+    RequirePaymentMethodQueryParam:
+      in: query
+      name: requirePaymentMethod
+      description: Setting this value to 'false' means that users can start a Stripe trial without providing a payment method upfront. Payment method will always be required if a subscription has no trial period.
+      schema:
+        type: string
+        enum:
+          - true
+          - false
+        default: true
+
+    ExpandPlanQueryParam:
+      in: query
+      name: expand
+      style: form
+      explode: false
+      required: false
+      description: Additional properties to expand the plan's relations as comma separated values eg `expand=currencies,features`
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - capabilities
+            - capabilities.capability
+            - features
+            - features.feature
+            - features.enumValue
+            - currencies
+            - currencies.currency
+
+    ExpandProductQueryParams:
+      in: query
+      name: expand
+      style: form
+      explode: false
+      description: Additional properties to expand the product's relations as comma separated values eg `expand=plans,features`
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - features
+            - features.featureEnumOptions
+            - capabilities
+            - currencies
+            - currencies.currency
+            - organisationPaymentIntegration
+            - plans
+            - plans.capabilities
+            - plans.features
+            - plans.features.feature
+            - plans.features.enumValue
+            - plans.currencies
+            - plans.currencies.currency
+
+    ExpandSubscriptionQueryParams:
+      in: query
+      name: expand
+      description: Specify the resource fields to expand as comma separated values eg `expand=product,customer`
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - product
+            - product.organisationPaymentIntegration
+            - product.currencies
+            - plan.currencies
+            - customer
+
+    ExpandGetAllSubscriptionQueryParams:
+      in: query
+      name: expand
+      description: Specify the resource fields to expand as comma separated values eg `expand=product,plan`
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - product
+            - plan
+
+    CancelWhenQueryParam:
+      in: query
+      name: when
+      description: Decides when the subscription should be canceled, either now or at the end of the subscription period
+      required: true
+      schema:
+        type: string
+        enum:
+          - now
+          - end
+
+  schemas:
+    Product:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          deprecated: true
+          type: string
+        description:
+          type: string
+          nullable: true
+        logoUrl:
+          type: string
+          nullable: true
+        displayName:
+          type: string
+          nullable: true
+        organisation:
+          type: string
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - DEPRECATED
+          example: ACTIVE
+        paid:
+          type: boolean
+        organisationPaymentIntegrationUuid:
+          type: string
+          format: uuid
+        paymentIntegrationProductId:
+          type: string
+          nullable: true
+        appType:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        isTest:
+          type: boolean
+
+    Plan:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          deprecated: true
+          type: string
+        description:
+          type: string
+          nullable: true
+        displayName:
+          type: string
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - DEPRECATED
+            - DRAFT
+            - REVISION
+            - SCHEDULED
+            - COMING_SOON
+          example: ACTIVE
+        isTest:
+          type: boolean
+        trialDays:
+          type: integer
+          nullable: true
+        evaluation:
+          type: boolean
+        evalDays:
+          type: integer
+        organisation:
+          type: string
+        visibility:
+          type: string
+        licenseType:
+          type: string
+        perSeatAmount:
+          type: integer
+        interval:
+          type: string
+        length:
+          type: integer
+        active:
+          type: boolean
+        planType:
+          type: string
+        pricingType:
+          type: string
+        environment:
+          type: string
+        paddlePlanId:
+          deprecated: true
+          type: string
+          nullable: true
+        productUuid:
+          type: string
+          format: uuid
+        salablePlan:
+          type: boolean
+        updatedAt:
+          type: string
+          format: date-time
+
+    Capability:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - DEPRECATED
+        productUuid:
+          type: string
+          format: uuid
+        updatedAt:
+          type: string
+          format: date-time
+
+    Feature:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        displayName:
+          type: string
+        variableName:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - DEPRECATED
+          example: ACTIVE
+        visibility:
+          type: string
+        valueType:
+          type: string
+        defaultValue:
+          type: string
+        showUnlimited:
+          type: boolean
+        productUuid:
+          type: string
+          format: uuid
+        updatedAt:
+          type: string
+          format: date-time
+        sortOrder:
+          type: integer
+
+    OrganisationPaymentIntegration:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        organisation:
+          type: string
+        integrationName:
+          type: string
+        accountName:
+          type: string
+        accountData:
+          type: object
+        accountId:
+          type: string
+          nullable: true
+        updatedAt:
+          type: string
+          format: date-time
+        isTest:
+          type: boolean
+
+    Currency:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        shortName:
+          type: string
+          example: USD
+        longName:
+          type: string
+          example: United States Dollar
+        symbol:
+          type: string
+          example: $
+
+    ProductPricingTable:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        logoUrl:
+          type: string
+          nullable: true
+        displayName:
+          type: string
+          nullable: true
+        organisation:
+          type: string
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - DEPRECATED
+          example: ACTIVE
+        paid:
+          type: boolean
+        paymentIntegrationProductId:
+          type: string
+          nullable: true
+        appType:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        isTest:
+          type: boolean
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/Feature'
+        currencies:
+          type: array
+          items:
+            type: object
+            properties:
+              productUuid:
+                type: string
+                format: uuid
+              currencyUuid:
+                type: string
+                format: uuid
+              defaultCurrency:
+                type: boolean
+                example: true
+              currency:
+                $ref: '#/components/schemas/Currency'
+        plans:
+          type: array
+          items:
+            $ref: '#/components/schemas/PricingTablePlan'
+
+    PricingTablePlan:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        displayName:
+          type: string
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - DEPRECATED
+          example: ACTIVE
+        isTest:
+          type: boolean
+        trialDays:
+          type: integer
+          nullable: true
+        evaluation:
+          type: boolean
+        evalDays:
+          type: integer
+        organisation:
+          type: string
+        visibility:
+          type: string
+        licenseType:
+          type: string
+        perSeatAmount:
+          type: integer
+        interval:
+          type: string
+        length:
+          type: integer
+        active:
+          type: boolean
+        planType:
+          type: string
+        pricingType:
+          type: string
+        environment:
+          type: string
+        paddlePlanId:
+          deprecated: true
+          type: string
+          nullable: true
+        productUuid:
+          type: string
+          format: uuid
+        salablePlan:
+          type: boolean
+        updatedAt:
+          type: string
+          format: date-time
+        grantee:
+          type: object
+          nullable: true
+          properties:
+            isLicensed:
+              type: boolean
+            isSubscribed:
+              type: boolean
+        currencies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Currency'
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/Feature'
+
+    Event:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+            - Create seats
+            - Remove seats
+            - Change plan
+            - Update usage
+            - Cancel subscription
+        organisation:
+          type: string
+        status:
+          type: string
+          enum:
+            - retrying
+            - pending
+            - success
+            - failed
+            - incomplete
+        isTest:
+          type: boolean
+        retries:
+          type: integer
+        errorMessage:
+          type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    Subscription:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        productUuid:
+          type: string
+          format: uuid
+        planUuid:
+          type: string
+          format: uuid
+        organisation:
+          type: string
+        paymentIntegrationSubscriptionId:
+          type: string
+        type:
+          type: string
+          enum:
+            - salable
+            - stripe_existing
+        quantity:
+          type: integer
+          minimum: 1
+        email:
+          type: string
+          nullable: true
+          format: email
+        expiryDate:
+          type: string
+          format: date-time
+        lineItemIds:
+          type: array
+          nullable: true
+          items:
+            type: string
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - CANCELED
+            - PAUSED
+            - TRIALING
+            - DELETED
+            - PAST_DUE
+            - INCOMPLETE_EXPIRED
+            - INCOMPLETE
+            - UNPAID
+          example: ACTIVE
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        isTest:
+          type: boolean
+        cancelAtPeriodEnd:
+          type: boolean
+
+    SessionCreateInvoiceRequest:
+      type: object
+      title: Invoice
+      properties:
+        scope:
+          type: string
+          enum: 
+            - web-components:invoices
+          description: The component the created session will be used with
+        metadata:
+          type: object
+          required:
+            - subscriptionUuid
+          properties:
+            subscriptionUuid:
+              type: string
+              description: The subscription UUID to show the invoices for
+      required:
+        - scope
+        - metadata
+      example:
+        scope: web-components:invoices
+        metadata:
+          subscriptionUuid: 570c87ca-d415-4415-99ba-57abca146a81
+        
+    SessionCreatePricingTableRequest:
+      type: object
+      title: Pricing Table
+      properties:
+        scope:
+          type: string
+          enum: 
+            - web-components:pricing-table
+          description: The component the created session will be used with
+        metadata:
+          type: object
+          oneOf:
+            - title: Product UUID
+              properties:
+                productUuid:
+                  type: string
+                  description: The product UUID to show the default pricing table for
+              required: productUuid
+
+            - title: Pricing Table UUID
+              properties:
+                pricingTableUuid:
+                  type: string
+                  description: The pricing table UUID to show
+              required: pricingTableUuid
+      required:
+        - scope
+        - metadata
+      example:
+        scope: web-components:pricing-table
+        metadata:
+          productUuid: a1212e6b-eef0-41d1-9071-ead207fc7d9b
+
+    SessionCreateCheckoutRequest:
+      type: object
+      title: Checkout
+      properties:
+        scope:
+          type: string
+          enum: 
+            - web-components:checkout
+          description: The component the created session will be used with
+        metadata:
+          type: object
+          required:
+            - planUuid
+          properties:
+            planUuid:
+              type: string
+              description: The plan UUID to render a checkout component for
+      required:
+        - scope
+        - metadata
+      example:
+        scope: web-components:checkout
+        metadata:
+          planUuid: 040e46e4-ae69-4013-8b2a-0b5f17cbc51a
+
+    LicenseCreateRequest:
+      type: object
+      properties:
+        planUuid:
+          type: string
+          format: uuid
+          description: |
+            The UUID of the plan associated with the license.
+            The `planUuid` can be found on the Plan view in the Salable dashboard.
+        member:
+          type: string
+          description: The ID of the member who will manage the license.
+        granteeId:
+          type: string
+          nullable: true
+          description: The grantee ID for the license.
+        status:
+          type: string
+          nullable: true
+          enum:
+            - ACTIVE
+            - TRIALING
+          example: ACTIVE
+        endTime:
+          type: string
+          format: date-time
+          description: Provide a custom end time for the license; this will override the plan's default interval.
+        cancelAtPeriodEnd:
+          type: boolean
+          description: If set to true the license will not renew once the endTime date has passed.
+      required:
+        - planUuid
+        - member
+      example:
+        planUuid: 2fbdf7df-cb91-4104-ab75-de2db68db742
+        member: memberId_123456
+        granteeId: userId_123456
+        status: ACTIVE
+        endTime: 2025-07-06T12:00:00.000Z
+
+    CreateManyLicensesRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/LicenseCreateRequest'
+      example:
+        - planUuid: 2fbdf7df-cb91-4104-ab75-de2db68db742
+          member: memberId_123456
+          granteeId: userId_123456
+          endTime: 2025-07-06T12:00:00.000Z
+        - planUuid: 31b83d94-26cd-415b-b46d-d17287e12be9
+          member: memberId_789101
+          granteeId: null
+          endTime: 2025-07-06T12:00:00.000Z
+        - planUuid: 31b83d94-26cd-415b-b46d-d17287e12be9
+          member: memberId_789101
+          granteeId: null
+          endTime: 2025-07-06T12:00:00.000Z
+
+    LicenseUpdateRequest:
+      type: object
+      properties:
+        granteeId:
+          type: string
+          nullable: true
+          description: The grantee ID for the license.
+        endTime:
+          type: string
+          format: date-time
+          description: Provide a custom end time for the license; this will override the plan's default interval.
+      required:
+        - uuid
+      example:
+        granteeId: userId_123456
+        endTime: 2025-07-06T12:00:00.000Z
+
+    UpdateManyLicensesRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/LicenseUpdateRequest'
+      example:
+        - uuid: 2fbdf7df-cb91-4104-ab75-de2db68db742
+          granteeId: userId_123456
+        - uuid: 31b83d94-26cd-415b-b46d-d17287e12be9
+          endTime: 2025-07-06T12:00:00.000Z
+        - uuid: 75fb6d73-b9b1-427f-bfbe-563741ce049e
+          granteeId: null
+          endTime: 2025-07-06T12:00:00.000Z
+
+    License:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        productUuid:
+          type: string
+          format: uuid
+        planUuid:
+          type: string
+          format: uuid
+        subscriptionUuid:
+          type: string
+          nullable: true
+          format: uuid
+        cancelAtPeriodEnd:
+          type: boolean
+          description: Only applicable to ad hoc licenses. If the license belongs to a subscription use the cancelAtPeriodEnd property on the subscription instead.
+        granteeId:
+          type: string
+          nullable: true
+        purchaser:
+          type: string
+        email:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        paymentService:
+          type: string
+        type:
+          type: string
+        capabilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Capability'
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - CANCELED
+            - EVALUATION
+            - SCHEDULED
+            - TRIALING
+            - INACTIVE
+          example: ACTIVE
+        metadata:
+          type: object
+          nullable: true
+          additionalProperties: true
+          properties:
+            granteeId:
+              type: string
+              nullable: true
+            purchaser:
+              type: string
+              nullable: false
+        updatedAt:
+          type: string
+          format: date-time
+        isTest:
+          type: boolean
+
+    LicenseCount:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: Total count of licenses.
+        assigned:
+          type: integer
+          description: Count of assigned licenses.
+        unassigned:
+          type: integer
+          description: Count of unassigned licenses.
+
+    LicenseByPurchaser:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        email:
+          type: string
+          format: email
+          nullable: true
+        subscriptionUuid:
+          type: string
+          format: uuid
+          nullable: true
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - CANCELED
+            - EVALUATION
+            - SCHEDULED
+            - TRIALING
+            - INACTIVE
+          example: ACTIVE
+        granteeId:
+          type: string
+        paymentService:
+          type: string
+        purchaser:
+          type: string
+          format: email
+        type:
+          type: string
+        productUuid:
+          type: string
+          format: uuid
+        planUuid:
+          type: string
+          format: uuid
+        capabilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Capability'
+        metadata:
+          type: string
+          nullable: true
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        isTest:
+          type: boolean
+        product:
+          $ref: '#/components/schemas/Product'
+        plan:
+          $ref: '#/components/schemas/Plan'
+        subscription:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Subscription'
+
+    LicenseCheck:
+      type: object
+      properties:
+        capabilities:
+          type: array
+          items:
+            type: object
+            properties:
+              capability:
+                type: string
+                example: test_capability
+              expiry:
+                type: string
+                format: date-time
+                example: "2024-07-09T20:08:26.685Z"
+          description: List of capabilities
+          example: [
+            { capability: 'capability_one', expiry: 2024-07-09T20:08:26.685Z },
+            { capability: 'capability_two', expiry: 2024-07-09T20:08:26.685Z },
+            { capability: 'test_plan', expiry: 2024-07-09T20:08:26.685Z }
+          ]
+        signature:
+          type: string
+          description: Signature
+          example: "3044022004f243b5bb524689498537ff6bf865d847b8f6c6f65db687036814281fe4c1cc022043e645238050c587b6a79343a4acad58a925d3fbf3ba914d2f4c38a1f8439993"
+
+    LicenseCurrentUsage:
+      type: object
+      properties:
+        unitCount:
+          type: integer
+          example: 0
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-07-09T20:08:26.685Z"
+
+    LicenseUsageRecord:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        unitCount:
+          type: integer
+          example: 0
+        type:
+          type: string
+          enum:
+            - recorded
+            - final
+            - current
+        recordedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: "2024-07-09T20:08:26.685Z"
+        resetAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: Determined by license's plan interval + length. Only applicable for ad hoc licenses without a subscription. If the license belongs to a subscription this value will always be null.
+          example: "2024-07-09T20:08:26.685Z"
+        planUuid:
+          type: string
+          format: uuid
+        licenseUuid:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-07-09T20:08:26.685Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-07-09T20:08:26.685Z"
+
+    PlanFeature:
+      type: object
+      properties:
+        planUuid:
+          type: string
+          format: uuid
+        featureUuid:
+          type: string
+          format: uuid
+        value:
+          type: string
+          example: "-1"
+        enumValueUuid:
+          type: string
+          format: uuid
+          nullable: true
+        isUnlimited:
+          type: boolean
+          example: true
+        isUsage:
+          type: boolean
+          example: false
+        pricePerUnit:
+          type: number
+          nullable: true
+        minUsage:
+          type: number
+          nullable: true
+        maxUsage:
+          type: number
+          nullable: true
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2023-02-07T14:44:37.433Z"
+        feature:
+          $ref: '#/components/schemas/Feature'
+        enumValue:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/EnumValue'
+
+    EnumValue:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: "1955081b-204d-4d2a-9c4c-dc042498c2d9"
+        name:
+          type: string
+          example: "xxxxx"
+        featureUuid:
+          type: string
+          format: uuid
+          example: "78720bed-dcc7-4dd6-8dad-336ef552d41d"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2023-11-16T10:41:57.633Z"
+
+    PlanCurrency:
+      type: object
+      properties:
+        planUuid:
+          type: string
+          format: uuid
+        currencyUuid:
+          type: string
+          format: uuid
+        price:
+          type: number
+          example: 1000
+        paymentIntegrationPlanId:
+          type: string
+          example: 'plan_NJVQSbjdHWJUSC'
+        currency:
+          $ref: '#/components/schemas/Currency'
+
+    PlanCapability:
+      type: object
+      properties:
+        planUuid:
+          type: string
+          format: uuid
+        capabilityUuid:
+          type: string
+          format: uuid
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2023-02-07T14:44:37.433Z'
+        capability:
+          $ref: '#/components/schemas/Capability'
+
+    StripeInvoice:
+      type: object
+      properties:
+        first:
+          type: string
+          example: in_xxxx
+        last:
+          type: string
+          example: in_xoxo
+        hasMore:
+          type: boolean
+          example: true
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: in_xxxx
+              object:
+                type: string
+                example: invoice
+              account_country:
+                type: string
+                example: GB
+              account_name:
+                type: string
+                example: salable.app
+              account_tax_ids:
+                type: string
+                nullable: true
+              amount_due:
+                type: integer
+                format: int32
+                example: 0
+              amount_paid:
+                type: integer
+                format: int32
+                example: 0
+              amount_remaining:
+                type: integer
+                format: int32
+                example: 0
+              amount_shipping:
+                type: integer
+                format: int32
+                example: 0
+              application:
+                type: string
+                example: ca_xxxx
+              application_fee_amount:
+                type: string
+                nullable: true
+              attempt_count:
+                type: integer
+                format: int32
+                example: 0
+              attempted:
+                type: boolean
+                example: true
+              auto_advance:
+                type: boolean
+                example: false
+              automatic_tax:
+                type: object
+                properties:
+                  enabled:
+                    type: boolean
+                    example: false
+                  status:
+                    type: string
+                    nullable: true
+              billing_reason:
+                type: string
+                example: subscription_cycle
+              charge:
+                type: string
+                nullable: true
+              collection_method:
+                type: string
+                example: charge_automatically
+              created:
+                type: integer
+                format: int32
+                example: 1694521666
+              currency:
+                type: string
+                example: usd
+              custom_fields:
+                type: string
+                nullable: true
+              customer:
+                type: string
+                example: cus_NlwjXMq7KBOOR2
+              customer_address:
+                type: object
+                properties:
+                  city:
+                    type: string
+                    nullable: true
+                  country:
+                    type: string
+                    example: GB
+                  line1:
+                    type: string
+                    nullable: true
+                  line2:
+                    type: string
+                    nullable: true
+                  postal_code:
+                    type: string
+                    example: NR13 6UN
+                  state:
+                    type: string
+                    nullable: true
+              customer_email:
+                type: string
+                example: customer@company.com
+              customer_name:
+                type: string
+                example: A NAME
+              customer_phone:
+                type: string
+                nullable: true
+              customer_shipping:
+                type: string
+                nullable: true
+              customer_tax_exempt:
+                type: string
+                example: none
+              customer_tax_ids:
+                type: array
+                items:
+                  type: string
+                  nullable: true
+              default_payment_method:
+                type: string
+                nullable: true
+              default_source:
+                type: string
+                nullable: true
+              default_tax_rates:
+                type: array
+                items:
+                  type: string
+                  nullable: true
+              description:
+                type: string
+                nullable: true
+              discount:
+                type: string
+                nullable: true
+              discounts:
+                type: array
+                items:
+                  type: string
+                  nullable: true
+              due_date:
+                type: string
+                nullable: true
+              effective_at:
+                type: integer
+                format: int32
+                example: 1694525662
+              ending_balance:
+                type: integer
+                format: int32
+                example: -11
+              footer:
+                type: string
+                nullable: true
+              from_invoice:
+                type: string
+                nullable: true
+              hosted_invoice_url:
+                type: string
+                example: https://invoice.stripe.com/i/acct_1MopGcQQTaDeHd2t/live_YWNjdF8xTW9wR2NRUVRhRGVIZDJ0LF9PY2xEM2tYSWVGYnhhbGI3YlRabzRyYXBJZDF1RTE0LDg3MDM4MDY00200n3ctI3Pm?s=ap
+              invoice_pdf:
+                type: string
+                example: https://pay.stripe.com/invoice/acct_1MopGcQQTaDeHd2t/live_YWNjdF8xTW9wR2NRUVRhRGVIZDJ0LF9PY2xEM2tYSWVGYnhhbGI3YlRabzRyYXBJZDF1RTE0LDg3MDM4MDY00200n3ctI3Pm/pdf?s=ap
+              last_finalization_error:
+                type: string
+                nullable: true
+              latest_revision:
+                type: string
+                nullable: true
+              lines:
+                type: object
+                properties:
+                  object:
+                    type: string
+                    example: list
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: il_1NpVh0QQTaDeHd2tKCrxg01G
+                        object:
+                          type: string
+                          example: line_item
+                        amount:
+                          type: integer
+                          format: int32
+                          example: -61
+                        amount_excluding_tax:
+                          type: integer
+                          format: int32
+                          example: -61
+                        currency:
+                          type: string
+                          example: usd
+                        description:
+                          type: string
+                          example: Unused time on Warm up calculator 2 after 12 Sep 2023
+                        discount_amounts:
+                          type: array
+                          items:
+                            type: string
+                            nullable: true
+                        discountable:
+                          type: boolean
+                          example: false
+                        discounts:
+                          type: array
+                          items:
+                            type: string
+                            nullable: true
+                        invoice_item:
+                          type: string
+                          example: ii_1NpVh0QQTaDeHd2tmqwlLPwv
+                        livemode:
+                          type: boolean
+                          example: true
+                        metadata:
+                          type: object
+                          properties: { }
+                        period:
+                          type: object
+                          properties:
+                            end:
+                              type: integer
+                              format: int32
+                              example: 1713962996
+                            start:
+                              type: integer
+                              format: int32
+                              example: 1694521666
+                        plan:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: plan_NkBTWal7D8noOb
+                            object:
+                              type: string
+                              example: plan
+                            active:
+                              type: boolean
+                              example: true
+                            aggregate_usage:
+                              type: string
+                              nullable: true
+                            amount:
+                              type: integer
+                              format: int32
+                              example: 99
+                            amount_decimal:
+                              type: string
+                              example: "99"
+                            billing_scheme:
+                              type: string
+                              example: per_unit
+                            created:
+                              type: integer
+                              format: int32
+                              example: 1681934120
+                            currency:
+                              type: string
+                              example: usd
+                            interval:
+                              type: string
+                              example: year
+                            interval_count:
+                              type: integer
+                              format: int32
+                              example: 1
+                            livemode:
+                              type: boolean
+                              example: true
+                            metadata:
+                              type: object
+                              properties: { }
+                            nickname:
+                              type: string
+                              example: Pro
+                            product:
+                              type: string
+                              example: prod_NkBLSrAcR0yFKA
+                            tiers_mode:
+                              type: string
+                              nullable: true
+                            transform_usage:
+                              type: string
+                              nullable: true
+                            trial_period_days:
+                              type: string
+                              nullable: true
+                            usage_type:
+                              type: string
+                              example: licensed
+                        price:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: plan_NkBTWal7D8noOb
+                            object:
+                              type: string
+                              example: price
+                            active:
+                              type: boolean
+                              example: true
+                            billing_scheme:
+                              type: string
+                              example: per_unit
+                            created:
+                              type: integer
+                              format: int32
+                              example: 1681934120
+                            currency:
+                              type: string
+                              example: usd
+                            custom_unit_amount:
+                              type: string
+                              nullable: true
+                            livemode:
+                              type: boolean
+                              example: true
+                            lookup_key:
+                              type: string
+                              nullable: true
+                            metadata:
+                              type: object
+                              properties: { }
+                            nickname:
+                              type: string
+                              example: Pro
+                            product:
+                              type: string
+                              example: prod_NkBLSrAcR0yFKA
+                            recurring:
+                              type: object
+                              properties:
+                                aggregate_usage:
+                                  type: string
+                                  nullable: true
+                                interval:
+                                  type: string
+                                  example: year
+                                interval_count:
+                                  type: integer
+                                  format: int32
+                                  example: 1
+                                trial_period_days:
+                                  type: string
+                                  nullable: true
+                                usage_type:
+                                  type: string
+                                  example: licensed
+                            tax_behavior:
+                              type: string
+                              example: unspecified
+                            tiers_mode:
+                              type: string
+                              nullable: true
+                            transform_quantity:
+                              type: string
+                              nullable: true
+                            type:
+                              type: string
+                              example: recurring
+                            unit_amount:
+                              type: integer
+                              format: int32
+                              example: 99
+                            unit_amount_decimal:
+                              type: string
+                              example: "99"
+                        proration:
+                          type: boolean
+                          example: true
+                        proration_details:
+                          type: object
+                          properties:
+                            credited_items:
+                              type: object
+                              nullable: true
+                              properties:
+                                invoice:
+                                  type: string
+                                  example: in_1P8ggrDC45Z3guyuDOWAkWUy
+                                invoice_line_items:
+                                  type: array
+                                  items:
+                                    type: string
+                                    example: il_1N0QjLQQTaDeHd2twY3fnTJz
+                        quantity:
+                          type: integer
+                          format: int32
+                          example: 1
+                        subscription:
+                          type: string
+                          example: sub_xxxx
+                        subscription_item:
+                          type: string
+                          example: si_NlwjmwWIcCnR0r
+                        tax_amounts:
+                          type: array
+                          items:
+                            type: string
+                            nullable: true
+                        tax_rates:
+                          type: array
+                          items:
+                            type: string
+                            nullable: true
+                        type:
+                          type: string
+                          example: invoiceitem
+                        unit_amount_excluding_tax:
+                          type: string
+                          example: "-61"
+                  has_more:
+                    type: boolean
+                    example: false
+                  total_count:
+                    type: integer
+                    format: int32
+                    example: 3
+                  url:
+                    type: string
+                    example: /v1/invoices/in_xxxx/lines
+              livemode:
+                type: boolean
+                example: true
+              metadata:
+                type: object
+                properties: { }
+              next_payment_attempt:
+                type: string
+                nullable: true
+              number:
+                type: string
+                example: C29E5E45-0014
+              on_behalf_of:
+                type: string
+                nullable: true
+              paid:
+                type: boolean
+                example: true
+              paid_out_of_band:
+                type: boolean
+                example: false
+              payment_intent:
+                type: string
+                nullable: true
+              payment_settings:
+                type: object
+                properties:
+                  default_mandate:
+                    type: string
+                    nullable: true
+                  payment_method_options:
+                    type: object
+                    nullable: true
+                    properties:
+                      acss_debit:
+                        type: string
+                        nullable: true
+                      bancontact:
+                        type: string
+                        nullable: true
+                      card:
+                        type: object
+                        properties:
+                          request_three_d_secure:
+                            type: string
+                      customer_balance:
+                        type: string
+                        nullable: true
+                      konbini:
+                        type: string
+                        nullable: true
+                      sepa_debit:
+                        type: string
+                        nullable: true
+                      us_bank_account:
+                        type: string
+                        nullable: true
+                  payment_method_types:
+                    type: string
+                    nullable: true
+              period_end:
+                type: integer
+                format: int32
+                example: 1694521666
+              period_start:
+                type: integer
+                format: int32
+                example: 1682340596
+              post_payment_credit_notes_amount:
+                type: integer
+                format: int32
+                example: 0
+              pre_payment_credit_notes_amount:
+                type: integer
+                format: int32
+                example: 0
+              quote:
+                type: string
+                nullable: true
+              receipt_number:
+                type: string
+                nullable: true
+              rendering:
+                type: string
+                nullable: true
+              rendering_options:
+                type: string
+                nullable: true
+              shipping_cost:
+                type: string
+                nullable: true
+              shipping_details:
+                type: string
+                nullable: true
+              starting_balance:
+                type: integer
+                format: int32
+                example: 0
+              statement_descriptor:
+                type: string
+                nullable: true
+              status:
+                type: string
+                example: paid
+              status_transitions:
+                type: object
+                properties:
+                  finalized_at:
+                    type: integer
+                    format: int32
+                    example: 1694525662
+                  marked_uncollectible_at:
+                    type: string
+                    nullable: true
+                  paid_at:
+                    type: integer
+                    format: int32
+                    example: 1694525662
+                  voided_at:
+                    type: string
+                    nullable: true
+              subscription:
+                type: string
+                example: sub_xxxx
+              subscription_details:
+                type: object
+                properties:
+                  metadata:
+                    type: object
+                    properties:
+                      granteeId:
+                        type: string
+                        example: user_2OsDX3m32lz850HSrdWurEVZkmU
+                      member:
+                        type: string
+                        example: example-member-123
+              subtotal:
+                type: integer
+                format: int32
+                example: -11
+              subtotal_excluding_tax:
+                type: integer
+                format: int32
+                example: -11
+              tax:
+                type: string
+                nullable: true
+              test_clock:
+                type: string
+                nullable: true
+              total:
+                type: integer
+                format: int32
+                example: -11
+              total_discount_amounts:
+                type: array
+                items:
+                  type: string
+                  nullable: true
+              total_excluding_tax:
+                type: integer
+                format: int32
+                example: -11
+              total_tax_amounts:
+                type: array
+                items:
+                  type: string
+                  nullable: true
+              transfer_data:
+                type: string
+                nullable: true
+              webhooks_delivered_at:
+                type: integer
+                format: int32
+                example: 1694521667
+
+    SubscriptionUpdatablePlan:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        displayName:
+          type: string
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - CANCELED
+            - PAUSED
+            - TRIALING
+            - DELETED
+            - PAST_DUE
+            - INCOMPLETE_EXPIRED
+            - INCOMPLETE
+            - UNPAID
+          example: ACTIVE
+        isTest:
+          type: boolean
+        trialDays:
+          type: integer
+          nullable: true
+        evaluation:
+          type: boolean
+        evalDays:
+          type: integer
+        organisation:
+          type: string
+        visibility:
+          type: string
+        licenseType:
+          type: string
+        perSeatAmount:
+          type: integer
+        interval:
+          type: string
+        length:
+          type: integer
+        active:
+          type: boolean
+        planType:
+          type: string
+        pricingType:
+          type: string
+        environment:
+          type: string
+        paddlePlanId:
+          deprecated: true
+          type: string
+          nullable: true
+        productUuid:
+          type: string
+          format: uuid
+        salablePlan:
+          type: boolean
+        updatedAt:
+          type: string
+          format: date-time
+        currencies:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlanCurrency'
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlanFeature'
+
+    PricingTable:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: xxxxx
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - DEPRECATED
+          example: ACTIVE
+        title:
+          type: string
+          nullable: true
+        text:
+          type: string
+          nullable: true
+        theme:
+          type: string
+          example: light
+        featureOrder:
+          type: string
+          example: default
+        productUuid:
+          type: string
+          format: uuid
+        customTheme:
+          type: string
+          nullable: true
+        featuredPlanUuid:
+          type: string
+          format: uuid
+          nullable: true
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2023-10-03T09:50:57.308Z
+        features:
+          type: array
+          items:
+            type: object
+            properties:
+              pricingTableUuid:
+                type: string
+                format: uuid
+              featureUuid:
+                type: string
+                format: uuid
+              sortOrder:
+                type: integer
+                format: int32
+                example: 0
+              updatedAt:
+                type: string
+                format: date-time
+                example: 2023-10-03T09:50:57.308Z
+              feature:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                    example: feature one
+                  description:
+                    type: string
+                    example: Feature description
+                  displayName:
+                    type: string
+                    example: Boolean Feature Display Name
+                  variableName:
+                    type: string
+                    example: feature_one
+                  status:
+                    type: string
+                    enum:
+                      - ACTIVE
+                      - DEPRECATED
+                    example: ACTIVE
+                  visibility:
+                    type: string
+                    example: public
+                  valueType:
+                    type: string
+                    example: boolean
+                  defaultValue:
+                    type: string
+                    example: "false"
+                  showUnlimited:
+                    type: boolean
+                    example: false
+                  productUuid:
+                    type: string
+                    format: uuid
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: 2023-10-03T09:50:54.288Z
+                  sortOrder:
+                    type: integer
+                    format: int32
+                    example: 0
+                  featureEnumOptions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        uuid:
+                          type: string
+                          format: uuid
+                        name:
+                          type: string
+                          example: xxxxx
+                        featureUuid:
+                          type: string
+                          format: uuid
+                        updatedAt:
+                          type: string
+                          format: date-time
+                          example: 2023-10-03T09:50:56.422Z
+        product:
+          type: object
+          properties:
+            uuid:
+              type: string
+              format: uuid
+            name:
+              type: string
+              example: Sample Product
+            description:
+              type: string
+              example: This is a sample product for testing purposes
+            logoUrl:
+              type: string
+              example: https://example.com/logo.png
+            displayName:
+              type: string
+              example: Sample Product
+            organisation:
+              type: string
+              example: test-org
+            status:
+              type: string
+              enum:
+                - ACTIVE
+                - DEPRECATED
+              example: ACTIVE
+            paid:
+              type: boolean
+              example: false
+            paymentIntegrationProductId:
+              type: string
+              nullable: true
+            appType:
+              type: string
+              example: CUSTOM
+            updatedAt:
+              type: string
+              format: date-time
+              example: 2023-10-03T09:50:54.288Z
+            isTest:
+              type: boolean
+              example: false
+            features:
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                    example: feature one
+                  description:
+                    type: string
+                    example: Feature description
+                  displayName:
+                    type: string
+                    example: Boolean Feature Display Name
+                  variableName:
+                    type: string
+                    example: feature_one
+                  status:
+                    type: string
+                    enum:
+                      - ACTIVE
+                      - DEPRECATED
+                    example: ACTIVE
+                  visibility:
+                    type: string
+                    example: public
+                  valueType:
+                    type: string
+                    example: boolean
+                  defaultValue:
+                    type: string
+                    example: "false"
+                  showUnlimited:
+                    type: boolean
+                    example: false
+                  productUuid:
+                    type: string
+                    format: uuid
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: 2023-10-03T09:50:54.288Z
+                  sortOrder:
+                    type: integer
+                    format: int32
+                    example: 0
+                  featureEnumOptions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        uuid:
+                          format: uuid
+                          type: string
+                        name:
+                          type: string
+                          example: xxxxx
+                        featureUuid:
+                          type: string
+                          format: uuid
+                        updatedAt:
+                          type: string
+                          format: date-time
+                          example: 2023-10-03T09:50:56.422Z
+            currencies:
+              type: array
+              items:
+                type: object
+                properties:
+                  productUuid:
+                    type: string
+                    format: uuid
+                  currencyUuid:
+                    type: string
+                    format: uuid
+                  defaultCurrency:
+                    type: boolean
+                    example: true
+                  currency:
+                    type: object
+                    properties:
+                      uuid:
+                        type: string
+                        format: uuid
+                      shortName:
+                        type: string
+                        example: GBP
+                      longName:
+                        type: string
+                        example: Pound Sterling
+                      symbol:
+                        type: string
+                        example: £
+        plans:
+          type: array
+          items:
+            type: object
+            properties:
+              planUuid:
+                type: string
+                format: uuid
+              pricingTableUuid:
+                type: string
+                format: uuid
+              sortOrder:
+                type: integer
+                format: int32
+                example: 0
+              updatedAt:
+                type: string
+                format: date-time
+                example: 2023-10-03T09:50:57.308Z
+              plan:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                    example: Free Plan Name
+                  description:
+                    type: string
+                    example: Free Plan description
+                  displayName:
+                    type: string
+                    example: Free Plan Display Name
+                  status:
+                    type: string
+                    enum:
+                      - ACTIVE
+                      - DEPRECATED
+                      - DRAFT
+                      - REVISION
+                      - SCHEDULED
+                      - COMING_SOON
+                    example: ACTIVE
+                  isTest:
+                    type: boolean
+                    example: false
+                  trialDays:
+                    type: integer
+                    format: int32
+                    example: 7
+                    nullable: true
+                  evaluation:
+                    type: boolean
+                    example: false
+                  evalDays:
+                    type: integer
+                    format: int32
+                    example: 14
+                  organisation:
+                    type: string
+                    example: test-org
+                  visibility:
+                    type: string
+                    example: public
+                  licenseType:
+                    type: string
+                    example: licensed
+                  perSeatAmount:
+                    type: integer
+                    format: int32
+                    example: 1
+                  interval:
+                    type: string
+                    example: month
+                  length:
+                    type: integer
+                    format: int32
+                    example: 1
+                  active:
+                    type: boolean
+                    example: true
+                  planType:
+                    type: string
+                    example: standard
+                  pricingType:
+                    type: string
+                    example: paid
+                  environment:
+                    type: string
+                    example: dev
+                  paddlePlanId:
+                    deprecated: true
+                    type: string
+                    nullable: true
+                  productUuid:
+                    type: string
+                    format: uuid
+                  salablePlan:
+                    type: boolean
+                    example: false
+                  isSubscribed:
+                    type: boolean
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: 2023-10-03T09:50:55.253Z
+                  capabilities:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        planUuid:
+                          type: string
+                          format: uuid
+                        capabilityUuid:
+                          type: string
+                          format: uuid
+                        updatedAt:
+                          type: string
+                          format: date-time
+                          example: 2023-10-03T09:50:57.155Z
+                        capability:
+                          type: object
+                          properties:
+                            uuid:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                              example: test_capability
+                            description:
+                              type: string
+                              example: Capability description
+                            status:
+                              type: string
+                              enum:
+                                - ACTIVE
+                                - DEPRECATED
+                              example: ACTIVE
+                            productUuid:
+                              type: string
+                              format: uuid
+                            updatedAt:
+                              type: string
+                              format: date-time
+                              example: 2023-10-03T09:50:54.288Z
+                  features:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        planUuid:
+                          type: string
+                          format: uuid
+                        featureUuid:
+                          type: string
+                          format: uuid
+                        value:
+                          type: string
+                          example: xxxxx
+                        enumValueUuid:
+                          type: string
+                          format: uuid
+                        isUnlimited:
+                          type: boolean
+                          example: false
+                        isUsage:
+                          type: boolean
+                          example: true
+                        pricePerUnit:
+                          type: integer
+                          format: int32
+                          example: 10
+                        minUsage:
+                          type: integer
+                          format: int32
+                          example: 1
+                        maxUsage:
+                          type: integer
+                          format: int32
+                          example: 100
+                        updatedAt:
+                          type: string
+                          format: date-time
+                          example: 2023-10-03T09:50:55.253Z
+                        feature:
+                          type: object
+                          properties:
+                            uuid:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                              example: feature one
+                            description:
+                              type: string
+                              example: Feature description
+                            displayName:
+                              type: string
+                              example: Boolean Feature Display Name
+                            variableName:
+                              type: string
+                              example: feature_one
+                            status:
+                              type: string
+                              enum:
+                                - ACTIVE
+                                - DEPRECATED
+                              example: ACTIVE
+                            visibility:
+                              type: string
+                              example: public
+                            valueType:
+                              type: string
+                              example: boolean
+                            defaultValue:
+                              type: string
+                              example: "false"
+                            showUnlimited:
+                              type: boolean
+                              example: false
+                            productUuid:
+                              type: string
+                              format: uuid
+                            updatedAt:
+                              type: string
+                              format: date-time
+                              example: 2023-10-03T09:50:54.288Z
+                            sortOrder:
+                              type: integer
+                              format: int32
+                              example: 0
+                        enumValue:
+                          type: object
+                          properties:
+                            uuid:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                              example: xxxxx
+                            featureUuid:
+                              type: string
+                              format: uuid
+                            updatedAt:
+                              type: string
+                              format: date-time
+                              example: 2023-10-03T09:50:55.253Z
+                  currencies:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        planUuid:
+                          type: string
+                          format: uuid
+                        currencyUuid:
+                          type: string
+                          format: uuid
+                        price:
+                          type: integer
+                          format: int32
+                          example: 500
+                        paymentIntegrationPlanId:
+                          type: string
+                          example: plan_OkaQpjaIjoUVYz
+                        currency:
+                          type: object
+                          properties:
+                            uuid:
+                              type: string
+                              format: uuid
+                            shortName:
+                              type: string
+                              example: GBP
+                            longName:
+                              type: string
+                              example: Pound Sterling
+                            symbol:
+                              type: string
+                              example: £
+
+    Permission:
+      type: object
+      properties:
+        value:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+          nullable: true
+        dependencies:
+          type: array
+          items:
+            type: string
+
+    PermissionCreateRequest:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        dependencies:
+          type: array
+          items:
+            type: string
+
+    PermissionUpdateRequest:
+      type: object
+      properties:
+        value:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        dependencies:
+          type: array
+          items:
+            type: string
+
+    Role:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Permission'
+
+    RoleCreateRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: string
+
+    RoleUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: string
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        role:
+          $ref: '#/components/schemas/Role'
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Permission'
+
+    UserCreateRequest:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: string
+
+    UserUpdateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+        permissions:
+          $ref: '#/components/schemas/AddRemoveByUuid'
+
+    AddRemoveByUuid:
+      type: object
+      properties:
+        add:
+          type: array
+          items:
+            type: string
+          nullable: true
+        remove:
+          type: array
+          items:
+            type: string
+          nullable: true
+
+    StripePaymentMethod:
+      type: object
+      properties:
+        id:
+          type: string
+        object:
+          type: string
+        billing_details:
+          $ref: '#/components/schemas/StripeBillingDetails'
+        card:
+          $ref: '#/components/schemas/StripeCard'
+        created:
+          type: integer
+        customer:
+          type: string
+        livemode:
+          type: boolean
+        metadata:
+          type: object
+        type:
+          type: string
+
+    StripeBillingDetails:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/StripeAddress'
+        email:
+          type: string
+        name:
+          type: string
+        phone:
+          type: string
+          nullable: true
+
+    StripeAddress:
+      type: object
+      properties:
+        city:
+          type: string
+          nullable: true
+        country:
+          type: string
+        line1:
+          type: string
+          nullable: true
+        line2:
+          type: string
+          nullable: true
+        postal_code:
+          type: string
+        state:
+          type: string
+          nullable: true
+
+    StripeCard:
+      type: object
+      properties:
+        brand:
+          type: string
+        checks:
+          $ref: '#/components/schemas/StripeChecks'
+        country:
+          type: string
+        exp_month:
+          type: integer
+        exp_year:
+          type: integer
+        fingerprint:
+          type: string
+        funding:
+          type: string
+        generated_from:
+          type: string
+          nullable: true
+        last4:
+          type: string
+        networks:
+          $ref: '#/components/schemas/StripeNetworks'
+        three_d_secure_usage:
+          $ref: '#/components/schemas/StripeThreeDSecureUsage'
+        wallet:
+          type: string
+          nullable: true
+
+    StripeChecks:
+      type: object
+      properties:
+        address_line1_check:
+          type: string
+          nullable: true
+        address_postal_code_check:
+          type: string
+        cvc_check:
+          type: string
+
+    StripeNetworks:
+      type: object
+      properties:
+        available:
+          type: array
+          items:
+            type: string
+        preferred:
+          type: string
+          nullable: true
+
+    StripeThreeDSecureUsage:
+      type: object
+      properties:
+        supported:
+          type: boolean
+
+    CheckoutCreateSubscriptionRequest:
+      type: object
+      properties:
+        planUuid:
+          type: string
+        email:
+          type: string
+        member:
+          type: string
+        granteeId:
+          type: string
+        currency:
+          type: string
+      required:
+        - planUuid
+        - email
+        - member
+        - granteeId
+
+    CheckoutCreateIntentRequest:
+      type: object
+      properties:
+        planUuid:
+          type: string
+        email:
+          type: string
+        member:
+          type: string
+        granteeId:
+          type: string
+        currency:
+          type: string
+      required:
+        - planUuid
+        - email
+        - member
+        - granteeId
+
+    CheckoutCreateSubscriptionResponse:
+      type: object
+      properties:
+        clientSecret:
+          type: string
+
+    CheckoutCreateIntentResponse:
+      type: object
+      properties:
+        clientSecret:
+          type: string
+
+    EventResponse:
+      type: object
+      properties:
+        eventUuid:
+          type: string
+          format: uuid
+
+    CursorPaginationLicensesResponse:
+      type: object
+      properties:
+        first:
+          type: string
+          format: uuid
+          nullable: true
+        last:
+          type: string
+          format: uuid
+          nullable: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/License'
+
+    CursorPaginationLicensesUsageRecordsResponse:
+      type: object
+      properties:
+        first:
+          type: string
+          format: uuid
+          nullable: true
+        last:
+          type: string
+          format: uuid
+          nullable: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/LicenseUsageRecord'
+
+    CursorPaginationSubscriptionsResponse:
+      type: object
+      properties:
+        first:
+          type: string
+          format: uuid
+          nullable: true
+        last:
+          type: string
+          format: uuid
+          nullable: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+
+tags:
+  - name: Products
+    description: Operations related to products.
+  - name: Plans
+    description: Operations related to plans.
+  - name: Pricing Tables
+    description: Operations related to pricing tables.
+  - name: Subscriptions
+    description: Operations related to licenses.
+  - name: Licenses
+    description: Operations related to licenses.
+  - name: Usage
+    description: Operations related to usage.
+  - name: Events
+    description: Operations related to events.
+  - name: Checkout
+    description: Operations related to checkout.
+
+paths:
+  /products:
+    get:
+      summary: Get products
+      operationId: getProducts
+      description: Retrieves a list of all products
+      tags:
+        - Products
+      security:
+        - apiKey: [ "products:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+      responses:
+        '200':
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        "400":
+          description: Bad request
+
+  /products/{productUuid}:
+    get:
+      summary: Get a product
+      operationId: getProductByUuid
+      description: |
+        Retrieves a specific product by its UUID. 
+        By default, the response does not contain any relational data. If you want to expand the relational data, you can do so with the `expand` query parameter.
+      tags:
+        - Products
+      security:
+        - apiKey: [ "products:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/ProductUuidPathParam'
+        - $ref: '#/components/parameters/ExpandProductQueryParams'
+      responses:
+        "200":
+          description: Returns the product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+
+  /products/{productUuid}/plans:
+    get:
+      summary: Get all plans of a product
+      operationId: getProductPlans
+      description: |
+        Retrieves all the plans associated with a specific product.
+        By default, the response does not contain any relational data. If you want to expand the relational data, you can do so with the `expand` query parameter.
+      tags:
+        - Products
+      security:
+        - apiKey: [ "plans:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/ProductUuidPathParam'
+      responses:
+        "200":
+          description: List of plans
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Plan'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /products/{productUuid}/pricingtable:
+    get:
+      summary: Get product pricing table
+      operationId: getProductPricingTable
+      description: |
+        Retrieves the pricing table of a specific product.
+      tags:
+        - Products
+      security:
+        - apiKey: [ "pricing-tables:read" ]
+        - sessionToken: [ "web-components:pricing-table" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/ProductUuidPathParam'
+        - $ref: '#/components/parameters/GranteeIdQueryParamRequired'
+        - $ref: '#/components/parameters/CurrencyQueryParam'
+      responses:
+        "200":
+          description: Returns a product object with pricing table details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPricingTable'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /products/{productUuid}/features:
+    get:
+      summary: Get product features
+      description: Retrieve the list of features for a product
+      operationId: getProductFeatures
+      tags:
+        - Products
+      security:
+        - apiKey: [ "features:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/ProductUuidPathParam'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Feature'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /products/{productUuid}/currencies:
+    get:
+      summary: Get product currencies
+      description: Retrieve the list of currencies for a product
+      operationId: getProductCurrencies
+      tags:
+        - Products
+      security:
+        - apiKey: [ "currencies:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/ProductUuidPathParam'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    productUuid:
+                      type: string
+                      format: uuid
+                      description: The UUID of the product
+                    currencyUuid:
+                      type: string
+                      format: uuid
+                      description: The UUID of the currency
+                    defaultCurrency:
+                      type: boolean
+                      description: Indicates if it is the default currency for the product
+                    currency:
+                      $ref: '#/components/schemas/Currency'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /products/{productUuid}/capabilities:
+    get:
+      summary: Get product capabilities
+      description: Retrieve the list of capabilities for a product
+      operationId: getProductCapabilities
+      tags:
+        - Products
+      security:
+        - apiKey: [ "capabilities:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/ProductUuidPathParam'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Capability'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /plans/{planUuid}:
+    get:
+      summary: Get a plan
+      operationId: getPlanByUuid
+      description: |
+        Retrieves information about a plan by its UUID.
+        By default, the response does not contain any relational data. If you want to expand the relational data, you can do so with the `expand` query parameter.
+      tags:
+        - Plans
+      security:
+        - apiKey: [ "plans:read" ]
+        - sessionToken: [ "web-components:checkout" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/PlanUuidPathParam'
+        - $ref: '#/components/parameters/ExpandPlanQueryParam'
+        - $ref: '#/components/parameters/SuccessUrlQueryParam'
+        - $ref: '#/components/parameters/CancelUrlQueryParam'
+        - $ref: '#/components/parameters/GranteeIdQueryParam'
+        - $ref: '#/components/parameters/MemberQueryParam'
+        - $ref: '#/components/parameters/PromoCodeQueryParam'
+        - $ref: '#/components/parameters/AllowPromoCodeQueryParam'
+        - $ref: '#/components/parameters/CustomerEmailQueryParam'
+        - $ref: '#/components/parameters/CustomerIdQueryParam'
+        - $ref: '#/components/parameters/CurrencyQueryParam'
+        - $ref: '#/components/parameters/AutomaticTaxQueryParam'
+      responses:
+        '200':
+          description: Returns the plan information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /plans/{planUuid}/features:
+    get:
+      summary: Get plan features
+      description: Retrieve the list of features for a specific plan
+      operationId: getPlanFeatures
+      tags:
+        - Plans
+      security:
+        - apiKey: [ "features:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/PlanUuidPathParam'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanFeature'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /plans/{planUuid}/currencies:
+    get:
+      summary: Get plan currencies
+      description: Retrieve the list of currencies for a specific plan
+      operationId: getPlanCurrencies
+      tags:
+        - Plans
+      security:
+        - apiKey: [ "currencies:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/PlanUuidPathParam'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanCurrency'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /plans/{planUuid}/checkoutlink:
+    get:
+      summary: Get a checkout link for a plan
+      operationId: getPlanCheckoutLink
+      description: Retrieves a checkout link for a specific plan. The checkout link can be used by customers to purchase the plan.
+      tags:
+        - Plans
+      security:
+        - apiKey: [ "plans:read" ]
+        - sessionToken: [ "web-components:pricing-table" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/PlanUuidPathParam'
+        - $ref: '#/components/parameters/SuccessUrlQueryParamRequired'
+        - $ref: '#/components/parameters/CancelUrlQueryParamRequired'
+        - $ref: '#/components/parameters/GranteeIdQueryParamRequired'
+        - $ref: '#/components/parameters/MemberQueryParamRequired'
+        - $ref: '#/components/parameters/PromoCodeQueryParam'
+        - $ref: '#/components/parameters/AllowPromoCodeQueryParam'
+        - $ref: '#/components/parameters/CustomerEmailQueryParam'
+        - $ref: '#/components/parameters/CustomerIdQueryParam'
+        - $ref: '#/components/parameters/CurrencyQueryParam'
+        - $ref: '#/components/parameters/AutomaticTaxQueryParam'
+        - $ref: '#/components/parameters/QuantityQueryParam'
+        - $ref: '#/components/parameters/ChangeQuantityQueryParam'
+        - $ref: '#/components/parameters/RequirePaymentMethodQueryParam'
+      responses:
+        '200':
+          description: Successfully retrieved the checkout link
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  checkoutUrl:
+                    type: string
+                    format: uri
+                    description: The generated checkout link for the plan.
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /plans/{planUuid}/capabilities:
+    get:
+      summary: Get plan capabilities
+      description: Retrieve the list of capabilities for a specific plan
+      operationId: getPlanCapabilities
+      tags:
+        - Plans
+      security:
+        - apiKey: [ "capabilities:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/PlanUuidPathParam'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanCapability'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /licenses:
+    post:
+      summary: Create a license
+      operationId: createLicense
+      description: Create one or many ad hoc Licenses to give the specified granteeIds access to features. Per seat ad hoc licenses are currently not supported. If you are incrementing seats on a paid subscription use the [increment seats](#tag/Subscriptions/operation/incrementSubscriptionSeats) endpoint instead.
+      tags:
+        - Licenses
+      security:
+        - apiKey: [ "licenses:write" ]
+        - sessionToken: [ "web-components:pricing-table" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/LicenseCreateRequest'
+                - $ref: '#/components/schemas/CreateManyLicensesRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/License'
+                  - type: array
+                    items:
+                      $ref: '#/components/schemas/License'
+        "400":
+          description: Bad request
+    put:
+      summary: Batch update licenses
+      operationId: updateLicenses
+      description: Performs a batch update of licenses.
+      tags:
+        - Licenses
+      security:
+        - apiKey: [ "licenses:write" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateManyLicensesRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/License'
+        "400":
+          description: Bad request
+    get:
+      summary: Get licenses
+      operationId: getLicenses
+      description: Retrieves a list of all licenses.
+      tags:
+        - Licenses
+      security:
+        - apiKey: [ "licenses:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/LicenseStatusQueryParam'
+        - $ref: '#/components/parameters/CursorQueryParam'
+        - $ref: '#/components/parameters/CursorTakeQueryParam'
+        - in: query
+          name: subscriptionUuid
+          required: false
+          schema:
+            type: string
+            format: uuid
+          description: Filters licenses by their subscription. Useful for returning licenses on a per seat subscription.
+        - in: query
+          name: granteeId
+          required: false
+          schema:
+            type: string
+          description: Filters licenses by grantee.
+        - in: query
+          name: planUuid
+          required: false
+          schema:
+            type: string
+            format: uuid
+          description: Filters licenses by their plan.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CursorPaginationLicensesResponse'
+        "400":
+          description: Bad request
+
+  /licenses/count:
+    get:
+      summary: Get the count of licenses
+      operationId: getLicensesCount
+      description: Returns the count of all licenses including counts for assigned and unassigned licenses.
+      tags:
+        - Licenses
+      security:
+        - apiKey: [ "licenses:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/SubscriptionUuidQueryParam'
+        - $ref: '#/components/parameters/LicenseStatusQueryParam'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseCount'
+        "400":
+          description: Bad request
+
+  /licenses/{licenseUuid}:
+    get:
+      summary: Get a License
+      operationId: getLicenseByUuid
+      description: Fetch the details of a specific license using its UUID. If additional specific details are required, use the optional 'expand' query parameter to include relational data such as associated subscription details, pricing plans, product details, etc.
+      tags:
+        - Licenses
+      security:
+        - apiKey: [ "licenses:read" ]
+      parameters:
+        - $ref: '#/components/parameters/LicenseUuidPathParam'
+        - name: expand
+          in: query
+          description: Specify the resource fields to expand as comma separated values eg `expand=subscription,plan`
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+          example:
+            - subscription
+            - plan.currencies.currency
+            - plan.currencies
+            - plan.features
+            - plan
+            - product.currencies
+            - product.organisationPaymentIntegration
+            - product
+      responses:
+        '200':
+          description: The operation was successful, and the license data is returned in the response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/License'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+    put:
+      summary: Update a license
+      operationId: updateLicense
+      description: Set or unset the granteeId of a license.
+      tags:
+        - Licenses
+      security:
+        - apiKey: [ "licenses:write" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/LicenseUuidPathParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LicenseUpdateRequest'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/License'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+    delete:
+      summary: Cancel an ad hoc License
+      operationId: cancelLicense
+      description: |
+        Cancel an ad hoc license, this will set the status to `CANCELED`
+        
+        Does not cancel subscription, only use for canceling ad hoc licenses.
+      tags:
+        - Licenses
+      security:
+        - apiKey: [ "licenses:write" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/LicenseUuidPathParam'
+      responses:
+        '204':
+          description: Successfully canceled the license, no content returned
+        "400":
+          description: Bad request
+
+  /licenses/check:
+    get:
+      summary: Check a grantee(s) licenses
+      operationId: getLicenseCheck
+      description: Retrieves the capabilities the grantee(s) have access to.
+      tags:
+        - Licenses
+      security:
+        - apiKey: [ "licenses:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/GranteeIdsQueryParam'
+        - $ref: '#/components/parameters/ProductUuidQueryParam'
+        - $ref: '#/components/parameters/GraceQueryParam'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseCheck'
+        "204":
+          description: No licenses found for grantees
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /licenses/purchaser:
+    get:
+      summary: Get licenses by purchaser
+      operationId: getLicensesByPurchaser
+      description: Retrieves an array of licenses for a purchaser
+      tags:
+        - Licenses
+      security:
+        - apiKey: [ "licenses:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/ProductUuidQueryParam'
+        - $ref: '#/components/parameters/LicenseStatusQueryParam'
+        - $ref: '#/components/parameters/PurchaserQueryParam'
+      responses:
+        '200':
+          description: An array of licenses for a specific purchaser
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LicenseByPurchaser'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /licenses/granteeId/{granteeId}:
+    get:
+      summary: Get licenses by granteeId
+      operationId: getLicensesByGranteeId
+      description: Retrieves a list of licenses for a grantee
+      tags:
+        - Licenses
+      security:
+        - apiKey: [ "licenses:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/GranteeIdPathParam'
+        - name: expand
+          in: query
+          description: Parameters to expand in the response
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - subscription
+                - plan.currencies.currency
+                - plan.currencies
+                - plan.features
+                - plan
+                - product.currencies
+                - product.organisationPaymentIntegration
+                - product
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/License'
+        '204':
+          description: No licenses returned for grantee
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /licenses/cancel:
+    post:
+      summary: Cancel many ad hoc licenses
+      operationId: cancelLicenses
+      description: |
+        Cancels ad hoc Licenses with using an array of licenseUuids.
+        
+        Does not cancel subscription, only use for canceling ad hoc licenses.
+      tags:
+        - Licenses
+      security:
+        - apiKey: [ "licenses:write" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uuids:
+                  type: array
+                  items:
+                    type: string
+                  description: UUIDs of the Licenses which are being canceled
+            example:
+              uuids:
+                - "674e7460-8eea-48b1-a795-2705d0e38ff4"
+                - "eb6424b2-4cb3-4812-85a4-25acab877109"
+      responses:
+        '204':
+          description: Successfully canceled licenses, no content returned
+        "400":
+          description: Bad request
+
+  /subscriptions:
+    get:
+      summary: Get subscriptions
+      operationId: getSubscriptions
+      description: Retrieves a list of all subscriptions.
+      tags:
+        - Subscriptions
+      security:
+        - apiKey: [ "subscriptions:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/SubscriptionStatusQueryParam'
+        - $ref: '#/components/parameters/SubscriptionEmailQueryParam'
+        - $ref: '#/components/parameters/CursorQueryParam'
+        - $ref: '#/components/parameters/CursorTakeQueryParam'
+        - $ref: '#/components/parameters/ExpandGetAllSubscriptionQueryParams'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CursorPaginationSubscriptionsResponse'
+        "400":
+          description: Bad request
+
+  /subscriptions/{subscriptionUuid}:
+    get:
+      summary: Get a subscription
+      operationId: getSubscriptionByUuid
+      description: |
+        Retrieves the subscription data based on the UUID.
+        By default, the response does not contain any relational data. If you want to expand the relational data, you can do so with the `expand` query parameter.
+      tags:
+        - Subscriptions
+      security:
+        - apiKey: [ "subscriptions:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/SubscriptionUuidPathParam'
+        - $ref: '#/components/parameters/ExpandSubscriptionQueryParams'
+      responses:
+        '200':
+          description: The subscription data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /subscriptions/{subscriptionUuid}/change-plan:
+    put:
+      summary: Change a Subscription's Plan
+      operationId: changeSubscriptionsPlan
+      description: |
+        Changes a subscription's plan based on UUID. If the subscription is usage based the requested subscription will be canceled and a new subscription will be created on the plan you are changing to.
+      tags:
+        - Subscriptions
+      security:
+        - apiKey: [ "subscriptions:write" ]
+      parameters:
+        - $ref: '#/components/parameters/SubscriptionUuidPathParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                planUuid:
+                  format: uuid
+                  type: string
+                  description: The UUID of the Plan to which the Subscription will be moved to
+                proration:
+                  type: string
+                  default: create_prorations
+                  enum:
+                    - create_prorations
+                    - none
+                    - always_invoice
+                  description: |
+                    The proration behaviour when moving the Subscription to a different Plan. Note this will only be applicable for subscription's that are not usage based.
+                    - create_prorations: Will cause proration invoice items to be created when applicable.
+                    - none: Disable creating prorations in this request.
+                    - always_invoice: Always invoice immediately for prorations.
+              required:
+                - planUuid
+              example:
+                planUuid: 31b83d94-26cd-415b-b46d-d17287e12be9
+                proration: create_prorations
+      responses:
+        '202':
+          description: Request has been accepted
+
+  /subscriptions/{subscriptionUuid}/invoices:
+    get:
+      summary: Get subscription invoices
+      operationId: getSubscriptionInvoices
+      description: Retrieves a list of invoices for a subscription
+      tags:
+        - Subscriptions
+      security:
+        - apiKey: [ "billing:read" ]
+        - sessionToken: [ "web-components:invoices" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/SubscriptionUuidPathParam'
+      responses:
+        '200':
+          description: Paginated invoices
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StripeInvoice'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /subscriptions/{subscriptionUuid}/updateplan/listplans:
+    get:
+      summary: Get plans that a subscribed user can switch to
+      operationId: getSubscriptionUpdatablePlans
+      description: Retrieves a list of available plans that a subscribed user can switch to
+      tags:
+        - Subscriptions
+      security:
+        - apiKey: [ "subscriptions:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/SubscriptionUuidPathParam'
+      responses:
+        '200':
+          description: List of plans that a subscribed user can switch to
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubscriptionUpdatablePlan'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /subscriptions/{subscriptionUuid}/cancel:
+    put:
+      summary: Cancel a subscription
+      description: |
+        Cancels a subscription by providing the `subscriptionUuid`
+        It will cancel immediately or at the end of the Subscription based on value of the `when` query parameter.
+      operationId: cancelSubscription
+      tags:
+        - Subscriptions
+      security:
+        - apiKey: [ "subscriptions:write" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/SubscriptionUuidPathParam'
+        - $ref: '#/components/parameters/CancelWhenQueryParam'
+      responses:
+        '204':
+          description: The subscription was canceled successfully.
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /subscriptions/{subscriptionUuid}/updatepaymentlink:
+    get:
+      summary: Get an update payment link
+      operationId: getSubscriptionUpdatePaymentLink
+      description: |
+        Retrieves the update payment link for a specific subscription. 
+        The link opens up a management portal for your payment integration that will have an option for the customer to update their payment details.
+      tags:
+        - Subscriptions
+      security:
+        - apiKey: [ "billing:write" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/SubscriptionUuidPathParam'
+      responses:
+        '200':
+          description: Retrieves the stripe update payment link.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    description: The URL to update payment information
+                    type: string
+                    example: "https://billing.stripe.com/p/session/test_YWNjdF8xS3RZbjhBNG4yM0FDU2oyLF9OeFpRRXB6SDVRRlZwQmIzY2ZTdHhmRnZBVWs1V2pj0100qMzar5GE"
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /subscriptions/{subscriptionUuid}/customer-portal:
+    get:
+      summary: Get a customer portal link
+      operationId: getSubscriptionCustomerPortalLink
+      description: |
+        Retrieves the customer portal link for a subscription.
+        The link opens up a subscription management portal for your payment integration that will have an options for the customer to manage their subscription.
+      tags:
+        - Subscriptions
+      security:
+        - apiKey: [ "billing:write" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/SubscriptionUuidPathParam'
+      responses:
+        '200':
+          description: Returns the Stripe customer portal link.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: The URL of the customer portal.
+                    example: 'https://billing.stripe.com/p/session/test_YWNjdF8xS3RZbjhBNG4yM0FDU2oyLF9OeGFlTkJvU2QxbHNnZWJKd3U3RmpleUt2N0tuRWIx0100HscSOCYZ'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /subscriptions/{subscriptionUuid}/cancelpaymentlink:
+    get:
+      summary: Get a cancel subscription link
+      description: |
+        Retrieves the cancel subscription link for a specific subscription. 
+        The link opens up a subscription management portal for your payment integration that will have an option for the customer to cancel the subscription.
+      operationId: getSubscriptionCancelLink
+      tags:
+        - Subscriptions
+      security:
+        - apiKey: [ "billing:write" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/SubscriptionUuidPathParam'
+      responses:
+        '200':
+          description: Retrieves the cancel subscription link successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: The cancel subscription link.
+                    example: "https://billing.stripe.com/p/session/test_YWNjdF8xS3RZbjhBNG4yM0FDU2oyLF9OeFpRRXB6SDVRRlZwQmIzY2ZTdHhmRnZBVWs1V2pj0100qMzar5GE"
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /subscriptions/{subscriptionUuid}/payment-method:
+    get:
+      summary: Get payment method
+      description: Retrieves the payment method used to pay for a subscription.
+      operationId: getSubscriptionPaymentMethod
+      tags:
+        - Subscriptions
+      security:
+        - apiKey: [ "billing:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/SubscriptionUuidPathParam'
+      responses:
+        '200':
+          description: Retrieves the payment method successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StripePaymentMethod'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /subscriptions/{subscriptionUuid}/reactivate:
+    put:
+      summary: Reactivate a Subscription
+      description: Reactivate a Subscription's scheduled cancellation before the billing period has passed. If the billing period has passed and the Subscription has already been canceled please create a new Subscription.
+      operationId: getSubscriptionReactivate
+      tags:
+        - Subscriptions
+      security:
+        - apiKey: [ "subscriptions:write" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/SubscriptionUuidPathParam'
+      responses:
+        '204':
+          description: Successfully reactivated the subscription.
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /subscriptions/{subscriptionUuid}/seats:
+    post:
+      summary: Increment quantity of seats on a subscription.
+      description: Incrementing will create unassigned licenses.
+      operationId: incrementSubscriptionSeats
+      tags:
+        - Subscriptions
+      security:
+        - apiKey: [ "licenses:write" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/SubscriptionUuidPathParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - increment
+              properties:
+                increment:
+                  type: integer
+                  description: The number of seats to increment.
+                proration:
+                  type: string
+                  default: create_prorations
+                  enum:
+                    - create_prorations
+                    - none
+                    - always_invoice
+                  description: |
+                    The proration behaviour when moving the Subscription to a different Plan
+                    - create_prorations: Will cause proration invoice items to be created when applicable.
+                    - none: Disable creating prorations in this request.
+                    - always_invoice: Always invoice immediately for prorations.
+      responses:
+        '202':
+          description: Request has been accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+    put:
+      summary: Decrement quantity of seats on a subscription.
+      description: Decrementing will only remove unassigned licenses.
+      operationId: decrementSubscriptionSeats
+      tags:
+        - Subscriptions
+      security:
+        - apiKey: [ "licenses:write" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/SubscriptionUuidPathParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - decrement
+              properties:
+                decrement:
+                  type: integer
+                  description: The number of seats to decrement.
+                proration:
+                  type: string
+                  default: create_prorations
+                  enum:
+                    - create_prorations
+                    - none
+                    - always_invoice
+                  description: |
+                    The proration behaviour when moving the Subscription to a different Plan
+                    - create_prorations: Will cause proration invoice items to be created when applicable.
+                    - none: Disable creating prorations in this request.
+                    - always_invoice: Always invoice immediately for prorations.
+      responses:
+        '202':
+          description: Request has been accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /usage:
+    get:
+      summary: Get all usage records for grantee
+      operationId: getLicenseUsage
+      description: Retrieves all usage records for grantee's metered licenses.
+      tags:
+        - Usage
+      security:
+        - apiKey: [ "usage:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/UsageGranteeIdRequiredQueryParam'
+        - $ref: '#/components/parameters/UsageTypeQueryParam'
+        - $ref: '#/components/parameters/UsageStatusQueryParam'
+        - $ref: '#/components/parameters/UsagePlanUuidQueryParam'
+        - $ref: '#/components/parameters/UsageSubscriptionUuidQueryParam'
+        - $ref: '#/components/parameters/UsageSortQueryParam'
+        - $ref: '#/components/parameters/CursorQueryParam'
+        - $ref: '#/components/parameters/CursorTakeQueryParam'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CursorPaginationLicensesUsageRecordsResponse'
+        "400":
+          description: Bad request
+    put:
+      summary: Updates a license's usage
+      operationId: updateLicenseUsage
+      description: Updates the usage on a license by incrementing its value.
+      tags:
+        - Usage
+      security:
+        - apiKey: [ "usage:write" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/UniqueKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - planUuid
+                - granteeId
+                - countOptions
+              properties:
+                planUuid:
+                  type: string
+                  description: The uuid of the plan the license belongs to.
+                granteeId:
+                  type: string
+                  description: The granteeId of the license.
+                countOptions:
+                  type: object
+                  required:
+                    - increment
+                  properties:
+                    increment:
+                      type: integer
+                      minimum: 1
+                      description: The value to increment the usage on the license.
+      responses:
+        '202':
+          description: Request accepted.
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /usage/current:
+    get:
+      summary: Get current usage record for grantee on plan
+      operationId: getCurrentLicenseUsage
+      description: Retrieves the current usage record for a metered license.
+      tags:
+        - Usage
+      security:
+        - apiKey: [ "usage:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/UsagePlanUuidRequiredQueryParam'
+        - $ref: '#/components/parameters/UsageGranteeIdRequiredQueryParam'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseCurrentUsage'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /sessions:
+    post:
+      summary: Create a new session
+      operationId: createSession
+      description: Creates a new session to use with the Salable web components
+      tags:
+        - Sessions
+      security:
+        - apiKey: [ "sessions:write" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/SessionCreateInvoiceRequest'
+                - $ref: '#/components/schemas/SessionCreatePricingTableRequest'
+                - $ref: '#/components/schemas/SessionCreateCheckoutRequest'
+
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                properties:
+                  sessionToken:
+                    type: string
+                    description: The session token to use with the requested web component
+        "400":
+          description: Bad request
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+
+  /events/{eventUuid}:
+    get:
+      summary: Get a event
+      operationId: getEventByUuid
+      description: |
+        Retrieves an event by its UUID. Events keep track of the progress of asynchronous tasks which rely on receiving webhooks or additional processing to complete.
+      tags:
+        - Events
+      security:
+        - apiKey: [ "events:read" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/EventUuidPathParam'
+      responses:
+        '200':
+          description: Returns the event information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        "404":
+          description: Not found
+
+  /pricing-tables/{pricingTableUuid}:
+    get:
+      summary: Get a pricing table
+      operationId: getPricingTableByUuid
+      description: Retrieves a pricing table by its UUID. This returns all necessary data on a Pricing Table to be able to display it.
+      tags:
+        - Pricing Tables
+      security:
+        - apiKey: [ "pricing-tables:read" ]
+        - sessionToken: [ "web-components:pricing-table" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+        - $ref: '#/components/parameters/PricingTableUuidPathParam'
+        - $ref: '#/components/parameters/GranteeIdPricingTableQueryParamRequired'
+        - $ref: '#/components/parameters/CurrencyQueryParam'
+      responses:
+        '200':
+          description: Successfully retrieved the specified pricing table
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PricingTable'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+
+  /checkout/create-subscription:
+    post:
+      summary: Create a Stripe subscription with a payment intent
+      operationId: checkoutCreateSubscription
+      description: |
+        Creates a Stripe subscription with an `incomplete` status and returns the `latest_invoice.payment_intent.client_secret` necessary for Stripe Elements and Salable Checkout component. 
+        This status changes to `active` once a payment method is successfully processed.
+      tags:
+        - Checkout
+      security:
+        - apiKey: [ "subscriptions:write" ]
+        - sessionToken: [ "web-components:checkout" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutCreateSubscriptionRequest'
+      responses:
+        '200':
+          description: Stripe subscription successfully created. Returns the client secret for use in the checkout component
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutCreateSubscriptionResponse'
+        "404":
+          description: Not found
+        "400":
+          description: Bad request
+
+  /checkout/create-intent:
+    post:
+      summary: Create a Stripe Setup Intent
+      operationId: checkoutCreateIntent
+      description: |
+        Creates a Stripe Setup Intent and returns the `clientSecret` required for use with Stripe Elements and the Salable Checkout component. 
+      tags:
+        - Checkout
+      security:
+        - sessionToken: [ "web-components:checkout" ]
+      parameters:
+        - $ref: '#/components/parameters/VersionHeader'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutCreateIntentRequest'
+      responses:
+        '201':
+          description: Stripe setup intent successfully created. Returns the client secret for use in the Salable Checkout component
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutCreateIntentResponse'
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not found
+

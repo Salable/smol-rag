@@ -1,0 +1,78 @@
+---
+sidebar_position: 4
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Get a subscription's seats
+
+Get the list of seats that are on the provided subscription. One common usage of
+this data is to show your users the list of people on their team.
+
+<Tabs>
+<TabItem value="node" label="Node.js">
+
+```js
+const params = {
+  subscriptionUuid: 'your-subscription-uuid',
+  status: 'active', // this can be any valid subscription status
+};
+
+const response = await fetch(
+  'https://api.salable.app/licenses?' + new URLSearchParams(params),
+  {
+    headers: {
+      version: '2',
+      'x-api-key': 'your-salable-api-key',
+    },
+  }
+);
+
+const subscriptionSeats = await response.json();
+```
+
+</TabItem>
+
+<TabItem value="curl" label="cURL">
+
+```bash
+curl
+  -XGET
+  -H 'x-api-key: your-salable-api-key'
+  -H 'version: v2'
+  'https://api.salable.app/licenses?subscriptionUuid=your-subscription-uuid&status=active'
+```
+
+</TabItem>
+</Tabs>
+
+### Get seat count
+
+Obtain the aggregate count of seats, as well as the amount that are assigned or
+unassigned. This data can be used in many ways, one common usage is to show your
+users how many of their remaining seats are available to be filled.
+
+<Tabs>
+<TabItem value="node" label="Node.js">
+
+```js
+import { Salable } from '@salable/node-sdk';
+
+const salable = new Salable('your-salable-api-key', 'v2');
+const licenseCount = await api.licenses.getCount('your-subscription-uuid');
+```
+
+</TabItem>
+<TabItem value="curl" label="cURL">
+
+```bash
+curl
+  -XGET
+  -H 'x-api-key: your-salable-api-key'
+  -H 'version: v2'
+  'https://api.salable.app/licenses/count?subscriptionUuid=:subscriptionUuid'
+```
+
+</TabItem>
+</Tabs>

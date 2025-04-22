@@ -627,44 +627,39 @@ class SmolRag:
 if __name__ == '__main__':
     async def main():
         # delete_all_files(DATA_DIR)
-        delete_all_files(LOG_DIR)
+        # delete_all_files(LOG_DIR)
 
         smol_rag = SmolRag()
-
         await smol_rag.import_documents()
 
-        print(await smol_rag.query("what is SmolRag?"))  # Should answer
-        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(await smol_rag.query("what do cats eat?"))  # Should reject
-        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(await smol_rag.query("What subjects we can discuss?"))  # Should answer
+        # print(await smol_rag.query("what is SmolRag?"))  # Should answer
+        # print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        # print(await smol_rag.query("what do cats eat?"))  # Should reject
+        # print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        # print(await smol_rag.query("What subjects we can discuss?"))  # Should answer
+        #
+        # print(await smol_rag.hybrid_kg_query("what is SmolRag?"))  # Should answer
+        # print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        # print(await smol_rag.hybrid_kg_query("what do cows eat?"))  # Should reject
+        # print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        # print(await smol_rag.hybrid_kg_query("What subjects we can discuss?"))
+        #
+        # print(await smol_rag.local_kg_query("what is SmolRag?"))  # Should answer
+        # print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        # print(await smol_rag.local_kg_query("what do ducks eat?"))  # Should reject
+        # print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        # print(await smol_rag.local_kg_query("What subjects we can discuss?"))
+        #
+        # print(await smol_rag.global_kg_query("what is SmolRag?"))  # Should answer
+        # print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        # print(await smol_rag.global_kg_query("what do frogs eat?"))  # Should reject
+        # print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
+        # print(await smol_rag.global_kg_query("What subjects we can discuss?"))
 
-        print(await smol_rag.hybrid_kg_query("what is SmolRag?"))  # Should answer
-        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(await smol_rag.hybrid_kg_query("what do cows eat?"))  # Should reject
-        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(await smol_rag.hybrid_kg_query("What subjects we can discuss?"))
-
-        print(await smol_rag.local_kg_query("what is SmolRag?"))  # Should answer
-        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(await smol_rag.local_kg_query("what do ducks eat?"))  # Should reject
-        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(await smol_rag.local_kg_query("What subjects we can discuss?"))
-
-        print(await smol_rag.global_kg_query("what is SmolRag?"))  # Should answer
-        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(await smol_rag.global_kg_query("what do frogs eat?"))  # Should reject
-        print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(await smol_rag.global_kg_query("What subjects we can discuss?"))
-
-        print(await smol_rag.mix_query("what is SmolRag?"))  # Should answer
+        print(await smol_rag.mix_query("what is Salable?"))  # Should answer
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
         print(await smol_rag.mix_query("what do jellyfish eat?"))  # Should reject
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
         print(await smol_rag.mix_query("What subjects we can discuss?"))
-
-        # await smol_rag.remove_document_by_id("doc_68ee570c562a4cdfb5c37cf96be2898d")
-
-
 
     asyncio.run(main())

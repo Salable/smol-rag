@@ -1,0 +1,104 @@
+---
+sidebar_position: 7
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Upgrade/downgrade subscription
+
+### Change the plan
+
+Useful if you need to update the plan your user is on. For example, if they have
+upgraded or downgraded you would want to update the subscription to reflect
+this.
+
+:::info
+
+If the new plan has a higher minimum seat number than the number of active seats
+on the current subscription, new seats are created when the subscription moves
+to the new plan. For example, if a subscription with ten active seats moves to a
+new plan with a minimum seat number of fifteen, five new seats are created.
+
+:::
+
+<Tabs>
+<TabItem value="node" label="Node.js">
+
+```js
+import { Salable } from '@salable/node-sdk';
+
+const salable = new Salable('your-salable-api-key', 'v2');
+const changeSubscriptionPlan = await salable.subscriptions.changePlan(
+  'your-subscription-uuid',
+  {
+    planUuid: 'your-new-plan-uuid',
+    proration: 'create_prorations', // optional. see table below for more options
+  }
+);
+```
+
+| Value             | Description                                                                                            |
+| ----------------- | ------------------------------------------------------------------------------------------------------ |
+| create_prorations | Keeps the subscription's billing cycle start/end date and refunds for unused time on the previous plan |
+| always_invoice    | Changes the billing cycle start date to the current date and immediately invoices                      |
+| none              | Disables proration behaviour                                                                           |
+
+</TabItem>
+
+<TabItem value="curl" label="cURL">
+
+```bash
+curl
+  -XPUT
+  -H 'x-api-key: your-salable-api-key'
+  -H 'version: v2'
+  -d '{ "planUuid": "the-new-plan-uuid" }'
+  'https://api.salable.app/subscriptions/{subscriptionUuid}/change-plan'
+```
+
+</TabItem>
+</Tabs>
+
+### Example scenarios
+
+An example scenario for upgrading a grantee's subscription could be as follows:
+
+:::note Upgrade Example
+
+A customer has an annual subscription that began on March 4th and costs $180 per
+year. On September 15th, they decide to upgrade their subscription to a more
+expensive plan, which costs $240 per year. Their subscription is prorated as
+follows:
+
+- Seven months (March 4th - October 3rd) on $180 plan: $15 \* 7 = $105.
+- Five months (October 4th - March 3rd) on $240 plan: $20 \* 5 = $100.
+- Total cost for annual subscription: $105 + $100 = $205.
+- The extra cost is the total cost minus the payment already made: $205 - $180 =
+  $25.
+- The customer is charged $25 to upgrade to the new plan for the remainder of
+  their subscription. This payment is taken at the start of their next billing
+  period, which is March 4th.
+
+:::
+
+An example scenario for the downgrading of a grantee's subscription could look
+like:
+
+:::note Downgrade Example
+
+A customer has an annual subscription that began on March 4th and costs $240 per
+year. On September 15th, they decide to downgrade their subscription to a less
+expensive plan that costs $180 per year. Their subscription is prorated as
+follows:
+
+- Seven months (March 4th - October 3rd) on $240 plan: $20 \* 7 = $140.
+- Five months (October 4th - March 3rd) on $180 plan: $15 \* 5 = $75.
+- Total cost for annual subscription: $140 + $75 = $215.
+- Amount paid on March 4th minus the prorated total cost for the year: $240 -
+  $215 = $25.
+- The customer is refunded $25 to downgrade to the new plan for the remainder of
+  their subscription. This refund is processed at the start of their next
+  billing period, which is March 4th.
+
+:::

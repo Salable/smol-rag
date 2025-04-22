@@ -1,0 +1,49 @@
+---
+sidebar_position: 2
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Create an ad hoc license
+
+Ad hoc licenses are used for free plans or if you want to grant a specific
+customer free access to a paid plan. In this case, you can create an ad hoc
+license to bypass payment/subscription.
+
+<Tabs>
+<TabItem value="node" label="Node.js">
+
+```js
+import { Salable } from '@salable/node-sdk';
+const salable = new Salable('your-salable-api-key', 'v2');
+
+const license = await salable.licenses.create([
+  {
+    planUuid: 'your-plan-uuid',
+    member: 'orgId_1234',
+    granteeId: 'userId-1',
+  },
+  {
+    planUuid: 'your-plan-uuid',
+    member: 'orgId_1234',
+    granteeId: 'userId-2',
+  },
+]);
+```
+
+</TabItem>
+<TabItem value="curl" label="cURL">
+
+```bash
+curl
+  -XPOST
+  -H 'x-api-key: your-salable-api-key'
+  -H 'version: v2'
+  -d '[{ "planUuid": "a-plan-uuid", "granteeId": "a-user-id", "member": "a-user-id" }, { "planUuid": "a-plan-uuid", "granteeId": "a-user-id", "member: "a-user-id"}]'
+  'https://api.salable.app/licenses'
+
+```
+
+</TabItem>
+</Tabs>

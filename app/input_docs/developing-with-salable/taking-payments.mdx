@@ -1,0 +1,94 @@
+---
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Taking payments
+
+Checkout links offer the quickest and simplest way to accept payments from your
+users.
+
+<Tabs>
+<TabItem value="js" label="JavaScript">
+
+```js
+import { getCheckoutLink } from '@salable/js'
+
+const { checkoutUrl } = await getCheckoutLink({
+  apiKey: 'your-salable-api-key',
+  planUuid: 'your-salable-plans-uuid',
+  successUrl: 'https://your.app/payment-success'
+  cancelUrl: 'https://your.app/payment-cancelled',
+  granteeId: 'your-grantees-id',
+  member: 'your-purchasers-id',
+  // 👇 optional, the shortname of the currency to be used - defaults to
+  // product-wide default currency.
+  currency: 'EUR',
+  // 👇 optional, if you're using per-seat billing - this will be the number of
+  // seats purchased. Defaults to plans minimum seat count.
+  quantity: 10,
+})
+
+// Now you are free to present this `checkoutLink` to your user however you see
+// fit.
+```
+
+</TabItem>
+<TabItem value="node" label="Node.js">
+
+```js
+// Don't forget to: npm install @salable/node-sdk
+import { Salable } from '@salable/node-sdk';
+
+const salable = new Salable('your-salable-api-key', 'v2');
+
+const { checkoutUrl } = await salable.plans.getCheckoutLink('your-plan-uuid', {
+  successUrl: 'https://example.com/success',
+  cancelUrl: 'https://your.app/cancel',
+  granteeId: 'your-grantees-id',
+  member: 'your-purchasers-id',
+  // 👇 optional, the shortname of the currency to be used - defaults to
+  // product-wide default currency.
+  currency: 'EUR',
+  // 👇 optional, if you're using per-seat billing - this will be the number of
+  // seats purchased. Defaults to plans minimum seat count.
+  quantity: 10,
+});
+```
+
+</TabItem>
+
+<TabItem value="curl" label="cURL">
+
+:::info Optional parameters
+
+`currency` is the shortname of the currency you want to use at checkout, this
+defaults to the currency set on the product.
+
+`quantity` is the number of seats you want to sell if you're using a per-seat
+billing model, it will default to the minimum seat count set on the plan.
+
+:::
+
+```bash
+curl
+  -XGET
+  -H 'x-api-key: YOUR_SALABLE_API_KEY'
+  -H 'version: v2'
+  'https://api.salable.app/plans/your-plan-uuid/checkoutLink?successUrl=https%3A%2F%2Fyour.app%2Fsuccess&cancelUrl=https%3A%2F%2Fyour.app%2Fcancel&granteeId=your-grantees-id&member=your-purchasers-id'
+```
+
+</TabItem>
+</Tabs>
+
+:::tip For per-seat plans
+
+On successful payment, the first seat will be assigned to the `granteeId`
+provided - the rest will be unassigned.
+
+To assign the rest of the seats, you can
+[update the licenses.](./update-a-license.mdx)
+
+:::

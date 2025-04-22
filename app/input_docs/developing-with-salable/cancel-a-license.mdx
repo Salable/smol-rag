@@ -1,0 +1,43 @@
+---
+sidebar_position: 10
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Cancel a license
+
+Licenses can be cancelled with their UUIDs.
+
+<Tabs>
+<TabItem value="node" label="Node.js">
+
+```js
+import { Salable } from '@salable/node-sdk';
+
+const salable = new Salable('your-salable-api-key', 'v2');
+
+// cancel a single license
+await salable.licenses.cancel('your-license-uuid');
+
+// cancel many licenses at once
+await salable.licenses.cancelMany({uuids: [
+  'your-license-uuid-1',
+  'your-license-uuid-2',
+]});
+```
+
+</TabItem>
+<TabItem value="curl" label="cURL">
+
+```bash
+curl
+  -XPOST
+  -H 'x-api-key: your-salable-api-key'
+  -H 'version: v2'
+  -d '{ "uuids": ["your-license-uuid-1", "your-license-uuid-2"] }'
+  'https://api.salable.app/licenses/cancel'
+```
+
+</TabItem>
+</Tabs>

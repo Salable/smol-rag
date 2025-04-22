@@ -1,0 +1,79 @@
+---
+sidebar_position: 2
+---
+
+# The Salable Way
+
+To get the most out of Salable, we have some recommendations around how to best set-up your plans, features, and capabilities on the platform.
+
+## The Basics
+
+The most common way to restrict access to a feature in an application is to assert whether the current user’s plan ID matches their plan ID from a payment provider service like Stripe.
+
+For example, if “Export CSV” is a “Pro” plan feature, then you’d write some code to check whether the current user is subscribed to the Pro plan. If they are, allow access to the feature; if they aren’t, hide it.
+
+This is a *fine* way to authorise your users, and you can work this way with Salable, but it isn’t what we would recommend.
+
+## Embracing Granularity
+
+When working with Salable we would recommend taking a more granular approach to authorisation. What this means is, rather than checking what **plan** a user is on, check whether they have access to a **feature**.
+
+This approach provides multiple benefits:
+
+1. If multiple plans give the user access to the same feature, your conditional code is simpler—you can check against the feature name rather than having to compare against a list of plans.
+2. You can easily change what features belong to which plans right from the Salable dashboard, no code required. This means your pricing model can easily be managed by non-developers and your application will automatically adapt to the changes.
+3. It enables the creation of bespoke plans which you can use to give the customer a custom combination of feature values and capabilities.
+
+## Features & Capabilities
+
+These are the two main methods of “authorising” whether a grantee can or cannot perform an action in Salable.
+
+A feature can provide a list of numeric options, text options or be a simple true/false boolean field. Any feature that is created in Salable must have an associated value on *every* plan.
+
+So for that “Export CSV” example we referenced earlier, that might be false for the Basic Plan; but true for the Pro Plan and the Premium Plan.
+
+Features also have the ability to appear on generated pricing tables.
+
+A capability on the other hand is a simple, bespoke string that can be attached to any plan. It can’t contain any values or options, it either exists or it doesn’t. You can think of it as almost like a true/false feature but with one key difference: it doesn’t have to have a value for each plan.
+
+## Proprietary vs Bespoke plans
+
+When setting up plans, it’s helpful to think if they’re going to be proprietary plans or bespoke.
+
+Proprietary plans are your typical Basic, Pro, Premium, etc plans that customers can sign up for and contain pre-defined sets of features.
+
+Bespoke plans are created for specific customers and contain custom feature sets and capabilities.
+
+## Should I use features or capabilities?
+
+When working with Salable, we’d recommend defaulting to using features unless you’re sure you need a capability. Features typically offer you additional flexibility later down the road.
+
+For example, that “Data Analytics” functionality you’ve just added might only be available on the Pro plan for now, but you never know how your business model will change or adapt in the future. If you make it a feature, you can easily toggle it on or off at any time, on any of your current or future plans.
+
+Capabilities really shine when you’re offering bespoke or “one-off” functionality to your customers. For example, you may offer white-labelling to select customers—having this be a feature wouldn’t make sense as you’d have to set a value for every plan. Whereas making it a capability allows you to simply add it just on the bespoke plan that you have set up for that specific customer.
+
+## When should I lock functionality behind the plan?
+
+As mentioned at the start of this guide, we wouldn’t recommend using the plan to authorise actions in your application. However, we do still return the plan name as part of the license check.
+
+We do this to enable you to check against this value in specific cases where it can be helpful—such as when the functionality is inextricably tied to one specific plan.
+
+## Summary
+
+So now you know the Salable way. As mentioned at the start of this guide, you can set things up however you see fit—but we believe the recommendations put forward in this guide will set you up for success and give you the best experience with the platform.
+
+And for reference, here are some of the main points re-iterated:
+
+1. Features have a value on every plan, capabilities do not.
+2. When setting up plans, think about whether they’re going to be proprietary or bespoke.
+3. We’d recommend features almost always unless you’re offering bespoke functionality.
+4. Check against the plan name only when that “thing” is inextricably linked to said plan.
+
+Now go and build something great.
+
+*The Salable Team*	
+
+
+
+
+

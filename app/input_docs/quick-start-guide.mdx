@@ -1,0 +1,163 @@
+---
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Quick Start Guide
+
+The simplest and easiest way to get up-and-running with Salable. Monetise your
+application in record time.
+
+### Create an account
+
+The first step of the journey is to
+[create a Salable account](https://salable.app/signup), if you haven't already!
+
+Once you are in the dashboard, you will have a pre-configured API Key and
+["Payment Integration"](./using-the-dashboard/payment-integration/add-salable-payments.md)
+ready for use. The payment intgration will need fully connecting before
+production use but is suitable for "Test Mode" development immediately.
+
+### Configure your product
+
+You can now create your product in the Salable dashboard. Configure the plans
+and features to best suit your intended business model. We support everything
+from monthly recurring payments, ad hoc licensing, usage-based billing.
+
+Creating your product in Salable is best done with a "bottom-up" approach.
+Start by defining each of your individual features and capabilities, and
+then create plans for them to sit within.
+
+### Taking payments
+
+Now you have your product configured, you will need to prompt the user to pay
+for your application. We will do this through a simple payment link.
+
+<Tabs>
+<TabItem value="js" label="JavaScript">
+
+```js
+// Don't forget to: npm install @salable/js
+import { getCheckoutLink } from '@salable/js'
+
+const checkoutLink = await getCheckoutLink({
+  apiKey: 'your-salable-api-key',
+  planUuid: 'your-salable-plans-uuid',
+  successUrl: 'https://your.app/payment-success',
+  cancelUrl: 'https://your.app/payment-cancelled',
+  granteeId: 'your-users-id',
+  member: 'your-users-id',
+})
+
+// Now you are free to present this `checkoutLink` to your user however you see
+// fit.
+```
+
+</TabItem>
+<TabItem value="node" label="Node.js">
+
+```js
+// Don't forget to: npm install @salable/node-sdk
+import { Salable } from '@salable/node-sdk';
+
+const salable = new Salable('your-salable-api-key', 'v2');
+
+const checkoutLink = await salable.plans.getCheckoutLink('your-plan-uuid', {
+  successUrl: 'https://example.com/success',
+  cancelUrl: 'https://your.app/cancel',
+  granteeId: 'your-users-id',
+  member: 'your-users-id',
+});
+```
+
+</TabItem>
+
+<TabItem value="curl" label="cURL">
+
+```bash
+curl
+  -XGET
+  -H 'x-api-key: YOUR_SALABLE_API_KEY'
+  -H 'version: v2'
+  'https://api.salable.app/plans/your-plan-uuid/checkoutLink?successUrl=https%3A%2F%2Fyour.app%2Fsuccess&cancelUrl=https%3A%2F%2Fyour.app%2Fcancel&granteeId=your-users-id&member=your-users-id'
+```
+
+</TabItem>
+</Tabs>
+
+The payment link is only for an individual plan. If you'd rather showcase
+multiple options to the user, consider using a Pricing Table.
+
+### License check
+
+Now users can buy licenses, you can lock certain features/functionalities of
+your application depending on whether they've paid or not.
+
+<Tabs>
+<TabItem value="js" label="JavaScript">
+
+```js
+// Don't forget to: npm install @salable/js
+import { getGrantee } from '@salable/js';
+
+const { hasCapability } = await getGrantee({
+  apiKey: 'your-salable-api-key',
+  productUuid: 'your-products-uuid',
+  granteeId: 'your-users-id',
+});
+
+const isUserLicensedToPerformAction = hasCapability('your-capability-name');
+```
+
+</TabItem>
+
+<TabItem value="node" label="Node.js">
+
+```js
+import { Salable } from '@salable/node-sdk';
+
+const salable = new Salable('your-salable-api-key', 'v2');
+
+const { capabilities } = await salable.licenses.check({
+  productUuid: 'your-product-uuid'
+  granteeIds: ['your-users-id']
+  });
+const isUserLicensedToPerformAction = capabilities.includes(
+  'your-capability-name'
+);
+```
+
+</TabItem>
+
+<TabItem value="curl" label="cURL">
+
+```bash
+curl
+  -XGET
+  -H 'x-api-key: YOUR_SALABLE_API_KEY'
+  -H 'version: v2'
+  'https://api.salable.app/licenses/check?productUuid=YOUR_PRODUCT_UUID&granteeIds=your-users-id'
+```
+
+</TabItem>
+</Tabs>
+
+### Learning more
+
+In just a few steps, you have now: configured your product on Salable, allowed
+users to buy licenses, and restricted what a user can do based on the license(s)
+they hold.
+
+You can now make money with your project!
+
+But this is just the beginning, Salable can offer a lot more when it comes to
+managing seats, usage-based consumption and subscription flexibility.
+
+To see how Salable can be implemented check out our demo repos -
+- [Flat rate billing in Next.js](https://github.com/Salable/salable-flat-rate-demo)
+- [Usage-based billing in Next.js](https://github.com/Salable/salable-usage-demo)
+- [Per-seat billing in Next.js](https://github.com/Salable/salable-per-seat-demo)
+- [Flat rate billing in Miro](https://github.com/Salable/miro-salable-flat-rate)
+- [Usage-based billing in Miro](https://github.com/Salable/miro-salable-usage)

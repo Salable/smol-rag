@@ -1,0 +1,133 @@
+---
+sidebar_position: 5
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Manage seats
+
+Add or remove seats from free plans or paid subscriptions.
+
+## Add seats
+
+The process to add seats varies depending on whether it is a paid subscription
+or a free plan.
+
+### Free plan
+
+Adding seats to a free plan is done by
+[creating ad hoc licenses](create-an-adhoc-license) associated with the plan.
+
+### Paid subscription
+
+All seats created are unassigned by default. If you want to assign them, you
+will need to [update the licenses](./update-a-license.mdx).
+
+<Tabs>
+<TabItem value="node" label="Node.js">
+
+```js
+import { Salable } from '@salable/node-sdk';
+const salable = new Salable('your-salable-api-key', 'v2');
+await salable.subscriptions.addSeats('your-subscription-uuid', {
+  increment: 2,
+});
+```
+
+</TabItem>
+
+<TabItem value="curl" label="cURL">
+
+```bash
+curl
+  -XPOST
+  -H 'x-api-key: your-salable-api-key'
+  -H 'version: v2'
+  -d '{ "increment": 2 }'
+  'https://api.salable.app/subscriptions/your-subscription-uuid/seats'
+```
+
+</TabItem>
+</Tabs>
+
+## Remove seats
+
+The process to remove seats varies depending on whether it is a paid
+subscription or a free license.
+
+:::info
+
+Only [unassigned seats](update-a-license) can be removed.
+
+:::
+
+### Free plan
+
+<Tabs>
+<TabItem value="node" label="Node.js">
+
+```js
+import { Salable } from '@salable/node-sdk';
+
+const salable = new Salable('your-salable-api-key', 'v2');
+await salable.licenses.cancelMany({uuids: ['a-license-uuid', 'a-license-uuid']});
+```
+
+</TabItem>
+
+<TabItem value="curl" label="cURL">
+
+```bash
+curl
+  -XDELETE
+  -H 'x-api-key: your-salable-api-key'
+  -H 'version: v2'
+  'https://api.salable.app/licenses/your-license-uuid'
+```
+
+</TabItem>
+</Tabs>
+
+### Paid subscription
+
+:::danger
+
+Do not modify subscriptions directly through Stripe, always manage them through
+the Salable API/SDKs to avoid issues.
+
+:::
+
+<Tabs>
+<TabItem value="node" label="Node.js">
+
+```js
+import { Salable } from '@salable/node-sdk';
+
+const salable = new Salable('your-salable-api-key', 'v2');
+await salable.subscriptions.removeSeats('your-subscription-uuid', {
+  decrement: 2,
+});
+```
+
+</TabItem>
+<TabItem value="curl" label="cURL">
+
+```bash
+curl
+  -XPUT
+  -H 'x-api-key: your-salable-api-key'
+  -H 'version: v2'
+  -d '{ "decrement": 2 }'
+  'https://api.salable.app/subscriptions/:subscriptionUuid/seats'
+```
+
+</TabItem>
+</Tabs>
+
+:::caution
+
+Ensure that the number of seats being removed doesn't take the number of active
+seats below the minimum set on the plan.
+
+:::

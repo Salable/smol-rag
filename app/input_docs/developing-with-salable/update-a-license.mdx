@@ -1,0 +1,45 @@
+---
+sidebar_position: 6
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Update a license grantee
+
+Update the `granteeId` of the license to assign it to a new grantee.
+
+:::info
+
+If you want to unassign the license, you can set the `granteeId` to `null`.
+
+:::
+
+<Tabs>
+<TabItem value="node" label="Node.js">
+
+```js
+import { Salable } from '@salable/node-sdk';
+
+const salable = new Salable('your-salable-api-key', 'v2');
+
+const updatedLicenses = await salable.licenses.updateMany([
+  { granteeId: 'new_userId_1', uuid: 'your-license-uuid' },
+  { granteeId: null, uuid: 'your-license-uuid' }, // this license will be unassigned
+]);
+```
+
+</TabItem>
+<TabItem value="curl" label="cURL">
+
+```bash
+curl
+  -XPUT
+  -H 'x-api-key: your-salable-api-key'
+  -H 'version: v2'
+  -d '[{ "licenseUuid": "your-license-uuid", "granteeId": "new-user-id" }, { "licenseUuid": "your-license-uuid", "granteeId": null }]'
+  'https://api.salable.app/licenses'
+```
+
+</TabItem>
+</Tabs>

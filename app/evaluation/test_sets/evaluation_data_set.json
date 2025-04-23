@@ -1,332 +1,269 @@
 [
     {
-        "pull_quote": "The generated token for this session from the Salable API.",
-        "query": "What is the purpose of the generated token mentioned in the pull quote?",
-        "response": "The generated token is used for establishing the session with the Salable API during the checkout process.",
-        "bleu": 0.09950615774798435,
-        "meteor": 0.5882663290070698
+        "pull_quote": "You can create a session token for this web component by using the request template below with the Salable API.",
+        "query": "How can I create a session token for the checkout web component?",
+        "response": "You can create a session token by using the request template provided with the Salable API.",
+        "bleu": 0.5615731785165538,
+        "meteor": 0.7741391080097088
     },
     {
-        "pull_quote": "The URL the user is sent to if they successfully completed a payment.",
-        "query": "What does the successUrl property in the Salable Checkout component do?",
-        "response": "It specifies the URL where users are redirected after successfully completing a payment.",
-        "bleu": 0.09303723531853667,
-        "meteor": 0.5357142857142857
+        "pull_quote": "The URL the user is sent to if they successfully completed a payment should be specified in the 'success-url' property.",
+        "query": "What should you specify in the 'success-url' property when using the Salable Checkout web component?",
+        "response": "You should specify the URL to which the user is sent if they successfully completed a payment.",
+        "bleu": 0.36698067963882147,
+        "meteor": 0.6748227719907407
     },
     {
-        "pull_quote": "When working with Salable, we\u2019d recommend defaulting to using features unless you\u2019re sure you need a capability.",
-        "query": "Why is it recommended to default to using features when working with Salable?",
-        "response": "Defaulting to features provides additional flexibility and easier management of your pricing model in the future.",
-        "bleu": 0.02032532706454901,
-        "meteor": 0.14090401785714285
+        "pull_quote": "When working with Salable we would recommend taking a more granular approach to authorisation.",
+        "query": "What is the recommended approach to authorisation when using Salable?",
+        "response": "We would recommend taking a more granular approach to authorisation.",
+        "bleu": 0.6951439283988788,
+        "meteor": 0.7531416279859616
     },
     {
-        "pull_quote": "Features have a value on every plan, capabilities do not.",
-        "query": "What is the key difference between features and capabilities in Salable?",
-        "response": "Features have a value on every plan, whereas capabilities do not.",
-        "bleu": 0.7611606003349892,
-        "meteor": 0.9894398530762167
+        "pull_quote": "Features typically offer you additional flexibility later down the road.",
+        "query": "How do features provide additional flexibility when using the Salable platform?",
+        "response": "Features allow for easy adjustments and toggling on or off across different plans, adapting as business models evolve.",
+        "bleu": 0.011451997463067555,
+        "meteor": 0.08403361344537816
     },
     {
         "pull_quote": "Instead of having to go to many places to get the flexibility you need, you can do it all through Salable.",
-        "query": "How does using Salable streamline the process of managing payment integrations?",
-        "response": "By allowing you to handle everything in one place instead of going to multiple sources for flexibility.",
-        "bleu": 0.023667587253397376,
-        "meteor": 0.2595336076817559
+        "query": "How does Salable simplify the process of managing payment integrations for businesses?",
+        "response": "Salable allows businesses to handle all their payment flexibility in one place, eliminating the need to visit multiple platforms.",
+        "bleu": 0.014384023999987157,
+        "meteor": 0.2192982456140351
     },
     {
-        "pull_quote": "If you'd like to use test mode, make sure to use an API key generated in test mode (prefixed with `test_`).",
-        "query": "What should you ensure when using test mode with Salable?",
-        "response": "You should ensure to use an API key generated in test mode, which is prefixed with 'test_'.",
-        "bleu": 0.32866107371428355,
-        "meteor": 0.502982442977191
+        "pull_quote": "To facilitate access to functionality in your product, you create and assign licenses that describe what features can be accessed.",
+        "query": "How can licenses enhance functionality access in a product?",
+        "response": "Licenses describe specific features that can be accessed, thus facilitating product functionality.",
+        "bleu": 0.0552428486172776,
+        "meteor": 0.4022536687631027
     },
     {
-        "pull_quote": "To facilitate access to functionality in your product, you create and assign licenses.",
-        "query": "How do licenses facilitate access to functionality in a product?",
-        "response": "Licenses allow you to define and control what features and capabilities users can access within your product.",
-        "bleu": 0.03230645681297444,
-        "meteor": 0.34773284313725494
+        "pull_quote": "This \u201cGrantee\u201d is no more complicated than a string, just a sequence of characters that describes the license holder.",
+        "query": "What is a Grantee in the context of the licensing system?",
+        "response": "A Grantee is simply a string, a sequence of characters that describes the license holder.",
+        "bleu": 0.45891121194983525,
+        "meteor": 0.6632936507936508
     },
     {
-        "pull_quote": "In Salable we call this _thing_ that the license belongs to the **Grantee**.",
-        "query": "What do we refer to as the entity that a license belongs to in Salable?",
-        "response": "We refer to this entity as the **Grantee**.",
-        "bleu": 0.3500496529700815,
-        "meteor": 0.553142857142857
+        "pull_quote": "The possibilities that this system offers are virtually limitless in what you assign your licenses to, depending on your business model.",
+        "query": "How does the flexibility of the Grantee system influence a company's business model?",
+        "response": "The limitless options for assigning licenses allow companies to tailor their offerings based on specific monetization strategies and user needs.",
+        "bleu": 0.01299743290636049,
+        "meteor": 0.17543859649122803
     },
     {
-        "pull_quote": "Salable API versions are now supported and `Version` is now a required argument upon `Salable` instantiation.",
-        "query": "How has the Salable API changed in terms of versioning with the latest update?",
-        "response": "The latest update requires a `Version` argument during `Salable` instantiation, indicating that multiple API versions are now supported.",
-        "bleu": 0.3124325727595954,
-        "meteor": 0.6843273180751175
+        "pull_quote": "You can create a session token for this web component by using the request template below with the Salable API.",
+        "query": "What is the method to create a session token for the cancellation button web component?",
+        "response": "You can create a session token by using the request template provided with the Salable API.",
+        "bleu": 0.5615731785165538,
+        "meteor": 0.7741391080097088
     },
     {
         "pull_quote": "`getAll` now supports cursor based pagination, licenses can also be filtered by `status`, `subscriptionUuid`, `planUuid`, `productUuid`, and `granteeId`.",
-        "query": "What new features does the `getAll` method now include according to the changelog?",
-        "response": "The `getAll` method now supports cursor-based pagination and allows licenses to be filtered by `status`, `subscriptionUuid`, `planUuid`, `productUuid`, and `granteeId`.",
-        "bleu": 0.7039758268589662,
-        "meteor": 0.8569241988810132
+        "query": "How does the `getAll` method enhance its functionality in the latest update?",
+        "response": "The `getAll` method now supports cursor-based pagination and allows filtering by multiple parameters such as status, subscriptionUuid, planUuid, productUuid, and granteeId.",
+        "bleu": 0.04649328134761858,
+        "meteor": 0.37860425585494834
     },
     {
         "pull_quote": "`getOne` now offers an `expand` option to expand certain properties (e.g. `plan` etc).",
-        "query": "What new feature does the `getOne` method now offer?",
-        "response": "The `getOne` method now offers an `expand` option to expand certain properties (e.g. `plan` etc).",
-        "bleu": 0.8466657105524215,
-        "meteor": 0.9910533863503032
+        "query": "How has the `getOne` method been updated in the latest version?",
+        "response": "The `getOne` method now offers an `expand` option to expand certain properties, such as `plan`.",
+        "bleu": 0.5683565265173782,
+        "meteor": 0.7783145464304885
     },
     {
         "pull_quote": "Salable is a comprehensive solution tailored for SaaS businesses, streamlining the design and management of pricing models, subscriptions, and licensing.",
-        "query": "What advantages does Salable offer for SaaS businesses looking to manage their pricing models, subscriptions, and licensing?",
-        "response": "Salable provides a comprehensive solution that streamlines the design and management of pricing models, subscriptions, and licensing, making it easier for SaaS businesses to operate efficiently.",
-        "bleu": 0.4768955997633769,
-        "meteor": 0.8523147214943224
+        "query": "What is the primary purpose of the Salable API?",
+        "response": "The primary purpose of the Salable API is to streamline the design and management of pricing models, subscriptions, and licensing for SaaS businesses.",
+        "bleu": 0.5040802179792181,
+        "meteor": 0.7779698266981067
     },
     {
-        "pull_quote": "Secure your requests by sending your api key on the `x-api-key` request header for authentication.",
-        "query": "What is the method for authenticating requests when using the Salable API?",
-        "response": "You need to send your API key in the `x-api-key` request header to secure your requests.",
-        "bleu": 0.3878964805488567,
-        "meteor": 0.7013192017138347
+        "pull_quote": "Secure your requests by sending your api key on the x-api-key request header for authentication.",
+        "query": "What is the method to ensure security when making requests to the Salable API?",
+        "response": "You need to send your API key on the x-api-key request header for authentication.",
+        "bleu": 0.6559826556429192,
+        "meteor": 0.7544986023759609
     },
     {
-        "pull_quote": "The request was successful and the action has been completed.",
-        "query": "What does a 200 HTTP status code indicate according to the Salable API documentation?",
-        "response": "It indicates that the request was successful and the action has been completed.",
-        "bleu": 0.7577395672414201,
-        "meteor": 0.9730856432384992
+        "pull_quote": "The entity that a License is assigned to could be an individual user, a team, an organisation, a Trello board, a Slack channel, or anything else that is uniquely identifiable.",
+        "query": "What are some examples of entities that a License can be assigned to?",
+        "response": "Examples of entities include an individual user, a team, an organisation, a Trello board, or a Slack channel.",
+        "bleu": 0.38214806012141594,
+        "meteor": 0.528422190201729
     },
     {
-        "pull_quote": "The entity that a License is assigned to.",
-        "query": "What is a Grantee in the context of a License?",
-        "response": "A Grantee is the entity that a License is assigned to, which may include an individual user, a team, an organisation, or any uniquely identifiable item.",
-        "bleu": 0.22366895391935884,
-        "meteor": 0.7682980599647268
+        "pull_quote": "The number of rows to display per page is configurable with a limit property.",
+        "query": "What is the purpose of the limit property in the invoices web component?",
+        "response": "The limit property allows you to configure the number of rows to display per page in the invoices web component.",
+        "bleu": 0.3681985997871233,
+        "meteor": 0.7414084757834758
     },
     {
-        "pull_quote": "Grouping of Features and Capabilities that a Grantee can be given a license for.",
-        "query": "What does the pull quote describe in relation to grantees?",
-        "response": "It describes how plans serve as a grouping of features and capabilities that can be assigned to a grantee through a license.",
-        "bleu": 0.2768239711787787,
-        "meteor": 0.7993783237210697
+        "pull_quote": "Now you have your product configured, you will need to prompt the user to pay for your application.",
+        "query": "What is the next step after configuring your product in Salable?",
+        "response": "You will need to prompt the user to pay for your application.",
+        "bleu": 0.583645478143574,
+        "meteor": 0.6734218352392924
     },
     {
-        "pull_quote": "You can create a session token for this web component by using the request template below with the Salable API.",
-        "query": "How can I create a session token for the invoices web component?",
-        "response": "You can create a session token by using the request template provided with the Salable API.",
-        "bleu": 0.5615731785165538,
-        "meteor": 0.7741391080097088
+        "pull_quote": "In just a few steps, you have now: configured your product on Salable, allowed users to buy licenses, and restricted what a user can do based on the license(s) they hold.",
+        "query": "What can users accomplish after following the quick start guide in Salable?",
+        "response": "Users can configure their product, allow users to buy licenses, and restrict functionalities based on the licenses held.",
+        "bleu": 0.13249878646889837,
+        "meteor": 0.48361034164358263
     },
     {
-        "pull_quote": "The uuid of the subscription that you want to display invoices for is required and should be passed as the subscriptionUuid property.",
-        "query": "What is the purpose of the subscriptionUuid property in the invoices web component?",
-        "response": "The subscriptionUuid property is required to specify the uuid of the subscription for which you want to display invoices.",
-        "bleu": 0.3964874830876782,
-        "meteor": 0.672682651708001
+        "pull_quote": "The Salable Web Component Library is designed to streamline the development process for SaaS products.",
+        "query": "How does the Salable Web Component Library aid in the development of SaaS products?",
+        "response": "The Salable Web Component Library streamlines the development process by providing a collection of Web Components that facilitate easy integration with payment platforms and simplify flexible pricing models.",
+        "bleu": 0.16591958445638164,
+        "meteor": 0.541907514450867
     },
     {
-        "pull_quote": "Salable throws different kinds of errors.",
-        "query": "What types of errors does Salable throw?",
-        "response": "Salable throws different kinds of errors including SalableResponseError, SalableValidationError, and SalableUnknownError.",
-        "bleu": 0.363622704650007,
-        "meteor": 0.8984892658362046
+        "pull_quote": "Our components are seamlessly compatible with various web frameworks, making it easier for developers to integrate payment and licensing functionality.",
+        "query": "How do the Salable Web Components facilitate integration across different web frameworks?",
+        "response": "They are designed to be seamlessly compatible with various web frameworks, simplifying the process for developers to integrate payment and licensing functionality.",
+        "bleu": 0.5784879107039426,
+        "meteor": 0.7636615854608934
     },
     {
-        "pull_quote": "The Salable node SDK throws a SalableResponseError exception if the error is a known error.",
-        "query": "What type of exception does the Salable node SDK throw for known errors?",
-        "response": "The Salable node SDK throws a SalableResponseError exception for known errors.",
-        "bleu": 0.46460714700198136,
-        "meteor": 0.6720173765628311
-    },
-    {
-        "pull_quote": "The simplest and easiest way to get up-and-running with Salable. Monetise your application in record time.",
-        "query": "What is the main benefit of using Salable for application monetization?",
-        "response": "The main benefit of using Salable is that it provides the simplest and easiest way to get up-and-running with monetization, allowing you to monetize your application in record time.",
-        "bleu": 0.4063636831176549,
-        "meteor": 0.8163657707253885
-    },
-    {
-        "pull_quote": "But this is just the beginning, Salable can offer a lot more when it comes to managing seats, usage-based consumption and subscription flexibility.",
-        "query": "What additional features does Salable provide beyond initial product configuration?",
-        "response": "Salable offers advanced management options for seats, usage-based consumption, and subscription flexibility to enhance your application monetization strategy.",
-        "bleu": 0.14509374449468532,
-        "meteor": 0.3937811811114978
-    },
-    {
-        "pull_quote": "Session tokens grant access to sensitive information so it's vital you authenticate your users prior to creating a new session token.",
-        "query": "What is the importance of user authentication before creating a session token in the Salable Web Component Library?",
-        "response": "User authentication is crucial because session tokens grant access to sensitive information, and without proper authentication, unauthorized users could gain access to this data.",
-        "bleu": 0.2310325762059593,
-        "meteor": 0.3796708342162888
-    },
-    {
-        "pull_quote": "V2 of the Salable API is the result of an effort to consolidate and fortify the elements that make Salable what it is end-to-end.",
-        "query": "What is the purpose of V2 of the Salable API?",
-        "response": "V2 of the Salable API is designed to consolidate and strengthen its core elements for a more robust end-to-end performance.",
-        "bleu": 0.25295952012171596,
-        "meteor": 0.3683792755087314
-    },
-    {
-        "pull_quote": "In V1, this endpoint returned all licenses for an organisation in a single response. Starting from V2, this response will be paginated which alters the data shape returned by the endpoint.",
-        "query": "What is the main change regarding licenses from V1 to V2 of the API?",
-        "response": "The main change is that in V2, the response for licenses is now paginated, altering the data shape returned by the endpoint.",
-        "bleu": 0.22479651365601988,
-        "meteor": 0.48402323892519966
-    },
-    {
-        "pull_quote": "You can create a session token for this web component by using the request template below with the Salable API.",
-        "query": "How can I create a session token for the pricing table web component?",
-        "response": "You can create a session token by using the request template provided with the Salable API.",
-        "bleu": 0.5615731785165538,
-        "meteor": 0.7741391080097088
-    },
-    {
-        "pull_quote": "The generated token for this session from the Salable API.",
-        "query": "What is the purpose of the session token generated from the Salable API?",
-        "response": "The session token is used to authenticate and manage a specific session when interacting with the Salable pricing table web component.",
-        "bleu": 0.024178614976744797,
-        "meteor": 0.3523875114784205
-    },
-    {
-        "pull_quote": "The UUID of the pricing table that you want to display.",
-        "query": "What is the purpose of the UUID mentioned in the context of the pricing table?",
-        "response": "The UUID is used to identify and display the specific pricing table that you want to present in your application.",
-        "bleu": 0.27249745234058675,
-        "meteor": 0.81267217630854
+        "pull_quote": "This used to return all licenses for an organisation in one response.",
+        "query": "What significant change has been made regarding how licenses are returned in V2 compared to V1?",
+        "response": "In V2, licenses are now returned in a paginated format, instead of all at once as was done in V1.",
+        "bleu": 0.011712916466550741,
+        "meteor": 0.17857142857142858
     },
     {
         "pull_quote": "Salable offers multiple pricing models that you can use for your product.",
-        "query": "What pricing models does Salable offer for products?",
-        "response": "Salable provides multiple pricing models, including flat rate, usage-based, per-seat, freemium, and free trials.",
-        "bleu": 0.05415315253510895,
-        "meteor": 0.32554744525547447
+        "query": "What types of pricing models does Salable offer for products?",
+        "response": "Salable offers multiple pricing models including flat rate, usage-based, per-seat, freemium, and free trials.",
+        "bleu": 0.19835441454182887,
+        "meteor": 0.43300653594771243
     },
     {
         "pull_quote": "With the usage-based model, you charge your customers based on how much they use your product during the billing cycle.",
-        "query": "How does the usage-based pricing model work for customers?",
+        "query": "How does the usage-based pricing model determine what customers are charged?",
         "response": "Customers are charged based on how much they use the product during the billing cycle.",
         "bleu": 0.4304386197638752,
         "meteor": 0.6879543094496365
     },
     {
         "pull_quote": "With the per-seat model, your customer pays depending on how many licenses they use, and the amount they pay per license is fixed.",
-        "query": "What is the benefit of using the per-seat pricing model for customers?",
-        "response": "The per-seat model allows customers to easily understand their costs, as they only pay for the licenses they actively use, with fixed pricing per license.",
-        "bleu": 0.06352047085618948,
-        "meteor": 0.5037771731952773
+        "query": "How does the per-seat pricing model work for customers?",
+        "response": "Customers pay based on the number of licenses they use, with a fixed amount per license.",
+        "bleu": 0.12438138775566357,
+        "meteor": 0.3806284418529316
     },
     {
-        "pull_quote": "Each product can have an unlimited number of features.",
-        "query": "How can having an unlimited number of features benefit a product?",
-        "response": "Having an unlimited number of features allows for greater customization and flexibility, catering to diverse customer needs and enhancing product appeal.",
-        "bleu": 0.1676784955078518,
-        "meteor": 0.6892975663716814
+        "pull_quote": "To deprecate a capability from your product you can easily do that at any time.",
+        "query": "How can I deprecate a capability from my product?",
+        "response": "You can easily deprecate a capability at any time by following the instructions provided in the documentation.",
+        "bleu": 0.12512236921161915,
+        "meteor": 0.5975308641975308
     },
     {
-        "pull_quote": "If you change, add or remove features, remember to update your plans to keep up with any changes.",
-        "query": "What should you do if you change, add, or remove features from your product?",
-        "response": "You should remember to update your plans to keep up with any changes.",
-        "bleu": 0.5189028619179192,
-        "meteor": 0.6392281458594457
-    },
-    {
-        "pull_quote": "If you need to deprecate a capability from your product you can easily do that at any time.",
-        "query": "What are the steps to deprecate a capability from a product?",
-        "response": "You simply select the product, go to the Capabilities tab, and click the Trash Can Icon next to the capability you wish to remove.",
-        "bleu": 0.011354092273667685,
-        "meteor": 0.17676767676767674
-    },
-    {
-        "pull_quote": "Select the product you want to configure.",
-        "query": "What is the first step to deprecate a capability from a product?",
-        "response": "You need to select the product you want to configure.",
-        "bleu": 0.6786502681586727,
-        "meteor": 0.9629141566265061
+        "pull_quote": "Select the product you want to configure from the navigation menu.",
+        "query": "What is the first step to deprecate a capability within a product?",
+        "response": "You need to select the product you want to configure from the navigation menu.",
+        "bleu": 0.7760114635728617,
+        "meteor": 0.9753274616079494
     },
     {
         "pull_quote": "Select the Trash Can Icon next to the capability you want to deprecate.",
-        "query": "What is the first step to deprecate a capability in your product?",
-        "response": "You need to select the product you want to configure from the Products menu.",
-        "bleu": 0.0925159978069645,
-        "meteor": 0.49811613475177297
+        "query": "What is the first step to deprecate a capability from a product?",
+        "response": "You need to select **Products** from the navigation menu on the left-hand side.",
+        "bleu": 0.016906536464856264,
+        "meteor": 0.39753401360544216
     },
     {
-        "pull_quote": "A default pricing table is automatically created for each of your products. The default pricing table includes all plans with a _Plan Type_ of _Standard_ or _Coming Soon_.",
-        "query": "What types of plans are included in the default pricing table?",
+        "pull_quote": "A default pricing table is automatically created for each of your products that displays all plans with a Plan Type of Standard or Coming Soon.",
+        "query": "What types of plans are included in the automatically created default pricing table for products?",
         "response": "The default pricing table includes all plans with a Plan Type of Standard or Coming Soon.",
-        "bleu": 0.23992501806873787,
-        "meteor": 0.41037553232675184
+        "bleu": 0.44905526607638246,
+        "meteor": 0.5969012837538734
     },
     {
-        "pull_quote": "You should see a notification telling you that your pricing table has been created.",
-        "query": "What can a user expect after successfully creating a pricing table in Salable?",
-        "response": "The user should see a notification telling them that their pricing table has been created.",
-        "bleu": 0.5423782837718303,
-        "meteor": 0.7884933774834437
+        "pull_quote": "You can highlight a specific plan in your pricing table by selecting the Featured radio button for that plan.",
+        "query": "What is the purpose of the Featured radio button in the pricing table?",
+        "response": "The Featured radio button allows you to highlight a specific plan in your pricing table, making it stand out to customers with different styling.",
+        "bleu": 0.3699382260470039,
+        "meteor": 0.6528630869823657
     },
     {
-        "pull_quote": "You cannot edit the default pricing table, like reordering the plans. The only way of removing a plan from the default pricing table is if you create or edit a plan and choose **No** on the **Show in the default pricing table?** section.",
-        "query": "What options do I have for modifying the default pricing table in Salable?",
-        "response": "You cannot edit the default pricing table, like reordering the plans; to remove a plan, you must create or edit a plan and select **No** on the **Show in the default pricing table?** section.",
-        "bleu": 0.6413007951838712,
-        "meteor": 0.7724651397935429
+        "pull_quote": "Once you have created the pricing table, you are taken to the editor page for that pricing table to make changes to your pricing table.",
+        "query": "What happens after you create a pricing table?",
+        "response": "You are taken to the editor page for that pricing table to make changes to your pricing table.",
+        "bleu": 0.6563555554708402,
+        "meteor": 0.7251379755133113
     },
     {
-        "pull_quote": "Once your product is set up, you can add a currency or change the default currency for the product.",
-        "query": "What can you do after your product is set up in relation to currencies?",
+        "pull_quote": "You select the default currency when you create a product, and you can add a currency or change the default currency for the product.",
+        "query": "What can you do with the currency settings for a product after it has been created?",
         "response": "You can add a currency or change the default currency for the product.",
-        "bleu": 0.6065306597126334,
-        "meteor": 0.6895295063838343
+        "bleu": 0.42437284567694994,
+        "meteor": 0.5644132653061223
     },
     {
-        "pull_quote": "A product is an app or service that your customers are buying.",
-        "query": "What defines a product in the context of Salable?",
-        "response": "A product is defined as an app or service that your customers are buying.",
-        "bleu": 0.7241577342575828,
-        "meteor": 0.9830554061323292
+        "pull_quote": "To change the default currency, select the Set Default check mark button next to the currency you want to set as your default currency.",
+        "query": "What do I need to do to change the default currency for my product?",
+        "response": "You need to select the Set Default check mark button next to the currency you want to set as your default currency.",
+        "bleu": 0.7641463137255547,
+        "meteor": 0.8167676928099386
     },
     {
-        "pull_quote": "You can amend any of the details at any time.",
-        "query": "What does it mean when the instructions say \"You can amend any of the details at any time\"?",
-        "response": "It means that after creating a product, you have the flexibility to change any of its details whenever you need to.",
-        "bleu": 0.023050898626566643,
-        "meteor": 0.24590163934426226
+        "pull_quote": "Select Products from the navigation menu on the left-hand side to configure the product's currencies.",
+        "query": "How do you start configuring a product's currencies?",
+        "response": "You start by selecting Products from the navigation menu on the left-hand side.",
+        "bleu": 0.4935832193308872,
+        "meteor": 0.6052358093729896
     },
     {
-        "pull_quote": "Capabilities define functionalities that are available across all plans.",
-        "query": "What do capabilities represent in the context of product offerings?",
-        "response": "Capabilities represent functionalities that are available across all plans.",
-        "bleu": 0.7825422900366437,
-        "meteor": 0.8950617283950617
+        "pull_quote": "Paid products cannot be converted to free products once created.",
+        "query": "What should I keep in mind when creating a paid product in Salable?",
+        "response": "You should remember that paid products cannot be converted to free products once created.",
+        "bleu": 0.722160038719837,
+        "meteor": 0.9674619175627239
     },
     {
-        "pull_quote": "You can add new capabilities at any time, and you can also create **Capabilities** when creating [**Plans**](../plans/create-plan).",
-        "query": "How can new capabilities be implemented within the existing product framework?",
-        "response": "New capabilities can be added at any time, and they can also be created during the process of setting up new plans.",
-        "bleu": 0.13943289438721215,
-        "meteor": 0.3577946137255986
+        "pull_quote": "If the product is a Paid Product, select the account name of the Payment Integration you wish to use for this product.",
+        "query": "What must you do if you want to create a Paid Product in Salable?",
+        "response": "You must select the account name of the Payment Integration you wish to use for this product.",
+        "bleu": 0.6292491869557132,
+        "meteor": 0.6836772168803419
     },
     {
-        "pull_quote": "There is a limit of 191 characters.",
-        "query": "What is the character limit for naming a capability?",
-        "response": "The character limit for naming a capability is 191 characters.",
-        "bleu": 0.11094660471566163,
-        "meteor": 0.6157965194109771
+        "pull_quote": "There is a limit of 191 characters when inputting a Name for the capability in the configuration process.",
+        "query": "What is the character limit for naming a capability during the configuration process?",
+        "response": "The character limit for naming a capability during the configuration process is 191 characters.",
+        "bleu": 0.07842017192231883,
+        "meteor": 0.5398612966851181
     },
     {
         "pull_quote": "Paid products cannot be deleted, only free products can be deleted.",
-        "query": "Can only free products be deleted according to the guidelines?",
-        "response": "Yes, the guidelines specify that paid products cannot be deleted, only free products can be deleted.",
-        "bleu": 0.6741942962447748,
-        "meteor": 0.9587293821638244
+        "query": "What types of products are eligible for deletion?",
+        "response": "Only free products can be deleted, not paid products.",
+        "bleu": 0.4704573425299053,
+        "meteor": 0.6484888701212523
     },
     {
-        "pull_quote": "Deleting a product is simple. Select Products from the left-hand menu. Then select the three dotted Menu icon next to the product you wish to delete. Select Delete.",
-        "query": "What are the steps to delete a product according to the provided information?",
-        "response": "The steps to delete a product are to select Products from the left-hand menu, click the three dotted Menu icon next to the product you wish to delete, and then select Delete.",
-        "bleu": 0.5429413765562551,
-        "meteor": 0.800007327752029
+        "pull_quote": "Deleting a product is simple. Select Products from the left-hand menu.",
+        "query": "What steps should I follow to delete a product?",
+        "response": "To delete a product, select Products from the left-hand menu, then click the three dotted Menu icon next to the product you want to delete and select Delete.",
+        "bleu": 0.17115279944073908,
+        "meteor": 0.42939189189189186
+    },
+    {
+        "pull_quote": "Once you suspend a license, you can't reactivate it. Instead, you need to create a new license with the required parameters.",
+        "query": "What happens if I suspend a license in the Salable Dashboard?",
+        "response": "Once you suspend a license, you can't reactivate it and instead need to create a new license with the required parameters.",
+        "bleu": 0.7810900575176258,
+        "meteor": 0.8789071086297093
     },
     {
         "pull_quote": "If you need to issue a free license to a customer, you can do that directly from your organization's homepage.",
@@ -336,1291 +273,962 @@
         "meteor": 0.5740989779451316
     },
     {
-        "pull_quote": "The **Create License** sidebar will open. It has the following parameter:",
-        "query": "What parameters are included in the **Create License** sidebar for issuing a free license?",
-        "response": "The parameters included are Grantee ID, Licensee Email, Product & Plan, and Let Expire/Renew Forever.",
-        "bleu": 0.012109013026441871,
-        "meteor": 0.11627906976744184
+        "pull_quote": "For a free license, you will want to select Renew Forever.",
+        "query": "What option should be selected for a free license to ensure it doesn\u2019t expire?",
+        "response": "You should select Renew Forever for a free license.",
+        "bleu": 0.2997004972035436,
+        "meteor": 0.6775541946145621
     },
     {
-        "pull_quote": "For a free license, you will want to select **Renew Forever**.",
-        "query": "What option should you select for a free license when issuing it to a customer?",
-        "response": "You will want to select **Renew Forever** for a free license.",
-        "bleu": 0.7784138774113644,
-        "meteor": 0.9436251849112426
+        "pull_quote": "The Create License sidebar will open with parameters including Grantee ID and Licensee Email.",
+        "query": "What are the key parameters included in the Create License sidebar when issuing a free license?",
+        "response": "The key parameters include Grantee ID and Licensee Email.",
+        "bleu": 0.3369422210259079,
+        "meteor": 0.6172839506172839
     },
     {
-        "pull_quote": "There are two options for viewing the licenses that you have issued using Salable.",
-        "query": "What are the options for viewing licenses in Salable?",
-        "response": "There are two options: viewing licenses for a specific product from its license tab or using the license section from the left-hand menu to see all issued licenses across all products.",
-        "bleu": 0.09054182982080389,
-        "meteor": 0.5288272333726879
+        "pull_quote": "You can search and filter this list to find the precise license you want, depending on how many licenses you have issued.",
+        "query": "How can I efficiently locate a specific license in Salable?",
+        "response": "You can search and filter the list in the license section to find the precise license you want, depending on how many licenses you have issued.",
+        "bleu": 0.7205743386699484,
+        "meteor": 0.9415770553782268
     },
     {
-        "pull_quote": "Alternatively, you can use the license section from the left-hand menu.",
-        "query": "What is the alternative method for viewing licenses mentioned in the content?",
-        "response": "You can use the license section from the left-hand menu.",
-        "bleu": 0.8337529180751805,
-        "meteor": 0.8590521694214875
+        "pull_quote": "To issue an evaluation license, you will need your customer's email address.",
+        "query": "What information is necessary for issuing an evaluation license?",
+        "response": "You will need your customer's email address.",
+        "bleu": 0.513417119032592,
+        "meteor": 0.6245713305898491
     },
     {
-        "pull_quote": "If you need to issue an evaluation license to a customer, you can do that directly from your organization's homepage.",
-        "query": "What is the process for issuing an evaluation license to a customer?",
-        "response": "You can issue an evaluation license directly from your organization's homepage by selecting Licenses, creating a new license, and entering the necessary details such as the customer's email address.",
-        "bleu": 0.23605722704787005,
-        "meteor": 0.5828578838174273
+        "pull_quote": "For an evaluation license, you will want to select Let Expire.",
+        "query": "What should be selected for an evaluation license according to the instructions?",
+        "response": "You will want to select Let Expire.",
+        "bleu": 0.5352614285189903,
+        "meteor": 0.639375
     },
     {
-        "pull_quote": "The **Create License** sidebar will open. It has the following parameter:  - **Licensee Email**: The email address for the customer receiving the evaluation license.",
-        "query": "What information is necessary to input when issuing an evaluation license?",
-        "response": "You need the customer's email address as part of the Licensee Email parameter in the Create License sidebar.",
-        "bleu": 0.02066279155644325,
-        "meteor": 0.188953488372093
+        "pull_quote": "Plans are the options you give your customers, allowing for different features, prices, and billing intervals.",
+        "query": "How do plans benefit customers in terms of features and pricing?",
+        "response": "Plans provide customers with tailored options that meet their specific needs by offering varying features, prices, and billing intervals.",
+        "bleu": 0.3386854985606571,
+        "meteor": 0.5314622371328043
     },
     {
-        "pull_quote": "For an evaluation license, you will want to select **Let Expire**.",
-        "query": "What should you select for an evaluation license when issuing it to a customer?",
-        "response": "You will want to select **Let Expire** for an evaluation license.",
-        "bleu": 0.7784138774113644,
-        "meteor": 0.9436251849112426
-    },
-    {
-        "pull_quote": "Plans are the options you give your customers.",
-        "query": "What do you mean by saying \"Plans are the options you give your customers\"?",
-        "response": "This means that each plan represents a different set of features, pricing, and billing intervals tailored to meet various customer needs.",
-        "bleu": 0.007913247271422612,
-        "meteor": 0.14285714285714288
-    },
-    {
-        "pull_quote": "Each plan can contain a different set of features, have an individual price, and a specific billing interval.",
-        "query": "How do the features and pricing of each plan vary for customers?",
-        "response": "Each plan is designed to offer different features and pricing options to cater to diverse customer needs.",
-        "bleu": 0.02544908849416925,
-        "meteor": 0.23168687764961055
-    },
-    {
-        "pull_quote": "Plans are differentiated by the features they offer.",
-        "query": "How do features affect the differentiation of plans?",
-        "response": "Features are the key components that distinguish one plan from another, determining what each plan offers to its users.",
-        "bleu": 0.01291802583371725,
-        "meteor": 0.29411764705882354
+        "pull_quote": "Plans let you offer your customers the right level of value for their needs.",
+        "query": "How do plans help in meeting customer needs?",
+        "response": "Plans allow you to provide customers with the appropriate level of value based on their specific requirements.",
+        "bleu": 0.07036147891341805,
+        "meteor": 0.5830065359477125
     },
     {
         "pull_quote": "If you add or remove features from your product it is important to review your plan settings.",
-        "query": "What should you do if you change features in your product?",
-        "response": "You should review your plan settings to ensure they align with the changes made.",
-        "bleu": 0.1549235545895005,
-        "meteor": 0.358584111610746
+        "query": "Why is it important to review plan settings when adding or removing features from a product?",
+        "response": "It ensures that the plan correctly reflects the new features and maintains optimal functionality.",
+        "bleu": 0.015304534622238592,
+        "meteor": 0.11299435028248588
     },
     {
         "pull_quote": "Choose the settings you require for each feature. The options will vary based on the Value Type you assigned each feature.",
-        "query": "What should you consider when choosing settings for each feature in your plan?",
-        "response": "You should consider that the options will vary based on the Value Type you assigned each feature.",
-        "bleu": 0.5828161967308343,
-        "meteor": 0.6658765432098768
+        "query": "What should you consider when choosing settings for each feature in a plan?",
+        "response": "You should consider that the options will vary based on the Value Type you assigned to each feature.",
+        "bleu": 0.5081728439699982,
+        "meteor": 0.6610619469026549
     },
     {
-        "pull_quote": "You can add new plans to a product at any time. There are three different types of plans. Which option you choose changes the plan cycle options available. Select if you'd like your Plan to be a **Paid Plan** or a **Free Plan**.",
-        "query": "What are the types of plans that can be added to a product?",
-        "response": "The three different types of plans are Standard, Bespoke, and Coming Soon, and you can choose between a Paid Plan or a Free Plan.",
-        "bleu": 0.07533124857332636,
-        "meteor": 0.2997366100436276
+        "pull_quote": "You can add new plans to a product at any time.",
+        "query": "What does the pull quote indicate about adding plans to a product?",
+        "response": "It indicates that new plans can be added to a product whenever needed, providing flexibility in plan management.",
+        "bleu": 0.06518963777667167,
+        "meteor": 0.4958545918367347
+    },
+    {
+        "pull_quote": "There are three different types of plans which affect plan cycle options available.",
+        "query": "What are the three different types of plans mentioned, and how do they affect the plan cycle options?",
+        "response": "The three types of plans are Standard, Bespoke, and Coming Soon, and they determine the available plan cycle options such as duration and features.",
+        "bleu": 0.06352047085618948,
+        "meteor": 0.5792207792207792
     },
     {
         "pull_quote": "To sell your product to your customers, you need to tell them what plans you offer, what features are in each plan, and how much they cost.",
-        "query": "What essential information should be included when selling a product to customers?",
-        "response": "You need to provide details about the plans you offer, the features included in each plan, and their respective costs.",
-        "bleu": 0.22698745760109754,
-        "meteor": 0.4874908020603385
+        "query": "What essential information should you include when presenting your product to customers?",
+        "response": "You should include the plans you offer, the features in each plan, and how much they cost.",
+        "bleu": 0.34782403035617626,
+        "meteor": 0.5309364548494983
     },
     {
-        "pull_quote": "If you want to copy the code of the pricing table, select **Copy React Code** or **Copy Vanilla JS Code** on the **Copy Code** tab.",
-        "query": "What should you do if you want to integrate the pricing table code into your webpage?",
-        "response": "You should select \"Copy React Code\" or \"Copy Vanilla JS Code\" on the \"Copy Code\" tab.",
-        "bleu": 0.10282884407736698,
-        "meteor": 0.40106951871657753
+        "pull_quote": "To see a preview of the pricing table, select Preview in Browser under Actions.",
+        "query": "What should I do to see a preview of the pricing table?",
+        "response": "You should select \"Preview in Browser\" under \"Actions.\"",
+        "bleu": 0.08350331161537673,
+        "meteor": 0.4042636162745352
     },
     {
-        "pull_quote": "For full details on our APIs please visit our API Documentation.",
-        "query": "What should I do to find comprehensive information about Salable's APIs?",
-        "response": "You should visit the API Documentation for full details on our APIs.",
-        "bleu": 0.45258880078905583,
-        "meteor": 0.737190082644628
+        "pull_quote": "Authentication is via API key in the header, ensuring secure access to the services.",
+        "query": "How does Salable ensure secure access to its services?",
+        "response": "Salable ensures secure access to its services by requiring authentication via an API key in the header.",
+        "bleu": 0.29759282342490984,
+        "meteor": 0.7089634012710937
     },
     {
-        "pull_quote": "Every request made to Salable requires an API key.",
-        "query": "Why is an API key necessary for making requests to Salable?",
-        "response": "An API key is required for every request made to Salable to ensure proper authentication and authorization.",
-        "bleu": 0.2769413275131342,
-        "meteor": 0.8259259259259261
+        "pull_quote": "For full details on our APIs please visit our API Documentation for comprehensive information.",
+        "query": "Where can I find comprehensive information about Salable's APIs?",
+        "response": "You can find comprehensive information about Salable's APIs in the API Documentation.",
+        "bleu": 0.0440162406319717,
+        "meteor": 0.3430275913497391
     },
     {
-        "pull_quote": "Input an **API Key Name**. eg. License Check.",
-        "query": "What should I input when creating an API key?",
-        "response": "You should input an API Key Name, such as \"License Check.\"",
-        "bleu": 0.1250076305588977,
-        "meteor": 0.5192708333333333
+        "pull_quote": "Every request made to Salable requires an API key. Generating them is simple.",
+        "query": "What is required for every request made to Salable?",
+        "response": "Every request made to Salable requires an API key, and generating them is simple.",
+        "bleu": 0.7447819789879647,
+        "meteor": 0.9258007838897149
     },
     {
-        "pull_quote": "The API Key appears in the menu. You can easily copy it, by selecting the **Copy Icon**.",
-        "query": "How can I easily obtain the API Key after creating it?",
-        "response": "You can easily copy the API Key from the menu by selecting the **Copy Icon**.",
-        "bleu": 0.5579518615301543,
-        "meteor": 0.8013287008779755
+        "pull_quote": "Select Settings from the left-hand navigation menu to generate a new API key.",
+        "query": "What is the first step to generating a new API key in Salable?",
+        "response": "You need to select Settings from the left-hand navigation menu to generate a new API key.",
+        "bleu": 0.805312203079627,
+        "meteor": 0.978842585985443
     },
     {
-        "pull_quote": "To join an existing organisation, the organisation owner will need to send an invite. You may need to check your junk folder. Your account is created and you are automatically added to the organisation that sent the invitation.",
-        "query": "What steps must be taken to join an existing organisation after receiving an invite?",
-        "response": "You need to follow the link from the invite email, provide your name and a secure password, and then click \"Accept invite\" to create your account and join the organisation.",
-        "bleu": 0.02035394951907733,
-        "meteor": 0.2827848025588139
+        "pull_quote": "The API Key appears in the menu, and you can easily copy it by selecting the Copy Icon.",
+        "query": "How can I copy the API Key once it's generated?",
+        "response": "You can easily copy the API Key by selecting the Copy Icon in the menu.",
+        "bleu": 0.4200381265123847,
+        "meteor": 0.7436822385204082
     },
     {
-        "pull_quote": "Create an API key: You need this so that you can use the Salable dev tools.",
-        "query": "What is the purpose of creating an API key in the Salable setup?",
-        "response": "The API key is needed so that you can use the Salable dev tools.",
-        "bleu": 0.5509947345130995,
-        "meteor": 0.7299501888810885
+        "pull_quote": "To join an existing organisation, the organisation owner will need to send an invite.",
+        "query": "What must the organisation owner do for someone to join an existing organisation?",
+        "response": "The organisation owner will need to send an invite.",
+        "bleu": 0.5488116360940264,
+        "meteor": 0.6490259740259741
     },
     {
-        "pull_quote": "Set up a payment integration: Salable has its own payment integration, but it also supports Stripe.",
-        "query": "What payment integration options are available for Salable?",
-        "response": "Salable has its own payment integration but also supports Stripe.",
-        "bleu": 0.347249517350399,
-        "meteor": 0.5982653709926438
+        "pull_quote": "You need this so that you can use the Salable dev tools.",
+        "query": "Why is creating an API key essential for using Salable dev tools?",
+        "response": "Creating an API key is essential because it allows you to access and utilize the Salable development tools effectively.",
+        "bleu": 0.02560744480557418,
+        "meteor": 0.27153284671532846
     },
     {
-        "pull_quote": "You can use it no matter what your app is built to do, or where it does it.",
-        "query": "How does Salable accommodate different types of apps?",
-        "response": "Salable can be used regardless of what your app is built to do or where it operates.",
-        "bleu": 0.3766019021279213,
-        "meteor": 0.6242902396748551
+        "pull_quote": "Provide details of the product you are providing to your users.",
+        "query": "What is the final step mentioned in the setup process for Salable?",
+        "response": "The final step is to provide details of the product you are providing to your users.",
+        "bleu": 0.675316032742297,
+        "meteor": 0.9597222222222221
     },
     {
-        "pull_quote": "Easily give licenses to individual users, a Trello or Miro board, or a whole organisation.",
-        "query": "How does Salable facilitate the distribution of licenses for apps?",
-        "response": "Salable allows you to easily give licenses to individual users, a Trello or Miro board, or a whole organisation.",
-        "bleu": 0.8042235271282977,
-        "meteor": 0.9781769994632314
+        "pull_quote": "Salable is a platform that allows you to easily sell your app to your customers.",
+        "query": "How does Salable facilitate the selling process for app developers?",
+        "response": "Salable provides an easy platform for app developers to connect with customers and manage sales effectively.",
+        "bleu": 0.018002829271425148,
+        "meteor": 0.18633540372670807
     },
     {
-        "pull_quote": "Our support team is always happy to help.",
-        "query": "How can I reach out if I need assistance with Salable?",
-        "response": "You can submit a request through our support portal or send an email to support@salable.app.",
-        "bleu": 0.027166383723579154,
-        "meteor": 0.20202020202020204
+        "pull_quote": "Through Salable, you can set up subscription plans and create multiple plans for a single product with customizable features.",
+        "query": "How does Salable enhance the selling process for app developers?",
+        "response": "Salable enhances the selling process by allowing developers to set up subscription plans and create multiple customizable plans for a single product.",
+        "bleu": 0.42902556537105646,
+        "meteor": 0.6944444444444444
     },
     {
         "pull_quote": "If you need any assistance, simply submit a request through our support portal or send us an email at support@salable.app.",
         "query": "What should I do if I need assistance with Salable?",
-        "response": "You should submit a request through our support portal or send an email to support@salable.app.",
-        "bleu": 0.45647022068942855,
-        "meteor": 0.6784188034188035
+        "response": "You can submit a request through our support portal or send us an email at support@salable.app.",
+        "bleu": 0.6901860411602626,
+        "meteor": 0.7654320987654321
     },
     {
-        "pull_quote": "You can update your organisation details at any time.",
-        "query": "How can I change my organisation details after creating my account?",
-        "response": "You can update your organisation details at any time by selecting Org Settings from the left-hand menu, making your changes, and then clicking Save Changes.",
-        "bleu": 0.28755838200176376,
-        "meteor": 0.8203389830508474
+        "pull_quote": "You can also find us in Discord, providing additional support options for our users.",
+        "query": "What additional support options are available for users?",
+        "response": "You can find us in Discord, providing additional support options for our users.",
+        "bleu": 0.8415266720024042,
+        "meteor": 0.9422781271837876
     },
     {
-        "pull_quote": "Click **Save Changes**.",
-        "query": "What is the final step you need to take after updating your organisation details?",
-        "response": "You need to click **Save Changes**.",
-        "bleu": 0.6786502681586727,
-        "meteor": 0.9629141566265061
+        "pull_quote": "This page also provides historical information regarding Salable's uptime and availability for user reference.",
+        "query": "What type of information does the Salable status page provide for user reference?",
+        "response": "The Salable status page provides historical information regarding Salable's uptime and availability for user reference.",
+        "bleu": 0.7541859578343534,
+        "meteor": 0.8682976296108504
     },
     {
-        "pull_quote": "Accounts are how you and your team access Salable. Each team member has their own account which they access using their email and a password they set up.",
-        "query": "How does each team member access their Salable account?",
-        "response": "Each team member accesses their Salable account using their email and a password they set up.",
-        "bleu": 0.3089645908871372,
-        "meteor": 0.5793135044548666
+        "pull_quote": "To update your organisation details, click Save Changes after making your updates.",
+        "query": "What must you do after updating your organisation details to ensure the changes are saved?",
+        "response": "You must click \"Save Changes\" after making your updates to ensure the changes are saved.",
+        "bleu": 0.17694975149532557,
+        "meteor": 0.5324074074074076
     },
     {
-        "pull_quote": "Enter the Verification code sent to the email address you provided.",
-        "query": "What should I do after entering my email address to complete the account creation process?",
-        "response": "You need to enter the Verification code sent to the email address you provided.",
-        "bleu": 0.7760114635728617,
-        "meteor": 0.9753274616079494
+        "pull_quote": "An organisation is automatically created when you create your account, allowing for details to be updated as needed.",
+        "query": "How can I change the details of my organisation after creating my account?",
+        "response": "You can change your organisation details by selecting Org Settings from the left-hand menu, updating the information, and clicking Save Changes.",
+        "bleu": 0.012384901282810543,
+        "meteor": 0.1715686274509804
+    },
+    {
+        "pull_quote": "Each team member has their own account which they access using their email and a password they set up.",
+        "query": "How do team members access their accounts in Salable?",
+        "response": "Team members access their accounts using their email and a password they set up.",
+        "bleu": 0.47917336715827125,
+        "meteor": 0.754985754985755
+    },
+    {
+        "pull_quote": "You will only need to verify your email address when not using a GitHub or Google sign up.",
+        "query": "What is the condition under which a user needs to verify their email address when creating an account on Salable?",
+        "response": "A user only needs to verify their email address if they are not signing up using a GitHub or Google account.",
+        "bleu": 0.22722445488928128,
+        "meteor": 0.7523316062176165
     },
     {
         "pull_quote": "By default, new members of your team will only have read access to your Salable instance.",
-        "query": "What type of access do new team members have when they first join your Salable instance?",
-        "response": "New members will only have read access by default to your Salable instance.",
-        "bleu": 0.4595569642054761,
-        "meteor": 0.7861781076066792
-    },
-    {
-        "pull_quote": "You can manage your team by selecting **Settings** from the left-hand menu and viewing the _Teams_ tab.",
-        "query": "How can I access the team management features for my Salable account?",
-        "response": "You can manage your team by selecting Settings from the left-hand menu and viewing the Teams tab.",
-        "bleu": 0.5608897625297664,
-        "meteor": 0.7819108035371012
+        "query": "What access do new team members have by default when they join your Salable account?",
+        "response": "New team members will only have read access to your Salable instance by default.",
+        "bleu": 0.5280814291397259,
+        "meteor": 0.8203389830508474
     },
     {
         "pull_quote": "By default, new team members have read-only access to your Salable account.",
-        "query": "What kind of access do new team members have when they first join your Salable account?",
+        "query": "What access do new team members have by default when they join a Salable account?",
         "response": "New team members have read-only access to your Salable account by default.",
         "bleu": 0.7473021919536904,
         "meteor": 0.9295049167766378
     },
     {
-        "pull_quote": "To remove a team member who no longer needs access to your Salable dashboard: Select **Settings** from the left-hand menu.",
-        "query": "What is the first step to take when you want to remove a team member from your Salable dashboard?",
-        "response": "You need to select **Settings** from the left-hand menu.",
-        "bleu": 0.3286356646533658,
-        "meteor": 0.520972513838519
-    },
-    {
         "pull_quote": "If you already have a Stripe account, you can easily link it with Salable in order to accept payments.",
-        "query": "How can I link my existing Stripe account to Salable for payment processing?",
-        "response": "You can easily link your existing Stripe account by selecting Settings, navigating to Payment Integrations, and following the steps to add Stripe as your payment provider.",
-        "bleu": 0.10601317434781207,
-        "meteor": 0.4075365835165668
+        "query": "How can I link my existing Stripe account with Salable to accept payments?",
+        "response": "You can easily link your existing Stripe account by going to Settings, selecting the Payment Integrations tab, and following the steps to add Stripe as a payment provider.",
+        "bleu": 0.10145249973866254,
+        "meteor": 0.403831705484598
     },
     {
-        "pull_quote": "Login to Stripe using your existing credentials to link your account to Salable.",
-        "query": "What is the process for linking an existing Stripe account to Salable?",
-        "response": "You need to login to Stripe using your existing credentials to link your account to Salable.",
-        "bleu": 0.805312203079627,
-        "meteor": 0.978842585985443
+        "pull_quote": "Adding payment integration to Salable is simple; you just need to follow these instructions and provide your business details when requested.",
+        "query": "What are the key steps to add payment integration to Salable?",
+        "response": "You need to follow the instructions provided and input your business details when prompted.",
+        "bleu": 0.1562828379838838,
+        "meteor": 0.486893143143143
     },
     {
         "pull_quote": "The payment integration is now fully configured and can be added to products within Salable.",
-        "query": "What does it mean when it says \"the payment integration is now fully configured\"?",
-        "response": "It means that the payment integration has been successfully set up and is ready to be linked to products within the Salable platform.",
-        "bleu": 0.07664351336165819,
-        "meteor": 0.5288272333726879
+        "query": "What can you do once the payment integration is fully configured in Salable?",
+        "response": "You can add it to products within Salable.",
+        "bleu": 0.21461525035625467,
+        "meteor": 0.3848946986201889
     },
     {
-        "pull_quote": "Select the **Add Payment Integration** button on the top right of the page.",
-        "query": "What is the first step you need to take to add a payment integration in Salable?",
-        "response": "You need to select the **Add Payment Integration** button on the top right of the page.",
-        "bleu": 0.8455987220158339,
-        "meteor": 0.9835222289684951
+        "pull_quote": "All of Salable's functionality is also offered within Test Mode, allowing you to create a product along with its capabilities, features, plans, and pricing tables.",
+        "query": "What does Test Mode allow you to do in Salable?",
+        "response": "Test Mode allows you to create a product along with its capabilities, features, plans, and pricing tables.",
+        "bleu": 0.547019351551841,
+        "meteor": 0.699697656840514
     },
     {
-        "pull_quote": "All of Salable's functionality is also offered within Test Mode. You can create a product along with its capabilities, features, plans, and pricing tables.",
-        "query": "What can you do in Salable's Test Mode?",
-        "response": "You can create a product along with its capabilities, features, plans, and pricing tables.",
-        "bleu": 0.513417119032592,
-        "meteor": 0.6249464163237312
-    },
-    {
-        "pull_quote": "You must have at least one payment integration configured in Live Mode when you move a product to Live Mode.",
-        "query": "What is required before moving a product from Test Mode to Live Mode?",
-        "response": "You must have at least one payment integration configured in Live Mode.",
-        "bleu": 0.5263837632697335,
-        "meteor": 0.6396098189700627
+        "pull_quote": "Once you've completed your tests and you're satisfied that a product is ready to move from Test Mode to Live Mode, all you have to do is go to the Products page and click on the menu icon for the product.",
+        "query": "What steps should you take after testing a product in Test Mode to prepare it for Live Mode?",
+        "response": "You need to go to the Products page and click on the menu icon for the product you want to move to Live Mode.",
+        "bleu": 0.28992451325132074,
+        "meteor": 0.505627115663604
     },
     {
         "pull_quote": "Test Mode within Salable provides an environment where you have all the functionality that Salable offers, but any changes made in Test Mode do not affect your production environment.",
-        "query": "What advantages does Test Mode within Salable offer for users?",
-        "response": "Test Mode allows users to utilize all functionalities without impacting the production environment, ensuring thorough testing and confidence before going live.",
-        "bleu": 0.020802766464150774,
-        "meteor": 0.28237674760853565
+        "query": "What advantages does Test Mode in Salable offer for users managing their products?",
+        "response": "Test Mode allows users to utilize all Salable functionalities without impacting the production environment, ensuring safe testing and modifications.",
+        "bleu": 0.020782241202554137,
+        "meteor": 0.28425925925925927
     },
     {
-        "pull_quote": "Returns a list of all the capabilities associated with a product",
-        "query": "What does the API call return when you use the method to get capabilities associated with a product?",
-        "response": "It returns a list of all the capabilities associated with a product.",
-        "bleu": 0.8242367502646054,
-        "meteor": 0.9817739079102716
+        "pull_quote": "All of the functionality of Salable is available in Test Mode, so you can test thoroughly and be assured that the product behaves the way you want it to before converting it to a live product.",
+        "query": "How does Test Mode enhance the testing process before launching a product live?",
+        "response": "Test Mode allows you to utilize all of Salable's features without impacting your live environment, ensuring thorough testing and confidence in product performance before going live.",
+        "bleu": 0.02148117292126462,
+        "meteor": 0.2672101026870238
     },
     {
-        "pull_quote": "The UUID of the Product",
-        "query": "What is required to retrieve the capabilities associated with a product using the API?",
-        "response": "The UUID of the Product is required to retrieve its capabilities using the API.",
-        "bleu": 0.2460137257692754,
-        "meteor": 0.62
+        "pull_quote": "You can create a product, test it, and then make any required changes, all while remaining in Test Mode.",
+        "query": "How does Test Mode facilitate product development without impacting the production environment?",
+        "response": "Test Mode allows you to create a product, test it, and make any required changes without affecting your production environment.",
+        "bleu": 0.44651754110190417,
+        "meteor": 0.582625679347826
     },
     {
-        "pull_quote": "For more information about this request see our API documentation on Product Capability Object",
-        "query": "What additional resources can I refer to for understanding the product capability request?",
-        "response": "You can refer to the API documentation on the Product Capability Object for more information.",
-        "bleu": 0.13877399671044674,
-        "meteor": 0.6220657276995307
-    },
-    {
-        "pull_quote": "Returns a list of all the products created by your Salable organization",
-        "query": "What does the API request for getting all products from Salable return?",
-        "response": "It returns a list of all the products created by your Salable organization.",
+        "pull_quote": "Returns a list of all the capabilities associated with a product.",
+        "query": "What does the API do regarding product capabilities?",
+        "response": "The API returns a list of all the capabilities associated with a product.",
         "bleu": 0.8385766789076257,
         "meteor": 0.9833219489981786
     },
     {
-        "pull_quote": "const products = await salable.products.getAll();",
-        "query": "What is the purpose of the code snippet that includes \"const products = await salable.products.getAll();\"?",
-        "response": "It retrieves a list of all the products created by the Salable organization using their API.",
-        "bleu": 0.011502783619900045,
-        "meteor": 0.05617977528089888
+        "pull_quote": "For more information about this request see our API documentation on Product Capability Object.",
+        "query": "What should I do if I need more details about the capabilities associated with a product?",
+        "response": "You can refer to our API documentation on the Product Capability Object for comprehensive information.",
+        "bleu": 0.24207623565173003,
+        "meteor": 0.6208609271523178
     },
     {
-        "pull_quote": "For more information about this request see our API documentation on Product Object",
-        "query": "What should I do if I need further details about the product request in the Salable API?",
-        "response": "You can refer to the API documentation on the Product Object for more information.",
-        "bleu": 0.1250076305588977,
-        "meteor": 0.5900804924242424
+        "pull_quote": "For more information about this request see our API documentation on Product Object.",
+        "query": "What additional information can I find about the request to get all products?",
+        "response": "You can find more information in the API documentation on the Product Object.",
+        "bleu": 0.1350862565735142,
+        "meteor": 0.6146384479717814
     },
     {
         "pull_quote": "Every active plan on the product will be added to the table in the sort order of free plans, paid plans price, and then coming soon plans.",
-        "query": "How are the plans organized in the pricing table for a product?",
-        "response": "The plans are organized in the pricing table by listing free plans first, followed by paid plans in order of price, and concluding with plans that are coming soon.",
-        "bleu": 0.06181372348887605,
-        "meteor": 0.5486754966887417
+        "query": "How are the active plans sorted in the pricing table?",
+        "response": "Active plans are sorted in the order of free plans first, followed by paid plans by price, and finally any coming soon plans.",
+        "bleu": 0.22494926892902603,
+        "meteor": 0.6448902027027026
     },
     {
-        "pull_quote": "The unique identifier for the grantee.",
-        "query": "What is the significance of the \"granteeId\" in the context of retrieving the pricing table for a product?",
-        "response": "The \"granteeId\" serves as the unique identifier for the grantee and is required for building the pricing table effectively.",
-        "bleu": 0.22115966812339868,
-        "meteor": 0.5642256902761105
+        "pull_quote": "Returns a list of all the currencies associated with a product.",
+        "query": "What information does the API return when querying for a product's currencies?",
+        "response": "The API returns a list of all the currencies associated with a product.",
+        "bleu": 0.8385766789076257,
+        "meteor": 0.9833219489981786
     },
     {
-        "pull_quote": "Returns a list of all the currencies associated with a product",
-        "query": "What does the method 'getCurrencies' return when called with a product UUID?",
-        "response": "It returns a list of all the currencies associated with a product.",
-        "bleu": 0.8242367502646054,
-        "meteor": 0.9817739079102716
+        "pull_quote": "The UUID of the Product is a required parameter for this request.",
+        "query": "What is the significance of the product UUID in the context of retrieving currencies associated with a product?",
+        "response": "The UUID of the Product is essential as it is a required parameter for the request to obtain the associated currencies.",
+        "bleu": 0.38305978177479755,
+        "meteor": 0.7776278976818545
     },
     {
-        "pull_quote": "The UUID of the Product",
-        "query": "What is the significance of the UUID in relation to obtaining currencies for a product?",
-        "response": "The UUID of the product is a required parameter needed to retrieve the associated currencies for that specific product.",
-        "bleu": 0.17923344640485428,
-        "meteor": 0.5723076923076924
+        "pull_quote": "For more information about this request see our API documentation on Product Currency Object.",
+        "query": "What resource can I consult for detailed information about the request to get currencies for a product?",
+        "response": "You can refer to the API documentation on Product Currency Object for detailed information.",
+        "bleu": 0.35831291876413535,
+        "meteor": 0.5736625514403292
     },
     {
-        "pull_quote": "For more information about this request see our API documentation on Product Currency Object",
-        "query": "What additional resources can I refer to for understanding the Product Currency Object?",
-        "response": "You can refer to the API documentation on the Product Currency Object for more information about this request.",
-        "bleu": 0.3802115561049243,
-        "meteor": 0.8211206896551725
-    },
-    {
-        "pull_quote": "The UUID of the Product to be returned.",
-        "query": "What is required to return the details of a single product using the Salable SDK?",
-        "response": "The UUID of the Product to be returned is required.",
-        "bleu": 0.6989307622784944,
-        "meteor": 0.9728931830381106
-    },
-    {
-        "pull_quote": "Specify which properties to expand. e.g. `{ expand: ['features', 'plans'] }`",
-        "query": "What is an example of how to specify which properties to expand when using the getOne method?",
-        "response": "You can specify properties to expand by including an options object, like this: `{ expand: ['features', 'plans'] }`.",
-        "bleu": 0.47992366044240764,
-        "meteor": 0.8211575489862952
+        "pull_quote": "For more information about this request see our API documentation on Product Object.",
+        "query": "What additional resources can I consult for detailed information about the product retrieval request?",
+        "response": "You can refer to the API documentation on the Product Object for more information about this request.",
+        "bleu": 0.3742031646082125,
+        "meteor": 0.8179012345679012
     },
     {
         "pull_quote": "For more information about this request see our API documentation on Plan Object.",
-        "query": "What can I refer to for more details on the request for getting plans associated with a product?",
-        "response": "You can refer to our API documentation on the Plan Object for more details.",
-        "bleu": 0.22894156860669912,
-        "meteor": 0.6102793100429035
+        "query": "What should I do if I need additional details about the request for plans associated with a product?",
+        "response": "You can refer to our API documentation on the Plan Object for more information.",
+        "bleu": 0.2722589423069702,
+        "meteor": 0.6865248226950355
     },
     {
-        "pull_quote": "Returns a list of all the features associated with a product",
-        "query": "What does the function in the code sample return?",
-        "response": "It returns a list of all the features associated with a product.",
-        "bleu": 0.8242367502646054,
-        "meteor": 0.9817739079102716
+        "pull_quote": "Returns a list of all the features associated with a product.",
+        "query": "What does the API method return when called with a product's UUID?",
+        "response": "It returns a list of all the features associated with that product.",
+        "bleu": 0.7016035864257111,
+        "meteor": 0.8872344785192268
     },
     {
-        "pull_quote": "The UUID of the Product",
-        "query": "What is the significance of the UUID in the context of retrieving product features?",
-        "response": "The UUID of the Product is essential as it uniquely identifies the product for which the features are being fetched.",
-        "bleu": 0.17001078098404226,
-        "meteor": 0.5636363636363636
+        "pull_quote": "The UUID of the Product is a required parameter for this API request.",
+        "query": "What is the significance of the UUID in the API request for retrieving product features?",
+        "response": "The UUID of the Product is a required parameter for this API request, meaning it must be provided for the request to succeed.",
+        "bleu": 0.4967067363118649,
+        "meteor": 0.8406541424516826
     },
     {
-        "pull_quote": "For more information about this request see our API documentation on Product Feature Object",
-        "query": "What additional details can I find regarding the Product Feature Object?",
-        "response": "You can find more details in our API documentation specifically related to the Product Feature Object.",
-        "bleu": 0.09950615774798435,
-        "meteor": 0.5244755244755245
+        "pull_quote": "For more information about this request see our API documentation on Product Feature Object.",
+        "query": "What resource should I consult for additional details regarding the request for product features?",
+        "response": "You should consult the API documentation on Product Feature Object for more information.",
+        "bleu": 0.4257110866884422,
+        "meteor": 0.6620805369127516
     },
     {
-        "pull_quote": "Returns licenses for a purchaser on a product",
-        "query": "What does the API function mentioned return when executed?",
-        "response": "It returns licenses for a purchaser on a product.",
-        "bleu": 0.7598356856515925,
-        "meteor": 0.9746570121951219
+        "pull_quote": "Returns licenses for a purchaser on a product using the Salable API.",
+        "query": "How can you retrieve licenses for a purchaser on a product using the Salable API?",
+        "response": "You can retrieve licenses for a purchaser on a product by using the `getForPurchaser` method in the Salable API.",
+        "bleu": 0.39328368415488135,
+        "meteor": 0.8565647482014388
     },
     {
-        "pull_quote": "The purchaser of the licenses to fetch for",
-        "query": "What does the quote \"The purchaser of the licenses to fetch for\" imply about the function of the API?",
-        "response": "It implies that the API function is designed to retrieve licenses specifically associated with a given purchaser, identifying them by a unique purchaser identifier.",
-        "bleu": 0.010275474580767148,
-        "meteor": 0.20408163265306123
-    },
-    {
-        "pull_quote": "Filter by license status",
-        "query": "What is the significance of the \"status\" parameter in the getForPurchaser function?",
-        "response": "The \"status\" parameter allows you to filter the retrieved licenses based on their current status, though it's not mandatory.",
-        "bleu": 0.009410489957951634,
-        "meteor": 0.25
-    },
-    {
-        "pull_quote": "The status of the created license, e.g. \"ACTIVE\" \"TRIALING\".",
-        "query": "What are some examples of license statuses that can be specified when fetching licenses from Salable?",
-        "response": "The statuses include \"ACTIVE\" and \"TRIALING\".",
-        "bleu": 0.2226934448477632,
-        "meteor": 0.5025201612903226
+        "pull_quote": "To fetch licenses, provide the purchaser and productUuid as required parameters.",
+        "query": "What are the required parameters needed to fetch licenses for a purchaser?",
+        "response": "You need to provide the purchaser and productUuid as required parameters to fetch licenses.",
+        "bleu": 0.5828233954152654,
+        "meteor": 0.9019886363636364
     },
     {
         "pull_quote": "For more information about this request see our API documentation on License Object.",
-        "query": "What information can I find in the API documentation regarding the License Object?",
-        "response": "You can find detailed information about the request and the structure of the License Object in the API documentation.",
-        "bleu": 0.037903259135181486,
-        "meteor": 0.5251141552511416
+        "query": "What additional details can I find in the API documentation regarding the License Object?",
+        "response": "You can find comprehensive information about the License Object, including its properties and related operations, in the API documentation.",
+        "bleu": 0.03307108401836138,
+        "meteor": 0.4745565878378379
     },
     {
-        "pull_quote": "This method creates many ad hoc licenses",
-        "query": "What functionality does the method described provide?",
-        "response": "This method creates many ad hoc licenses.",
-        "bleu": 0.8408964152537145,
-        "meteor": 0.9844782983615982
+        "pull_quote": "The amount of licenses to fetch can be specified with the take parameter.",
+        "query": "What parameter allows you to specify the amount of licenses to fetch?",
+        "response": "The take parameter allows you to specify the amount of licenses to fetch.",
+        "bleu": 0.45723134461864345,
+        "meteor": 0.7219598583234947
     },
     {
-        "pull_quote": "Provide a custom end time for the license; this will override the plan's default interval.",
-        "query": "What does it mean to provide a custom end time for a license when creating many ad hoc licenses?",
-        "response": "Providing a custom end time means that the specified end time will take precedence over the default interval set by the plan associated with the license.",
-        "bleu": 0.13597796343834895,
-        "meteor": 0.5737140352524968
+        "pull_quote": "The UUID of the subscription to filter by is indicated by subscriptionUuid.",
+        "query": "What is the purpose of the subscriptionUuid parameter in the \"Get All Licenses\" API request?",
+        "response": "The subscriptionUuid parameter is used to filter the licenses returned by the API based on the unique identifier of the subscription.",
+        "bleu": 0.06429451441231726,
+        "meteor": 0.5960431654676259
     },
     {
-        "pull_quote": "Returns a single license",
-        "query": "What does the function `getOne` return when called?",
-        "response": "It returns a single license.",
-        "bleu": 0.5081327481546147,
-        "meteor": 0.9449404761904763
+        "pull_quote": "This method creates many ad hoc licenses using the Salable SDK in TypeScript.",
+        "query": "What is the primary function of the Salable SDK as described in the pull quote?",
+        "response": "The primary function is to create many ad hoc licenses using the Salable SDK in TypeScript.",
+        "bleu": 0.6102169202557912,
+        "meteor": 0.8389180264180262
     },
     {
-        "pull_quote": "The UUID of the license",
-        "query": "What is the significance of the UUID of the license in the provided code sample?",
-        "response": "The UUID is essential as it uniquely identifies the license to be retrieved using the API.",
-        "bleu": 0.03440134693333791,
-        "meteor": 0.3225806451612903
+        "pull_quote": "The UUID of the plan associated with the license can be found on the Plan view in the Salable dashboard.",
+        "query": "Where can I find the UUID of the plan associated with a license?",
+        "response": "You can find the UUID of the plan associated with the license on the Plan view in the Salable dashboard.",
+        "bleu": 0.7721947901921794,
+        "meteor": 0.9029811370531593
     },
     {
-        "pull_quote": "Specify which properties to expand. e.g. `{ expand: ['plan' }`",
-        "query": "What do you need to do if you want to include additional details when retrieving a license?",
-        "response": "You need to specify which properties to expand, for example, using `{ expand: ['plan'] }`.",
-        "bleu": 0.419793811546288,
-        "meteor": 0.8394224733207785
+        "pull_quote": "For more information about this request see our API documentation on License Object.",
+        "query": "What should I do if I need further details about the license request?",
+        "response": "You can refer to our API documentation on License Object for more information about this request.",
+        "bleu": 0.5749089871602278,
+        "meteor": 0.9035047792444243
     },
     {
-        "pull_quote": "Returns licenses for a grantee ID",
-        "query": "What does the API method return when using a grantee ID?",
-        "response": "It returns licenses for that specific grantee ID.",
-        "bleu": 0.14923729480049117,
-        "meteor": 0.7682539682539684
+        "pull_quote": "Returns licenses for a grantee ID to access specific licensing information.",
+        "query": "What does the process of retrieving licenses for a grantee ID entail?",
+        "response": "The process involves using the Salable API to fetch licensing information based on a specified grantee ID.",
+        "bleu": 0.03715770152515524,
+        "meteor": 0.4543245869776481
     },
     {
-        "pull_quote": "The grantee ID of the licenses",
-        "query": "What is the significance of the grantee ID in the context of retrieving licenses?",
-        "response": "The grantee ID is essential as it uniquely identifies the licenses associated with a specific grantee, enabling the retrieval of relevant license information.",
-        "bleu": 0.04934494673001858,
-        "meteor": 0.379746835443038
+        "pull_quote": "An array of grantee IDs is required for the checkLicenseParams.",
+        "query": "Why is it necessary to include an array of grantee IDs in the checkLicenseParams?",
+        "response": "It is necessary because the API requires this information to determine the specific capabilities that each grantee has access to.",
+        "bleu": 0.01291802583371725,
+        "meteor": 0.20833333333333331
     },
     {
-        "pull_quote": "Specify which properties to expand. e.g. `{ expand: ['plan'] }`",
-        "query": "What does the expand option allow you to do when retrieving licenses for a grantee ID?",
-        "response": "It allows you to specify which properties to expand, such as including additional details about the plan.",
-        "bleu": 0.19835441454182887,
-        "meteor": 0.31077348066298344
+        "pull_quote": "For more information about this request see our API documentation on License Check Object.",
+        "query": "What additional resources can I refer to for understanding the License Check request?",
+        "response": "You can refer to our API documentation on License Check Object for more information.",
+        "bleu": 0.5038920485259633,
+        "meteor": 0.7258953168044078
     },
     {
-        "pull_quote": "The UUID of the product.",
-        "query": "What is required to check the license of a product in the Salable API?",
-        "response": "The UUID of the product is required to check the license in the Salable API.",
-        "bleu": 0.23961829057131984,
-        "meteor": 0.6091269841269841
-    },
-    {
-        "pull_quote": "An array of grantee IDs.",
-        "query": "What is the significance of using an array of grantee IDs in the license check function?",
-        "response": "The array of grantee IDs is crucial as it allows the function to identify and retrieve the specific capabilities each grantee has access to within the product.",
-        "bleu": 0.08839374326825923,
-        "meteor": 0.45365853658536587
-    },
-    {
-        "pull_quote": "- \"This method updates many Licenses with the values passed into the body of the request.\"",
-        "query": "What does the method described in the pull quote do?",
-        "response": "The method updates many Licenses with the values passed into the body of the request.",
-        "bleu": 0.7714985257158095,
-        "meteor": 0.8020202020202021
-    },
-    {
-        "pull_quote": "- \"The new grantee ID value.\"",
-        "query": "What does the term \"new grantee ID value\" refer to in the context of updating licenses?",
-        "response": "The \"new grantee ID value\" refers to the updated identifier for the individual or entity that will be granted access to the license being modified.",
-        "bleu": 0.09941490945601678,
-        "meteor": 0.6443520642201835
-    },
-    {
-        "pull_quote": "- \"The UUID of the license to update.\"",
-        "query": "What is the significance of the UUID in the updateManyLicenses method?",
-        "response": "The UUID represents the specific license that is to be updated in the request.",
-        "bleu": 0.036787632499277766,
-        "meteor": 0.30701754385964913
-    },
-    {
-        "pull_quote": "This method will cancel an ad hoc License",
-        "query": "What does the method mentioned in the pull quote do?",
-        "response": "The method will cancel an ad hoc License.",
-        "bleu": 0.7259795291154771,
-        "meteor": 0.8629377676996723
-    },
-    {
-        "pull_quote": "`uuid` of the License to be canceled",
-        "query": "What is the significance of the `uuid` in canceling a license?",
-        "response": "The `uuid` is the unique identifier required to specify which license should be canceled in the system.",
-        "bleu": 0.06740258529346294,
-        "meteor": 0.6953898514851485
-    },
-    {
-        "pull_quote": "For more information about this request see our API documentation on cancel License",
-        "query": "What should I do if I need more information about canceling a license using the Salable API?",
-        "response": "You can refer to the API documentation on cancel License for detailed information about the request.",
-        "bleu": 0.26220676436185975,
-        "meteor": 0.6421595725078311
-    },
-    {
-        "pull_quote": "This method creates an ad hoc license",
-        "query": "What is the purpose of the method mentioned in the document?",
-        "response": "The method creates an ad hoc license.",
-        "bleu": 0.6803749333171202,
-        "meteor": 0.843114241001565
-    },
-    {
-        "pull_quote": "The UUID of the plan associated with the license. The planUuid can be found on the Plan view in the Salable dashboard.",
-        "query": "How can I locate the planUuid needed to create an ad hoc license?",
-        "response": "You can find the planUuid on the Plan view in the Salable dashboard.",
-        "bleu": 0.3226982330850647,
-        "meteor": 0.5176630434782609
-    },
-    {
-        "pull_quote": "Provide a custom end time for the license; this will override the plan's default interval.",
-        "query": "What happens if a custom end time is provided when creating an ad hoc license?",
-        "response": "The custom end time will override the plan's default interval.",
-        "bleu": 0.4555348407994064,
-        "meteor": 0.6842672413793103
-    },
-    {
-        "pull_quote": "The `uuid` of the license to be updated.",
-        "query": "What is the significance of the `uuid` in the context of updating licenses?",
-        "response": "The `uuid` is essential as it uniquely identifies the license that needs to be updated.",
-        "bleu": 0.2955043237121875,
-        "meteor": 0.8431623931623934
-    },
-    {
-        "pull_quote": "The new grantee ID for the license.",
-        "query": "What is the purpose of the new grantee ID in the license update process?",
-        "response": "The new grantee ID identifies the individual or entity that is now associated with the updated license.",
-        "bleu": 0.16617429299578945,
-        "meteor": 0.7052154195011338
-    },
-    {
-        "pull_quote": "This method will cancel many ad hoc Licenses",
-        "query": "What is the purpose of the method mentioned in the pull quote?",
-        "response": "The purpose of the method is to cancel many ad hoc Licenses.",
-        "bleu": 0.3026643726685863,
-        "meteor": 0.6928104575163399
-    },
-    {
-        "pull_quote": "`uuid` array of the Licenses to be canceled",
-        "query": "What is the required parameter for canceling multiple licenses using the Salable API?",
-        "response": "The required parameter is a `uuid` array of the licenses to be canceled.",
-        "bleu": 0.5828233954152653,
-        "meteor": 0.9429245283018869
-    },
-    {
-        "pull_quote": "For more information about this request see our API documentation on cancel many Licenses",
-        "query": "What does the pull quote suggest for users seeking detailed information about the 'cancel many Licenses' method?",
-        "response": "It directs users to consult the API documentation for comprehensive information on how to use the 'cancel many Licenses' functionality.",
-        "bleu": 0.029883097780540872,
-        "meteor": 0.38678985107556535
-    },
-    {
-        "pull_quote": "Filter by subscription.",
-        "query": "How can I filter the license count by a specific subscription?",
-        "response": "You can filter the license count by providing the `subscriptionUuid` parameter in your request options.",
-        "bleu": 0.014216645907653848,
-        "meteor": 0.2777777777777778
-    },
-    {
-        "pull_quote": "Filter by license status.",
-        "query": "What does the option to \"filter by license status\" imply in the context of obtaining license counts?",
-        "response": "It allows users to specify the status of the licenses they wish to count, such as 'ACTIVE', to tailor the results according to their needs.",
-        "bleu": 0.007696339439306161,
-        "meteor": 0.20270270270270271
-    },
-    {
-        "pull_quote": "Returns a list of all the Capabilities associated with a Plan",
-        "query": "What does the function described in the pull quote do?",
-        "response": "It returns a list of all the Capabilities associated with a Plan.",
-        "bleu": 0.8242367502646054,
-        "meteor": 0.9817739079102716
-    },
-    {
-        "pull_quote": "The `uuid` of the Plan to return the Features from",
-        "query": "What is required to get the capabilities associated with a plan in the API?",
-        "response": "The `uuid` of the Plan is required to return the Features from the API.",
-        "bleu": 0.5635190098079903,
-        "meteor": 0.8647222222222222
-    },
-    {
-        "pull_quote": "For more information about this request see our API documentation on Plan Capability Object",
-        "query": "What can you tell me about the resource for more information on the Plan Capability Object?",
-        "response": "You can find detailed information about the Plan Capability Object in the API documentation linked in the response.",
-        "bleu": 0.07406972893485564,
-        "meteor": 0.5172413793103449
-    },
-    {
-        "pull_quote": "Returns a list of all the Currencies associated with a Plan",
-        "query": "What does the function \"getCurrencies\" do in the Salable SDK?",
-        "response": "It returns a list of all the Currencies associated with a Plan.",
-        "bleu": 0.8242367502646054,
-        "meteor": 0.9817739079102716
-    },
-    {
-        "pull_quote": "The uuid of the Plan to return the Currencies from",
-        "query": "What is the significance of the \"uuid\" of the Plan in retrieving Currencies?",
-        "response": "The \"uuid\" serves as a unique identifier required to fetch the relevant Currencies associated with that specific Plan.",
-        "bleu": 0.014296145628396562,
-        "meteor": 0.27027027027027023
-    },
-    {
-        "pull_quote": "For more information about this request see our API documentation on Plan Currency Object",
-        "query": "What can you find in the API documentation related to the request for currencies associated with a plan?",
-        "response": "You can find detailed information about the Plan Currency Object, which explains the request and its parameters.",
-        "bleu": 0.06632379583706112,
-        "meteor": 0.43771991555242784
-    },
-    {
-        "pull_quote": "Specify which properties to expand. e.g. `{ expand: ['product'] }`",
-        "query": "What is the purpose of the expand option in the Get One Plan API?",
-        "response": "The expand option allows users to specify which properties of the plan they want to retrieve, such as including product details by using `{ expand: ['product'] }`.",
-        "bleu": 0.3064859599765908,
-        "meteor": 0.7997898159898477
-    },
-    {
-        "pull_quote": "Returns the checkout link for a plan. This endpoint will only work for paid Plans.",
-        "query": "What is the purpose of the endpoint mentioned in the pull quote?",
-        "response": "The endpoint is designed to return the checkout link for a plan, but it only works for paid Plans.",
-        "bleu": 0.3558785149067877,
-        "meteor": 0.8006392212057236
-    },
-    {
-        "pull_quote": "The `uuid` of the Plan to get the checkout link from.",
-        "query": "What is the importance of the `uuid` when obtaining a checkout link for a plan?",
-        "response": "The `uuid` is crucial as it identifies the specific plan for which the checkout link is being retrieved.",
-        "bleu": 0.1797645142876138,
-        "meteor": 0.6377551020408164
-    },
-    {
-        "pull_quote": "Automatically calculate tax on checkout based on customers location and your Stripe settings.",
-        "query": "How does the automatic tax calculation feature work during the checkout process?",
-        "response": "The automatic tax calculation feature determines the appropriate tax based on the customer's location and the settings configured in Stripe.",
-        "bleu": 0.030897518619233476,
-        "meteor": 0.5397029260665623
-    },
-    {
-        "pull_quote": "Returns a list of all the Features associated with a Plan",
-        "query": "What does the function in the code sample do regarding a Plan?",
-        "response": "It returns a list of all the Features associated with a Plan.",
-        "bleu": 0.8242367502646054,
-        "meteor": 0.9817739079102716
-    },
-    {
-        "pull_quote": "The `uuid` of the Plan to return the Features from",
-        "query": "What does the pull quote indicate is needed to return the Features of a Plan?",
-        "response": "It indicates that the `uuid` of the Plan is required to return the Features.",
-        "bleu": 0.4962822700197384,
-        "meteor": 0.8773553719008264
-    },
-    {
-        "pull_quote": "For more information about this request see our API documentation on Plan Feature Object",
-        "query": "What can you tell me about the API documentation related to the Plan Feature Object?",
-        "response": "You can find more information about this request in the API documentation on Plan Feature Object.",
-        "bleu": 0.4962822700197384,
-        "meteor": 0.8326048951048949
-    },
-    {
-        "pull_quote": "Sorts usage records by createdAt field. Default ('asc'). Enum: 'asc' | 'desc'.",
-        "query": "What options are available for sorting usage records when retrieving them?",
-        "response": "The usage records can be sorted by the createdAt field, with the default sort order being 'asc', and you can choose 'asc' or 'desc' for the sort direction.",
-        "bleu": 0.027644084186833978,
-        "meteor": 0.5444083462981604
-    },
-    {
-        "pull_quote": "Increments usage count on a License.",
-        "query": "How does the usage count get updated for a license?",
-        "response": "It gets updated by using the `updateLicenseUsage` method with required parameters like `granteeId`, `planUuid`, `increment`, and `idempotencyKey`.",
-        "bleu": 0.006032401726201458,
-        "meteor": 0.10638297872340427
-    },
-    {
-        "pull_quote": "The granteeId of the license.",
-        "query": "What is the significance of granteeId in the updateLicenseUsage function?",
-        "response": "The granteeId is essential as it identifies the specific license for which the usage count is being incremented.",
-        "bleu": 0.027076576267554473,
-        "meteor": 0.3424657534246575
-    },
-    {
-        "pull_quote": "A unique key for idempotent requests.",
-        "query": "What is the purpose of the idempotencyKey in the Update License Usage process?",
-        "response": "The idempotencyKey ensures that the request can be safely retried without unintended side effects, making it unique for each request.",
-        "bleu": 0.011433361115787456,
-        "meteor": 0.3713235294117647
-    },
-    {
-        "pull_quote": "The UUID of the plan the license belongs to is required.",
-        "query": "Why is the UUID of the plan important when retrieving the current usage record for a grantee?",
-        "response": "The UUID of the plan the license belongs to is required to accurately fetch the associated usage record and ensure data validity.",
-        "bleu": 0.44903323241491255,
-        "meteor": 0.7228053435114503
-    },
-    {
-        "pull_quote": "The UUID of the subscription.",
-        "query": "What is the significance of the UUID in the context of the subscription update payment link?",
-        "response": "The UUID of the subscription is essential as it uniquely identifies the specific subscription for which the update payment link is generated.",
-        "bleu": 0.16133948681475338,
-        "meteor": 0.5537518037518038
-    },
-    {
-        "pull_quote": "For more information about this request see our API documentation on Subscription Payment Link Object.",
-        "query": "What does the pull quote explain regarding the subscription update payment link?",
-        "response": "It directs readers to consult the API documentation for detailed information about the Subscription Payment Link Object related to this request.",
-        "bleu": 0.16923267918690046,
-        "meteor": 0.6777108433734939
-    },
-    {
-        "pull_quote": "Adds seats to a Subscription. Initially the seats will be unassigned.",
-        "query": "What happens to the seats added to a subscription when they are first created?",
-        "response": "The seats added to a subscription are initially unassigned.",
-        "bleu": 0.11759572010851714,
-        "meteor": 0.6479051229707398
-    },
-    {
-        "pull_quote": "The number of seats to be created.",
-        "query": "What is required when adding seats to a subscription in the Salable API?",
-        "response": "The number of seats to be created is required when adding seats to a subscription.",
-        "bleu": 0.3850322886878713,
-        "meteor": 0.8522727272727273
-    },
-    {
-        "pull_quote": "`create_prorations`: Will cause proration invoice items to be created when applicable (default).",
-        "query": "What happens when the `create_prorations` option is enabled while adding seats to a subscription?",
-        "response": "This option will cause proration invoice items to be created when applicable, which is the default behavior.",
-        "bleu": 0.5049567629086866,
-        "meteor": 0.6578038674033149
-    },
-    {
-        "pull_quote": "The UUID of the subscription.",
-        "query": "What is the importance of the UUID in retrieving subscription invoices?",
-        "response": "The UUID uniquely identifies the subscription, allowing accurate retrieval of its associated invoices.",
-        "bleu": 0.043748114312246456,
-        "meteor": 0.7407407407407407
-    },
-    {
-        "pull_quote": "The amount of subscriptions to fetch. Default: `10`.",
-        "query": "What is the default number of subscriptions to fetch when requesting invoices?",
-        "response": "The default amount of subscriptions to fetch is `10`.",
-        "bleu": 0.5137480412538583,
-        "meteor": 0.8322121852777243
-    },
-    {
-        "pull_quote": "The UUID of the subscription.",
-        "query": "What is the significance of the UUID when retrieving a subscription payment method?",
-        "response": "The UUID of the subscription is essential as it uniquely identifies the subscription needed to fetch the associated payment method.",
-        "bleu": 0.17793925745339384,
-        "meteor": 0.5685185185185185
-    },
-    {
-        "pull_quote": "For more information about this request see our API documentation on Subscription Payment Method Object.",
-        "query": "What should I do if I need more details about the Subscription Payment Method Object?",
-        "response": "You can refer to our API documentation for comprehensive information on the Subscription Payment Method Object.",
-        "bleu": 0.31007120066002053,
-        "meteor": 0.6511472717006315
-    },
-    {
-        "pull_quote": "The amount of subscriptions to fetch. Default: `20`.",
-        "query": "What is the default number of subscriptions fetched when using the Salable API?",
-        "response": "The default amount of subscriptions to fetch is `20`.",
-        "bleu": 0.5137480412538583,
-        "meteor": 0.8322121852777243
-    },
-    {
-        "pull_quote": "Sorts by expiryDate field. Default (`'asc'`). Enum: `'asc'` | `'desc'`.",
-        "query": "How can I sort the subscriptions returned by the Salable API?",
-        "response": "You can sort the subscriptions by the expiryDate field using either 'asc' for ascending or 'desc' for descending order, with 'asc' as the default.",
-        "bleu": 0.029640797459808833,
-        "meteor": 0.3357392825896763
-    },
-    {
-        "pull_quote": "Returns a link to cancel a specific subscription.",
-        "query": "What does the code sample demonstrate regarding subscription management?",
-        "response": "It demonstrates how to retrieve a link to cancel a specific subscription using the Salable API.",
-        "bleu": 0.360056585428503,
-        "meteor": 0.8099489795918368
-    },
-    {
-        "pull_quote": "The UUID of the subscription.",
-        "query": "What is the significance of the UUID in the process of canceling a subscription?",
-        "response": "The UUID uniquely identifies the specific subscription that you want to cancel, ensuring the correct one is processed.",
-        "bleu": 0.02560744480557418,
-        "meteor": 0.33783783783783783
-    },
-    {
-        "pull_quote": "For more information about this request see our API documentation on Cancel Subscription Link Object.",
-        "query": "What additional resources can I refer to for more information about the Cancel Subscription Link Object?",
-        "response": "You can check the API documentation on the Cancel Subscription Link Object for more details.",
-        "bleu": 0.25336549464486463,
-        "meteor": 0.6552169421487604
-    },
-    {
-        "pull_quote": "Specify which properties to expand. e.g. `{ expand: 'product' }`",
-        "query": "What does the quote about expanding properties suggest about the flexibility of the subscription details retrieval process?",
-        "response": "It suggests that users have the option to customize their request by specifying additional properties to include in the response, enhancing the information returned.",
-        "bleu": 0.01700463072175106,
-        "meteor": 0.18566176470588236
-    },
-    {
-        "pull_quote": "Remove seats from a Subscription. Seats can only be removed if they are unassigned.",
-        "query": "What conditions must be met to remove seats from a Subscription?",
-        "response": "Seats can only be removed if they are unassigned.",
-        "bleu": 0.5488116360940264,
-        "meteor": 0.6490259740259741
-    },
-    {
-        "pull_quote": "To unassign seats use the update many method to set the granteeId of each seat to null.",
-        "query": "What method should be used to unassign seats before they can be removed from a subscription?",
-        "response": "You should use the update many method to set the granteeId of each seat to null.",
-        "bleu": 0.8205257019731467,
-        "meteor": 0.837864680322781
-    },
-    {
-        "pull_quote": "The number of seats to be created.",
-        "query": "What is the significance of specifying the number of seats to be created in the subscription API?",
-        "response": "The number of seats to be created determines how many unassigned seats will be removed from the subscription.",
-        "bleu": 0.3187271473320672,
-        "meteor": 0.5846497252747253
-    },
-    {
-        "pull_quote": "The UUID of the subscription.",
-        "query": "What is the importance of the subscription UUID in the context of retrieving switchable plans?",
-        "response": "The subscription UUID is crucial as it uniquely identifies the subscription to fetch the appropriate switchable plans associated with it.",
-        "bleu": 0.024289783953423513,
-        "meteor": 0.33333333333333337
-    },
-    {
-        "pull_quote": "For more information about this request see our API documentation on Subscription Object.",
-        "query": "What does the pull quote suggest about where to find more details on the subscription request?",
-        "response": "It directs readers to the API documentation on the Subscription Object for more information.",
+        "pull_quote": "For more information about this request see our API documentation on licenses object.",
+        "query": "What can I do if I need additional details about the API request for updating licenses?",
+        "response": "You should refer to the API documentation on the licenses object for more information.",
         "bleu": 0.12874330508144843,
         "meteor": 0.6102793100429035
     },
     {
-        "pull_quote": "Cancels a Subscription with options for when it terminates.",
-        "query": "What options are available for when a subscription can be canceled?",
-        "response": "The subscription can be canceled either immediately ('now') or at the end of its billing period ('end').",
-        "bleu": 0.009410489957951634,
-        "meteor": 0.17543859649122806
+        "pull_quote": "This method will cancel an ad hoc License when invoked correctly.",
+        "query": "What happens when the cancel license method is invoked correctly?",
+        "response": "It will cancel an ad hoc License when invoked correctly.",
+        "bleu": 0.8155395405382073,
+        "meteor": 0.8399159663865547
     },
     {
-        "pull_quote": "The UUID of the Subscription to be canceled.",
-        "query": "What is the significance of the UUID in canceling a subscription?",
-        "response": "The UUID is essential as it identifies the specific subscription that you wish to cancel.",
-        "bleu": 0.0342347495586902,
-        "meteor": 0.6507731958762887
+        "pull_quote": "For more information about this request see our API documentation on cancel License.",
+        "query": "What should I do if I need more details about canceling an ad hoc License?",
+        "response": "You can refer to the API documentation on cancel License for more information.",
+        "bleu": 0.3661926362999429,
+        "meteor": 0.630952380952381
     },
     {
-        "pull_quote": "`now`: Immediately cancels the Subscription. `end`: Cancels the Subscription at the end of it's billing period.",
-        "query": "What are the options available for canceling a subscription according to the provided code sample?",
-        "response": "The options available for canceling a subscription are to either cancel it immediately with `now` or to cancel it at the end of its billing period with `end`.",
-        "bleu": 0.15341329869349904,
-        "meteor": 0.5552513474629045
+        "pull_quote": "Provide a custom end time for the license; this will override the plan's default interval.",
+        "query": "What happens if I set a custom end time for a license during creation?",
+        "response": "It will override the plan's default interval.",
+        "bleu": 0.3176050446027024,
+        "meteor": 0.4673793859649123
     },
     {
-        "pull_quote": "Returns the customer portal link for a subscription.",
-        "query": "What does the code sample provided aim to achieve?",
-        "response": "The code sample aims to return the customer portal link for a subscription.",
-        "bleu": 0.5142401605028263,
-        "meteor": 0.9467186484730346
+        "pull_quote": "The status of the created license can be set to \"ACTIVE\" or \"TRIALING\".",
+        "query": "What statuses can be assigned to a created license in the Salable system?",
+        "response": "The created license can be set to \"ACTIVE\" or \"TRIALING\".",
+        "bleu": 0.8187307530779819,
+        "meteor": 0.8473320778405524
     },
     {
-        "pull_quote": "The UUID of the subscription to be returned.",
-        "query": "What is the significance of the subscription UUID in obtaining a customer portal link?",
-        "response": "The subscription UUID is required to identify and retrieve the specific subscription's customer portal link from the API.",
-        "bleu": 0.026801651563557783,
-        "meteor": 0.3465346534653465
+        "pull_quote": "This method updates specific Licenses with the values passed into the body of the request.",
+        "query": "What is the purpose of the method described in the pull quote?",
+        "response": "The method is designed to update specific licenses with the values provided in the request body.",
+        "bleu": 0.2756966158898809,
+        "meteor": 0.6349206349206349
+    },
+    {
+        "pull_quote": "For more information about this request see our API documentation on license object.",
+        "query": "What can I do to find more details about the update license request?",
+        "response": "You can check the API documentation on the license object for more information about the request.",
+        "bleu": 0.24264382743890414,
+        "meteor": 0.7867132867132866
+    },
+    {
+        "pull_quote": "This method will cancel many ad hoc Licenses using the Salable SDK.",
+        "query": "How does the method described in the pull quote function in relation to the Salable SDK?",
+        "response": "The method cancels many ad hoc Licenses using the Salable SDK, allowing for efficient management of licenses.",
+        "bleu": 0.38761990534234064,
+        "meteor": 0.7708434613514829
+    },
+    {
+        "pull_quote": "For more information about this request see our API documentation on cancel many Licenses.",
+        "query": "What should I consult for detailed guidance on canceling multiple licenses?",
+        "response": "You should refer to the API documentation on canceling many Licenses for detailed guidance.",
+        "bleu": 0.08947853200770763,
+        "meteor": 0.5192708333333333
+    },
+    {
+        "pull_quote": "This method returns aggregate count number of Licenses.",
+        "query": "What does the method mentioned in the pull quote do?",
+        "response": "It returns the aggregate count number of Licenses.",
+        "bleu": 0.6104735835807844,
+        "meteor": 0.7687074829931974
+    },
+    {
+        "pull_quote": "For more information about this request see our API documentation on License count.",
+        "query": "What resource can I refer to for additional details on the license count request?",
+        "response": "You can refer to our API documentation on License count for more information about this request.",
+        "bleu": 0.5749089871602278,
+        "meteor": 0.9035047792444243
+    },
+    {
+        "pull_quote": "Filter by license status is an optional parameter in the request options.",
+        "query": "What does the pull quote indicate about the status parameter in the license count request?",
+        "response": "It indicates that filtering by license status is an optional parameter in the request options.",
+        "bleu": 0.722160038719837,
+        "meteor": 0.9772211594073942
+    },
+    {
+        "pull_quote": "Returns a list of all the Capabilities associated with a Plan.",
+        "query": "What does the API method retrieve when querying with a specific Plan UUID?",
+        "response": "It returns a list of all the Capabilities associated with that Plan.",
+        "bleu": 0.7016035864257111,
+        "meteor": 0.8872344785192268
+    },
+    {
+        "pull_quote": "For more information about this request see our API documentation on Plan Capability Object.",
+        "query": "What should I refer to for additional details about the Plan Capability Object in the API?",
+        "response": "You can refer to the API documentation on Plan Capability Object for more information.",
+        "bleu": 0.42311785416105785,
+        "meteor": 0.6576666666666666
+    },
+    {
+        "pull_quote": "For more information about this request see our API documentation on Plan Currency Object.",
+        "query": "What can I refer to for additional details about the Plan Currency Object?",
+        "response": "You can refer to the API documentation on the Plan Currency Object for more information.",
+        "bleu": 0.14247788801610148,
+        "meteor": 0.6410596026490065
+    },
+    {
+        "pull_quote": "Specify which properties to expand, for example, { expand: ['product'] }.",
+        "query": "What is an example of how to specify properties to expand when retrieving a plan?",
+        "response": "You can specify which properties to expand by using an options object, for example, { expand: ['product'] }.",
+        "bleu": 0.6318296475144833,
+        "meteor": 0.961906648181158
+    },
+    {
+        "pull_quote": "For more information about this request see our API documentation on plan object.",
+        "query": "What should I do if I need further clarification on the plan object request?",
+        "response": "You can refer to the API documentation mentioned for detailed information about the plan object.",
+        "bleu": 0.0925159978069645,
+        "meteor": 0.5281690140845071
+    },
+    {
+        "pull_quote": "This endpoint will only work for paid Plans, ensuring proper access control.",
+        "query": "What is the limitation of the checkout link endpoint mentioned in the pull quote?",
+        "response": "The checkout link endpoint only works for paid Plans, ensuring proper access control.",
+        "bleu": 0.579558149889942,
+        "meteor": 0.8490937746256895
+    },
+    {
+        "pull_quote": "The URL to send users if they have successfully completed a purchase is required.",
+        "query": "What happens if the success URL is not provided when requesting a checkout link?",
+        "response": "The checkout process will not work correctly, as the URL to send users after a successful purchase is required.",
+        "bleu": 0.2924007455652194,
+        "meteor": 0.6881754609027336
+    },
+    {
+        "pull_quote": "Returns a list of all the Features associated with a Plan.",
+        "query": "What does the API function return when you use it with a Plan UUID?",
+        "response": "It returns a list of all the Features associated with that Plan.",
+        "bleu": 0.7016035864257111,
+        "meteor": 0.8872344785192268
+    },
+    {
+        "pull_quote": "For more information about this request see our API documentation on Plan Feature Object.",
+        "query": "What additional details are available about the request to get features associated with a plan?",
+        "response": "You can find more information about this request in our API documentation on the Plan Feature Object.",
+        "bleu": 0.47183720093512005,
+        "meteor": 0.9043617446978792
+    },
+    {
+        "pull_quote": "Sorts usage records by createdAt field, with default sorting set to 'asc'.",
+        "query": "How can I sort the usage records returned by the API when retrieving them for a grantee?",
+        "response": "You can sort the usage records by the createdAt field, with the default sorting set to 'asc'.",
+        "bleu": 0.4797543511401896,
+        "meteor": 0.9585663082437275
+    },
+    {
+        "pull_quote": "The UUID of the plan the license belongs to is necessary for the usage update.",
+        "query": "Why is the UUID of the plan necessary when updating license usage?",
+        "response": "The UUID of the plan is necessary for the usage update to identify which plan the license is associated with.",
+        "bleu": 0.462985228134777,
+        "meteor": 0.7744107744107744
+    },
+    {
+        "pull_quote": "A unique key for idempotent requests must be provided during the update.",
+        "query": "Why is it necessary to provide a unique key for idempotent requests when updating license usage?",
+        "response": "It ensures that duplicate requests do not result in unintended multiple increments of usage, maintaining data integrity.",
+        "bleu": 0.012109013026441871,
+        "meteor": 0.07352941176470588
+    },
+    {
+        "pull_quote": "The granteeId of the license and the UUID of the plan are required.",
+        "query": "Why are the granteeId and planUuid essential when retrieving the current usage record?",
+        "response": "The granteeId of the license and the UUID of the plan are required to identify which specific license and plan the usage record pertains to.",
+        "bleu": 0.4763897220229857,
+        "meteor": 0.7532223415682062
+    },
+    {
+        "pull_quote": "For more information about this request see our API documentation on Usage Record Object.",
+        "query": "What does the pull quote suggest for someone looking for more details on the usage record request?",
+        "response": "It suggests that they should refer to the API documentation on the Usage Record Object for comprehensive information.",
+        "bleu": 0.09379601158083607,
+        "meteor": 0.534311367644701
+    },
+    {
+        "pull_quote": "Returns the update payment link for a specific subscription.",
+        "query": "What does the function return when called with a specific subscription UUID?",
+        "response": "It returns the update payment link for that specific subscription.",
+        "bleu": 0.587728372510532,
+        "meteor": 0.8861997310842195
+    },
+    {
+        "pull_quote": "For more information about this request see our API documentation on Subscription Payment Link Object.",
+        "query": "What does the pull quote suggest for obtaining further details about the subscription update payment link?",
+        "response": "It suggests referring to the API documentation on the Subscription Payment Link Object for more information.",
+        "bleu": 0.27098211583470044,
+        "meteor": 0.6668035521790463
+    },
+    {
+        "pull_quote": "Adds seats to a Subscription. Initially the seats will be unassigned.",
+        "query": "What happens to the seats after they are added to a Subscription?",
+        "response": "The seats are initially unassigned after being added to the Subscription.",
+        "bleu": 0.053905948484896764,
+        "meteor": 0.31007751937984496
+    },
+    {
+        "pull_quote": "To assign granteeIds to the seats use the update many method.",
+        "query": "What method do I use to assign granteeIds to the seats after adding them to a subscription?",
+        "response": "You should use the update many method to assign granteeIds to the seats.",
+        "bleu": 0.6298129992394241,
+        "meteor": 0.8859858834244081
+    },
+    {
+        "pull_quote": "The amount of subscriptions to fetch. Default: `10`.",
+        "query": "What is the default number of subscriptions to fetch when using the getInvoices method?",
+        "response": "The default number of subscriptions to fetch is `10`.",
+        "bleu": 0.41249148923121126,
+        "meteor": 0.8322121852777243
+    },
+    {
+        "pull_quote": "For more information about this request see our API documentation on Subscription Payment Method Object.",
+        "query": "What additional resources can I refer to for details on the Subscription Payment Method Object?",
+        "response": "You can refer to the API documentation on Subscription Payment Method Object for more information.",
+        "bleu": 0.46892438882117243,
+        "meteor": 0.6805268595041322
+    },
+    {
+        "pull_quote": "Sorts by expiryDate field. Default ('asc'). Enum: 'asc' | 'desc'.",
+        "query": "How can the sorting of subscriptions by expiry date be customized in the Salable API?",
+        "response": "You can customize the sorting of subscriptions by specifying the 'sort' parameter as either 'asc' for ascending or 'desc' for descending order of the expiry date.",
+        "bleu": 0.021479380274235616,
+        "meteor": 0.31405472636815923
+    },
+    {
+        "pull_quote": "The amount of subscriptions to fetch. Default: 20.",
+        "query": "What is the default number of subscriptions that will be fetched when using the getAll subscriptions method?",
+        "response": "The default number of subscriptions to fetch is 20.",
+        "bleu": 0.30374414220764573,
+        "meteor": 0.7894438781288935
+    },
+    {
+        "pull_quote": "For more information about this request see our API documentation on Cancel Subscription Link Object.",
+        "query": "What should I do if I need more information about the request for the cancel subscription link?",
+        "response": "You can refer to the API documentation on the Cancel Subscription Link Object for detailed information.",
+        "bleu": 0.22637359354764466,
+        "meteor": 0.5822981366459627
+    },
+    {
+        "pull_quote": "For more information about this request see our API documentation on Subscription Object.",
+        "query": "What should I do if I need further details about the subscription request?",
+        "response": "You can refer to our API documentation on the Subscription Object for more information.",
+        "bleu": 0.2722589423069702,
+        "meteor": 0.6865248226950355
+    },
+    {
+        "pull_quote": "Seats can only be removed if they are unassigned.",
+        "query": "What is required before removing seats from a subscription?",
+        "response": "Seats must be unassigned before they can be removed.",
+        "bleu": 0.06104735835807846,
+        "meteor": 0.47959183673469385
+    },
+    {
+        "pull_quote": "The number of seats to be created is specified by the decrement option.",
+        "query": "What does the decrement option specify when removing subscription seats?",
+        "response": "The decrement option specifies the number of seats to be created when removing them from a subscription.",
+        "bleu": 0.41180376356915777,
+        "meteor": 0.7812499999999999
+    },
+    {
+        "pull_quote": "For more information about this request see our API documentation on Subscription Seat Object.",
+        "query": "What additional details can I find about the removal of subscription seats?",
+        "response": "You can find more information about this request in the API documentation on Subscription Seat Object.",
+        "bleu": 0.5635190098079903,
+        "meteor": 0.8500077857365307
+    },
+    {
+        "pull_quote": "The UUID of the subscription is required to retrieve switchable plans.",
+        "query": "Why is the UUID of the subscription necessary for retrieving switchable plans?",
+        "response": "The UUID of the subscription is required to uniquely identify which subscription's plans you want to retrieve.",
+        "bleu": 0.4104424101861004,
+        "meteor": 0.7958612611440098
+    },
+    {
+        "pull_quote": "For more information about this request see our API documentation on Subscription Object.",
+        "query": "What should I refer to for detailed information regarding the request for switchable plans?",
+        "response": "You should refer to the API documentation on Subscription Object for detailed information regarding the request.",
+        "bleu": 0.24797984721910182,
+        "meteor": 0.6237762237762239
+    },
+    {
+        "pull_quote": "Cancels the Subscription at the end of its billing period when specified in the cancel options.",
+        "query": "What happens to the subscription if the cancel option specifies \"end\"?",
+        "response": "The subscription will be canceled at the end of its billing period when specified in the cancel options.",
+        "bleu": 0.7508561371925762,
+        "meteor": 0.9856562323971997
+    },
+    {
+        "pull_quote": "Returns the customer portal link for a subscription, making it easier for customers to manage their accounts and billing information.",
+        "query": "How does returning the customer portal link benefit customers?",
+        "response": "It makes it easier for customers to manage their accounts and billing information.",
+        "bleu": 0.4735594472722181,
+        "meteor": 0.6130679915150162
     },
     {
         "pull_quote": "For more information about this request see our API documentation on Subscription Portal Link Object.",
-        "query": "What should I do to find more details about the Subscription Portal Link Object?",
-        "response": "You can refer to our API documentation for the Subscription Portal Link Object for more detailed information.",
-        "bleu": 0.22786788980326644,
-        "meteor": 0.6471278440975412
+        "query": "What should I do if I need more details about the Subscription Portal Link Object?",
+        "response": "You should refer to the API documentation on the Subscription Portal Link Object for comprehensive information.",
+        "bleu": 0.22637359354764466,
+        "meteor": 0.5822981366459627
     },
     {
-        "pull_quote": "Update properties on a subscription.",
-        "query": "What can you do with a subscription in the Salable API?",
-        "response": "You can update properties on a subscription using the Salable API.",
-        "bleu": 0.33180774028439425,
-        "meteor": 0.8922558922558923
+        "pull_quote": "For more information about this request see our API documentation on Subscription update.",
+        "query": "What additional details can I find in the API documentation regarding the Subscription update?",
+        "response": "You can find comprehensive information about the request in the API documentation on Subscription update.",
+        "bleu": 0.3489981252688509,
+        "meteor": 0.6816901408450705
     },
     {
-        "pull_quote": "The UUID of the Subscription",
-        "query": "What is required to update a subscription using the Salable API?",
-        "response": "The UUID of the Subscription is required to perform the update.",
-        "bleu": 0.31702331385234306,
-        "meteor": 0.6526315789473685
+        "pull_quote": "Move a Subscription to a new Plan. Proration behaviour can optionally be set.",
+        "query": "What can be done to a Subscription as indicated in the pull quote?",
+        "response": "A Subscription can be moved to a new Plan, with the option to set proration behaviour.",
+        "bleu": 0.20105373454060027,
+        "meteor": 0.7482993197278912
     },
     {
-        "pull_quote": "The ID of the entity that owns the subscription",
-        "query": "What does the term \"the ID of the entity that owns the subscription\" refer to in the context of the subscription update?",
-        "response": "It refers to the unique identifier associated with the organization or individual that holds the subscription.",
-        "bleu": 0.03058760346458022,
-        "meteor": 0.3795918367346939
+        "pull_quote": "For more information about this request see our API documentation on Subscription Object.",
+        "query": "What can I do to find more details about changing a subscription's plan?",
+        "response": "You can refer to our API documentation on the Subscription Object for more information about this request.",
+        "bleu": 0.44219732271776674,
+        "meteor": 0.8896285338593031
     },
     {
-        "pull_quote": "The UUID of the Subscription that is being moved.",
-        "query": "What is the significance of the UUID when changing a subscription's plan?",
-        "response": "The UUID of the Subscription is essential as it uniquely identifies the subscription that is being moved to a new plan.",
-        "bleu": 0.35537192498941217,
-        "meteor": 0.8642857142857143
-    },
-    {
-        "pull_quote": "The status of the subscription, e.g. \"ACTIVE\" \"CANCELED\".",
-        "query": "What are the possible statuses of a subscription when changing its plan?",
-        "response": "The possible statuses of a subscription when changing its plan are \"ACTIVE\" and \"CANCELED\".",
-        "bleu": 0.20038908500140973,
-        "meteor": 0.6087662337662338
-    },
-    {
-        "pull_quote": "Will cause proration invoice items to be created when applicable (default).",
-        "query": "What happens to the subscription when the proration option is set to create items?",
-        "response": "Proration invoice items will be created when applicable by default.",
-        "bleu": 0.2824213793244899,
-        "meteor": 0.6843065693430658
-    },
-    {
-        "pull_quote": "This method reactivates a subscription scheduled for cancellation before the billing period has passed.",
-        "query": "What does the method described in the pull quote do?",
-        "response": "It reactivates a subscription that is scheduled for cancellation before the billing period has passed.",
-        "bleu": 0.6739047062564734,
-        "meteor": 0.8593596927779301
-    },
-    {
-        "pull_quote": "The UUID of the subscription to be returned.",
-        "query": "What is the significance of the UUID in the context of reactivating a subscription?",
-        "response": "The UUID of the subscription is required to identify and reactivate the specific subscription in the system.",
-        "bleu": 0.21869766863251183,
-        "meteor": 0.5374053030303031
-    },
-    {
-        "pull_quote": "Returns void",
-        "query": "What does the return type of the reactivation method indicate?",
-        "response": "The return type \"returns void\" indicates that the reactivation method does not return any value upon completion.",
-        "bleu": 0.020364851292391,
-        "meteor": 0.4934210526315789
-    },
-    {
-        "pull_quote": "The `uuid` of the Pricing Table to build",
-        "query": "What is the significance of the `uuid` in the context of building a pricing table?",
-        "response": "The `uuid` is essential because it uniquely identifies the specific pricing table that you want to retrieve or build.",
-        "bleu": 0.1423071532720465,
-        "meteor": 0.7346781305114639
-    },
-    {
-        "pull_quote": "The unique identifier for the grantee",
-        "query": "What is the significance of the unique identifier for the grantee in the context of the pricing table?",
-        "response": "The unique identifier for the grantee ensures accurate identification and personalization of the pricing table for each specific customer.",
-        "bleu": 0.23588448106534202,
-        "meteor": 0.5762012012012011
-    },
-    {
-        "pull_quote": "Uses the currency short name e.g. USD, defaults to the default currency on the Product which the Plan is linked to",
-        "query": "How does the pricing table handle currency options if none is provided?",
-        "response": "If no currency is specified, it defaults to the default currency associated with the Product linked to the Plan.",
-        "bleu": 0.23396716301277526,
-        "meteor": 0.6079922027290448
-    },
-    {
-        "pull_quote": "The generated token for this session from the Salable API.",
-        "query": "What is the purpose of the generated token mentioned in the pull quote?",
-        "response": "The generated token is used for establishing the session with the Salable API during the checkout process.",
-        "bleu": 0.09950615774798435,
-        "meteor": 0.5882663290070698
-    },
-    {
-        "pull_quote": "The URL the user is sent to if they successfully completed a payment.",
-        "query": "What does the successUrl property in the Salable Checkout component do?",
-        "response": "It specifies the URL where users are redirected after successfully completing a payment.",
-        "bleu": 0.09303723531853667,
-        "meteor": 0.5357142857142857
-    },
-    {
-        "pull_quote": "The generated token for this session from the Salable API is required.",
-        "query": "What is the significance of the generated session token in using the Salable cancellation button?",
-        "response": "The generated token for this session from the Salable API is necessary to utilize the cancellation button functionality.",
-        "bleu": 0.5520516129306315,
-        "meteor": 0.850439133986928
+        "pull_quote": "Returns all necessary data on a display a pricing table.",
+        "query": "What does the function salable.pricingTables.getOne return?",
+        "response": "It returns all necessary data to display a pricing table.",
+        "bleu": 0.587728372510532,
+        "meteor": 0.813692480359147
     },
     {
         "pull_quote": "You can create a session token for this web component by using the request template below with the Salable API.",
-        "query": "How can I create a session token for the invoices web component?",
+        "query": "How can I create a session token for the checkout web component?",
         "response": "You can create a session token by using the request template provided with the Salable API.",
         "bleu": 0.5615731785165538,
         "meteor": 0.7741391080097088
     },
     {
-        "pull_quote": "You can create a session token for this web component by using the request template below with the Salable API.",
-        "query": "How can I create a session token for the pricing table web component?",
-        "response": "You can create a session token by using the request template provided with the Salable API.",
-        "bleu": 0.5615731785165538,
-        "meteor": 0.7741391080097088
+        "pull_quote": "The URL the user is sent to if they successfully completed a payment should be specified in the 'success-url' property.",
+        "query": "What should you specify in the 'success-url' property when using the Salable Checkout web component?",
+        "response": "You should specify the URL to which the user is sent if they successfully completed a payment.",
+        "bleu": 0.36698067963882147,
+        "meteor": 0.6748227719907407
     },
     {
-        "pull_quote": "The generated token for this session from the Salable API.",
-        "query": "What is the purpose of the session token generated from the Salable API?",
-        "response": "The session token is used to authenticate and manage a specific session when interacting with the Salable pricing table web component.",
-        "bleu": 0.024178614976744797,
-        "meteor": 0.3523875114784205
+        "pull_quote": "The uuid of the subscription that you want to display invoices for.",
+        "query": "What is the significance of the subscription UUID in the context of displaying invoices?",
+        "response": "The subscription UUID is crucial as it identifies the specific subscription for which you want to retrieve and display invoices.",
+        "bleu": 0.07439509796701055,
+        "meteor": 0.6437896754102287
     },
     {
-        "pull_quote": "The UUID of the pricing table that you want to display.",
-        "query": "What does the UUID represent in the context of the pricing table?",
-        "response": "The UUID is the unique identifier of the pricing table that you want to display.",
-        "bleu": 0.6262844962765468,
-        "meteor": 0.9601814516129031
+        "pull_quote": "The number of rows to display per page is set to 25 by default.",
+        "query": "What is the default number of rows displayed per page when using the invoices web component?",
+        "response": "The default number of rows to display per page is set to 25.",
+        "bleu": 0.7493466477551354,
+        "meteor": 0.9286399123407754
     },
     {
-        "pull_quote": "This methods creates a new session to use with the Salable web components",
+        "pull_quote": "This methods creates a new session to use with the Salable web components.",
         "query": "What is the purpose of the method described in the pull quote?",
-        "response": "The method creates a new session to be used with the Salable web components.",
-        "bleu": 0.4920274515385508,
-        "meteor": 0.906986531986532
+        "response": "The method creates a new session to use with the Salable web components.",
+        "bleu": 0.8385766789076257,
+        "meteor": 0.9283601014370245
     },
     {
-        "pull_quote": "The component the created session will be used with",
-        "query": "What is the purpose of the 'scope' parameter when creating a session using the Salable web components?",
-        "response": "The 'scope' parameter specifies the component that the created session will be used with.",
-        "bleu": 0.4121183751323027,
-        "meteor": 0.9227440498918162
+        "pull_quote": "The component the created session will be used with is specified by the scope parameter.",
+        "query": "What parameter is crucial for defining the component that the created session will be associated with?",
+        "response": "The scope parameter is crucial for defining the component that the created session will be associated with.",
+        "bleu": 0.31553655365257355,
+        "meteor": 0.669333041127913
     },
     {
-        "pull_quote": "Additional data needed for the session (varies by scope)",
-        "query": "What does the pull quote mean in relation to the createSessionParams for the Salable web components?",
-        "response": "It emphasizes that the metadata required for creating a session can change depending on the specified scope of the session.",
-        "bleu": 0.02297185935845028,
-        "meteor": 0.26302083333333337
+        "pull_quote": "For more information about this request see our API documentation on Event Object.",
+        "query": "What can you tell me about the API documentation for the Event Object?",
+        "response": "The API documentation provides detailed information on how to use the Get One Event request, including the required parameters and the return type.",
+        "bleu": 0.02191286020886785,
+        "meteor": 0.3176104879037708
     },
     {
-        "pull_quote": "Returns a single event",
-        "query": "What does the API method 'Get One Event' do?",
-        "response": "It returns a single event based on the provided UUID.",
-        "bleu": 0.23462350320528,
-        "meteor": 0.8444148936170214
+        "pull_quote": "If you want to unassign the license, you can set the granteeId to null.",
+        "query": "What is the method to unassign a license in the system?",
+        "response": "You can unassign the license by setting the granteeId to null.",
+        "bleu": 0.3338705167304981,
+        "meteor": 0.6979762661580843
     },
     {
-        "pull_quote": "The UUID of the event",
-        "query": "What is required to fetch a single event using the Salable API?",
-        "response": "The UUID of the event is required to fetch a single event using the Salable API.",
-        "bleu": 0.21409092659758044,
-        "meteor": 0.6000000000000001
+        "pull_quote": "The capabilities contains an array of objects containing the name and expiration date of each capability / feature / plan.",
+        "query": "What information does the capabilities property in the license check contain?",
+        "response": "The capabilities property contains an array of objects including the name and expiration date of each capability, feature, or plan.",
+        "bleu": 0.513202956829175,
+        "meteor": 0.8399574889354764
     },
     {
-        "pull_quote": "For more information about this request see our API documentation on Event Object",
-        "query": "What can I do to find more detailed information about the event object from the API?",
-        "response": "You can refer to the API documentation on Event Object for comprehensive details.",
-        "bleu": 0.27824623288353134,
-        "meteor": 0.44953350296861755
+        "pull_quote": "You can use the optional grace parameter to extend the license capability check by a specified number of days.",
+        "query": "How can the grace parameter be used to benefit users with licensing issues?",
+        "response": "The grace parameter allows you to extend the license capability check by a specified number of days, giving users additional time to resolve payment issues.",
+        "bleu": 0.4569262184262977,
+        "meteor": 0.803202781538873
     },
     {
-        "pull_quote": "If you want to unassign the license, you can set the `granteeId` to `null.`",
-        "query": "What should you do if you want to unassign a license in the Salable API?",
-        "response": "You can set the `granteeId` to `null` to unassign the license.",
-        "bleu": 0.569133886912883,
-        "meteor": 0.6122448979591837
-    },
-    {
-        "pull_quote": "const updatedLicenses = await salable.licenses.updateMany([ { granteeId: 'new_userId_1', uuid: 'your-license-uuid' }, { granteeId: null, uuid: 'your-license-uuid' }, // this license will be unassigned ]);",
-        "query": "What is the purpose of using the `updateMany` function in the provided code snippet?",
-        "response": "The `updateMany` function is used to update the `granteeId` for licenses, either assigning a new grantee or unassigning the license by setting `granteeId` to `null`.",
-        "bleu": 0.007084449781305298,
-        "meteor": 0.09067357512953368
-    },
-    {
-        "pull_quote": "-H 'x-api-key: your-salable-api-key' -H 'version: v2' -d '[{ \"licenseUuid\": \"your-license-uuid\", \"granteeId\": \"new-user-id\" }, { \"licenseUuid\": \"your-license-uuid\", \"granteeId\": null }]' 'https://api.salable.app/licenses'",
-        "query": "What is the purpose of the command that includes the headers and data specified in the pull quote?",
-        "response": "The command is used to update license grantees in the Salable API by assigning a new grantee or unassigning an existing one.",
-        "bleu": 0,
-        "meteor": 0.0
-    },
-    {
-        "pull_quote": "The `publicHash` and `capsHashed` properties have been removed and the `capabilities` and `capabilitiesEndDates` properties have been consolidated into a single `capabilities` property.",
-        "query": "What changes were made to the `publicHash` and `capsHashed` properties in the Salable API V2 update?",
-        "response": "The properties have been removed and consolidated into a single `capabilities` property.",
-        "bleu": 0.24524562660265783,
-        "meteor": 0.4718660968660969
-    },
-    {
-        "pull_quote": "If the customer's payment fails, and you would like to give them a grace period to rectify this \u2014 you can use the optional `grace` parameter to extend the license capability check by a specified number of days.",
-        "query": "How can the grace period parameter be utilized in situations where a customer's payment fails?",
-        "response": "The grace period parameter allows you to extend the license capability check by a specified number of days, giving customers time to rectify payment failures.",
-        "bleu": 0.2748972226155916,
-        "meteor": 0.5221752549651101
-    },
-    {
-        "pull_quote": "We use ECDSA cryptography to generate signatures for license checks. Signatures are signed with a private key (which we keep encrypted on our end) and can be verified using your organisations public key.",
-        "query": "What cryptography method is used for generating signatures in license checks?",
-        "response": "ECDSA cryptography is used to generate signatures for license checks, which can be verified using your organization's public key.",
-        "bleu": 0.23480442255811726,
-        "meteor": 0.4847852547383065
-    },
-    {
-        "pull_quote": "`currency` is the shortname of the currency you want to use at checkout, this defaults to the currency set on the product.",
-        "query": "What does the pull quote indicate about the `currency` parameter when accepting payments?",
-        "response": "It states that the `currency` is the shortname of the currency to be used at checkout and that it defaults to the currency set on the product.",
-        "bleu": 0.5495207706557382,
-        "meteor": 0.8308289506636615
+        "pull_quote": "Checkout links offer the quickest and simplest way to accept payments from your users.",
+        "query": "How do checkout links improve the payment process for users?",
+        "response": "Checkout links streamline the payment experience by providing a fast and easy way to complete transactions.",
+        "bleu": 0.039567167294524315,
+        "meteor": 0.4152960526315789
     },
     {
         "pull_quote": "On successful payment, the first seat will be assigned to the `granteeId` provided - the rest will be unassigned.",
-        "query": "What happens to the seats after a successful payment for a per-seat plan?",
+        "query": "How are the seats allocated after a successful payment in the per-seat billing model?",
         "response": "The first seat will be assigned to the `granteeId` provided, while the rest will be unassigned.",
         "bleu": 0.7006889816771001,
         "meteor": 0.8353569990359624
     },
     {
-        "pull_quote": "Licenses can be cancelled with their UUIDs.",
-        "query": "How can licenses be cancelled according to the given information?",
-        "response": "Licenses can be cancelled by using their UUIDs.",
-        "bleu": 0.43167001068522526,
-        "meteor": 0.854119425547997
+        "pull_quote": "The `currency` is the shortname of the currency you want to use at checkout, this defaults to the currency set on the product.",
+        "query": "What is the default setting for currency when accepting payments?",
+        "response": "The currency defaults to the currency set on the product.",
+        "bleu": 0.19876447286684437,
+        "meteor": 0.43176937593544606
     },
     {
-        "pull_quote": "await salable.licenses.cancel('your-license-uuid');",
-        "query": "How can I cancel a single license using the Salable Node.js SDK?",
-        "response": "You can cancel a single license by using the command await salable.licenses.cancel('your-license-uuid');",
-        "bleu": 0.34823528327578535,
-        "meteor": 0.8737244897959183
+        "pull_quote": "To cancel many licenses at once, provide an array of UUIDs in the request.",
+        "query": "How can multiple licenses be cancelled simultaneously using the API?",
+        "response": "You can cancel many licenses at once by providing an array of UUIDs in the request.",
+        "bleu": 0.630190855592386,
+        "meteor": 0.8682976296108504
     },
     {
-        "pull_quote": "curl -XPOST -H 'x-api-key: your-salable-api-key' -H 'version: v2' -d '{ \"uuids\": [\"your-license-uuid-1\", \"your-license-uuid-2\"] }' 'https://api.salable.app/licenses/cancel'",
-        "query": "What is the correct cURL command to cancel multiple licenses using the Salable API?",
-        "response": "The correct cURL command is: curl -XPOST -H 'x-api-key: your-salable-api-key' -H 'version: v2' -d '{ \"uuids\": [\"your-license-uuid-1\", \"your-license-uuid-2\"] }' 'https://api.salable.app/licenses/cancel'",
-        "bleu": 0.84796847543517,
-        "meteor": 0.9831346021554689
+        "pull_quote": "The cURL command allows users to cancel licenses by supplying their UUIDs in the request body.",
+        "query": "How can users cancel licenses using the cURL command?",
+        "response": "Users can cancel licenses by supplying their UUIDs in the request body.",
+        "bleu": 0.6192557436381307,
+        "meteor": 0.7212182061579653
     },
     {
-        "pull_quote": "Get the list of seats that are on the provided subscription. One common usage of this data is to show your users the list of people on their team.",
-        "query": "How can the subscription seat data be utilized by users?",
-        "response": "It can be used to show users the list of people on their team.",
-        "bleu": 0.20541762354890913,
-        "meteor": 0.4049744897959183
+        "pull_quote": "Get the list of seats that are on the provided subscription to show users the list of people on their team.",
+        "query": "How can developers utilize the subscription seat information to enhance user experience?",
+        "response": "Developers can get the list of seats on a subscription to show users the list of people on their team, thereby improving team visibility and management.",
+        "bleu": 0.49806572776935465,
+        "meteor": 0.7730388943515788
     },
     {
-        "pull_quote": "Obtain the aggregate count of seats, as well as the amount that are assigned or unassigned. This data can be used in many ways, one common usage is to show your users how many of their remaining seats are available to be filled.",
-        "query": "How can I use the seat count data obtained from the API?",
-        "response": "You can use the seat count data to show users how many of their remaining seats are available to be filled, helping them manage their team effectively.",
-        "bleu": 0.23717999754382701,
-        "meteor": 0.44723177064287284
+        "pull_quote": "Obtain the aggregate count of seats, as well as the amount that are assigned or unassigned to inform users about their remaining seats available to be filled.",
+        "query": "How can users check the availability of their subscription seats?",
+        "response": "Users can obtain the aggregate count of seats and the number that are assigned or unassigned to inform them about their remaining seats available to be filled.",
+        "bleu": 0.6395694917082845,
+        "meteor": 0.863280276816609
     },
     {
-        "pull_quote": "const subscriptionSeats = await response.json();",
-        "query": "What does the code `const subscriptionSeats = await response.json();` do in the context of fetching data?",
-        "response": "It processes the response from the API call to convert the data into a JSON format, allowing access to the subscription's seat information.",
-        "bleu": 0,
-        "meteor": 0.0
+        "pull_quote": "One common usage of license data is to show your users how many of their remaining seats are available to be filled.",
+        "query": "What is a common application of license data according to the information provided?",
+        "response": "The license data is commonly used to show users how many of their remaining seats are available to be filled.",
+        "bleu": 0.6265504182177836,
+        "meteor": 0.7876461988304095
     },
     {
-        "pull_quote": "Add or remove seats from free plans or paid subscriptions.",
-        "query": "What processes are available for adding or removing seats in different subscription plans?",
-        "response": "You can add or remove seats from both free plans and paid subscriptions using specific methods tailored for each plan type.",
-        "bleu": 0.21279882820441612,
-        "meteor": 0.7371900826446282
+        "pull_quote": "The process to add seats varies depending on whether it is a paid subscription or a free plan.",
+        "query": "How does the process of adding seats differ between paid subscriptions and free plans?",
+        "response": "The process differs in that adding seats to a free plan involves creating ad hoc licenses, while for paid subscriptions, all seats created are unassigned by default and need to be assigned separately.",
+        "bleu": 0.0371749241029078,
+        "meteor": 0.43091787439613527
     },
     {
         "pull_quote": "Do not modify subscriptions directly through Stripe, always manage them through the Salable API/SDKs to avoid issues.",
-        "query": "Why is it important not to modify subscriptions directly through Stripe?",
-        "response": "Modifying subscriptions directly through Stripe can lead to issues, which is why it is recommended to manage them through the Salable API/SDKs.",
-        "bleu": 0.32041441988129854,
-        "meteor": 0.7446153846153847
+        "query": "Why is it important to manage subscriptions through the Salable API instead of directly through Stripe?",
+        "response": "Managing subscriptions through the Salable API helps avoid issues that may arise from direct modifications in Stripe.",
+        "bleu": 0.07152241531239317,
+        "meteor": 0.4056437389770723
     },
     {
-        "pull_quote": "In this case, you can create an ad hoc license to bypass payment/subscription.",
-        "query": "What is the purpose of creating an ad hoc license according to the pull quote?",
-        "response": "The purpose of creating an ad hoc license is to bypass payment or subscription requirements for specific customers or free plans.",
-        "bleu": 0.1336412760311249,
-        "meteor": 0.4961186305732484
+        "pull_quote": "You can create an ad hoc license to bypass payment/subscription, allowing for greater flexibility in managing access.",
+        "query": "How does creating an ad hoc license provide flexibility in managing access?",
+        "response": "Creating an ad hoc license allows you to grant specific customers free access to a paid plan, effectively bypassing the payment or subscription requirements.",
+        "bleu": 0.11076060807725355,
+        "meteor": 0.5188945290468132
     },
     {
-        "pull_quote": "const license = await salable.licenses.create([...]);",
-        "query": "What does the code snippet in the pull quote accomplish?",
-        "response": "The code snippet creates a new ad hoc license using the Salable SDK for specific users in a given plan.",
-        "bleu": 0.00913442366656447,
-        "meteor": 0.04166666666666667
+        "pull_quote": "The second argument to subscriptions.cancel represents when you want the subscription to cancel.",
+        "query": "What does the second argument in the subscriptions.cancel function represent?",
+        "response": "It represents when you want the subscription to cancel.",
+        "bleu": 0.5899565399238539,
+        "meteor": 0.6613108206245462
     },
     {
-        "pull_quote": "The second argument to `subscriptions.cancel` represents when you want the subscription to cancel.",
-        "query": "What does the second argument in the `subscriptions.cancel` method signify?",
-        "response": "It indicates the timing for when you want the subscription to be canceled.",
-        "bleu": 0.3259169224191723,
-        "meteor": 0.559071729957806
+        "pull_quote": "Cancels the Subscription at the end of its billing period.",
+        "query": "What happens to a subscription if it is cancelled with the 'end' option?",
+        "response": "The subscription will be cancelled at the end of its billing period.",
+        "bleu": 0.6115380576901023,
+        "meteor": 0.9721812278630461
     },
     {
-        "pull_quote": "Immediately cancels the Subscription.",
-        "query": "What does the option \"now\" indicate when canceling a subscription?",
-        "response": "It immediately cancels the Subscription.",
-        "bleu": 0.7598356856515925,
-        "meteor": 0.9764705882352942
-    },
-    {
-        "pull_quote": "Cancels the Subscription at the end of it's billing period.",
-        "query": "What does it mean to cancel a subscription at the end of its billing period?",
-        "response": "It means that the subscription will remain active until the current billing cycle is completed, after which it will no longer be active.",
-        "bleu": 0.021084454569051277,
-        "meteor": 0.32059314954051793
+        "pull_quote": "Immediately cancels the Subscription or cancels the Subscription at the end of its billing period.",
+        "query": "What options are available for canceling a subscription according to the pull quote?",
+        "response": "The subscription can be canceled immediately or at the end of its billing period.",
+        "bleu": 0.5094002845309816,
+        "meteor": 0.7943507870938931
     },
     {
         "pull_quote": "If the new plan has a higher minimum seat number than the number of active seats on the current subscription, new seats are created when the subscription moves to the new plan.",
-        "query": "What happens to the number of seats when a subscription is upgraded to a plan with a higher minimum seat requirement?",
-        "response": "New seats are created to match the new plan's minimum seat number if it exceeds the current number of active seats.",
-        "bleu": 0.20430353194652354,
-        "meteor": 0.48501713410064906
+        "query": "What happens when a subscriber upgrades to a plan with a higher minimum seat requirement than their current subscription?",
+        "response": "New seats are created to accommodate the higher minimum seat number when the subscription moves to the new plan.",
+        "bleu": 0.32816209087392384,
+        "meteor": 0.5462300234795123
     },
     {
-        "pull_quote": "A customer has an annual subscription that began on March 4th and costs $180 per year. On September 15th, they decide to upgrade their subscription to a more expensive plan, which costs $240 per year.",
-        "query": "What happens when a customer upgrades their annual subscription from $180 to $240 per year?",
-        "response": "The customer is charged the difference for the remaining months of their subscription based on prorated calculations, totaling $25 in this example.",
-        "bleu": 0.011554485177250395,
-        "meteor": 0.13503331218274112
-    },
-    {
-        "pull_quote": "This is a good way to get the last four digits of the user's card!",
-        "query": "What is an effective method to retrieve the last four digits of a user's card?",
-        "response": "You can use the API to get subscription payment methods, which returns details including the last four digits of the user's card.",
-        "bleu": 0.3420941751050785,
-        "meteor": 0.6161203454359737
-    },
-    {
-        "pull_quote": "Returns details about the payment method associated with the specified `subscriptionUuid`.",
-        "query": "What information can you retrieve about a payment method using a subscription UUID?",
-        "response": "You can retrieve details about the payment method associated with the specified subscription UUID.",
-        "bleu": 0.5659119256652702,
-        "meteor": 0.7063829787234043
-    },
-    {
-        "pull_quote": "Get an \"update payment method\" link.",
-        "query": "How can I obtain an \"update payment method\" link for my subscription?",
-        "response": "You can get an \"update payment method\" link by sending a GET request to 'https://api.salable.app/subscriptions/your-subscription-uuid/updatepaymentlink' with the appropriate API key and version in the headers.",
-        "bleu": 0.22366895391935884,
-        "meteor": 0.7886904761904764
+        "pull_quote": "Get an \"update payment method\" link using the Salable API for subscriptions.",
+        "query": "How can I obtain an \"update payment method\" link for a subscription using the Salable API?",
+        "response": "You can get the link by making a GET request to 'https://api.salable.app/subscriptions/your-subscription-uuid/updatepaymentlink' with the appropriate headers.",
+        "bleu": 0.013618796864073041,
+        "meteor": 0.12903225806451613
     }
 ]

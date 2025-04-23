@@ -212,6 +212,7 @@ class SmolRag:
                                                                                   [KG_SEP])
                             descriptions = KG_SEP.join(set(list(existing_descriptions) + [description]))
                             existing_categories = split_string_by_multi_markers(existing_node["category"], [KG_SEP])
+                            # Todo: figure out how to reduce to a single category for a given entity name, probably something for an LLM
                             categories = KG_SEP.join(set(list(existing_categories) + [category]))
                             existing_excerpt_ids = split_string_by_multi_markers(existing_node["excerpt_id"], [KG_SEP])
                             excerpt_ids = KG_SEP.join(set(list(existing_excerpt_ids) + [excerpt_id]))
@@ -269,6 +270,7 @@ class SmolRag:
                         })
                 elif record_type == 'content_keywords':
                     if len(fields) >= 2:
+                        # Todo: figure out what these are for, we're overwriting them each time
                         self.graph.set_field('content_keywords', fields[1])
 
             results = await asyncio.gather(*tasks)
@@ -293,14 +295,14 @@ class SmolRag:
         logger.info(f"Extracted {total_entities} entities and {total_relationships} relationships "
                     f"from document {doc_id} in {elapsed:.2f} seconds.")
 
-    async def query(self, text):
+    async def query(self, text, use_cache=True):
         logger.info(f"Received query: {text}")
         excerpts = await self._get_query_excerpts(text)
         logger.info(f"Retrieved {len(excerpts)} excerpts for the query.")
         excerpt_context = self._get_excerpt_context(excerpts)
         system_prompt = get_query_system_prompt(excerpt_context)
 
-        return await self.rate_limited_get_completion(text, context=system_prompt.strip(), use_cache=False)
+        return await self.rate_limited_get_completion(text, context=system_prompt.strip(), use_cache=use_cache)
 
     def _get_excerpt_context(self, excerpts):
         context = ""
@@ -327,9 +329,9 @@ class SmolRag:
         excerpts = truncate_list_by_token_size(excerpts, get_text_for_row=lambda x: x["excerpt"], max_token_size=4000)
         return excerpts
 
-    async def hybrid_kg_query(self, text):
+    async def hybrid_kg_query(self, text, use_cache=True):
         prompt = get_high_low_level_keywords_prompt(text)
-        result = await self.rate_limited_get_completion(prompt)
+        result = await self.rate_limited_get_completion(prompt, use_cache=use_cache)
         keyword_data = extract_json_from_text(result)
         logger.info("Processed high/low level keywords for hybrid KG query.")
 
@@ -341,11 +343,11 @@ class SmolRag:
         excerpts = ll_entity_excerpts + hl_entity_excerpts
         context = self._get_kg_query_context(entities, excerpts, relations)
         system_prompt = get_kg_query_system_prompt(context)
-        return await self.rate_limited_get_completion(text, context=system_prompt.strip(), use_cache=False)
+        return await self.rate_limited_get_completion(text, context=system_prompt.strip(), use_cache=use_cache)
 
-    async def local_kg_query(self, text):
+    async def local_kg_query(self, text, use_cache=True):
         prompt = get_high_low_level_keywords_prompt(text)
-        result = await self.rate_limited_get_completion(prompt)
+        result = await self.rate_limited_get_completion(prompt, use_cache=use_cache)
         keyword_data = extract_json_from_text(result)
         logger.info("Processed high/low level keywords for local KG query.")
 
@@ -355,11 +357,11 @@ class SmolRag:
         excerpts = ll_entity_excerpts
         context = self._get_kg_query_context(entities, excerpts, relations)
         system_prompt = get_kg_query_system_prompt(context)
-        return await self.rate_limited_get_completion(text, context=system_prompt.strip(), use_cache=False)
+        return await self.rate_limited_get_completion(text, context=system_prompt.strip(), use_cache=use_cache)
 
-    async def global_kg_query(self, text):
+    async def global_kg_query(self, text, use_cache=True):
         prompt = get_high_low_level_keywords_prompt(text)
-        result = await self.rate_limited_get_completion(prompt)
+        result = await self.rate_limited_get_completion(prompt, use_cache=use_cache)
         keyword_data = extract_json_from_text(result)
         logger.info("Processed high/low level keywords for global KG query.")
 
@@ -369,11 +371,11 @@ class SmolRag:
         excerpts = hl_entity_excerpts
         context = self._get_kg_query_context(entities, excerpts, relations)
         system_prompt = get_kg_query_system_prompt(context)
-        return await self.rate_limited_get_completion(text, context=system_prompt.strip(), use_cache=False)
+        return await self.rate_limited_get_completion(text, context=system_prompt.strip(), use_cache=use_cache)
 
-    async def mix_query(self, text):
+    async def mix_query(self, text, use_cache=True):
         prompt = get_high_low_level_keywords_prompt(text)
-        result = await self.rate_limited_get_completion(prompt)
+        result = await self.rate_limited_get_completion(prompt, use_cache=use_cache)
         keyword_data = extract_json_from_text(result)
         logger.info("Processed high/low level keywords for mixed KG query.")
 
@@ -387,7 +389,7 @@ class SmolRag:
         kg_context = self._get_kg_query_context(kg_entities, kg_excerpts, kg_relations)
         excerpt_context = self._get_excerpt_context(query_excerpts)
         system_prompt = get_mix_system_prompt(excerpt_context, kg_context)
-        return await self.rate_limited_get_completion(text, context=system_prompt.strip(), use_cache=False)
+        return await self.rate_limited_get_completion(text, context=system_prompt.strip(), use_cache=use_cache)
 
     def _get_kg_query_context(self, entities, excerpts, relations):
         entity_csv = [["entity", "type", "description", "rank"]]
@@ -656,10 +658,10 @@ if __name__ == '__main__':
         # print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
         # print(await smol_rag.global_kg_query("What subjects we can discuss?"))
 
-        print(await smol_rag.mix_query("what is Salable?"))  # Should answer
+        print(await smol_rag.mix_query("what is Salable?", use_cache=False))  # Should answer
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(await smol_rag.mix_query("what do jellyfish eat?"))  # Should reject
+        print(await smol_rag.mix_query("what do jellyfish eat?", use_cache=False))  # Should reject
         print("=+=+=+=+=+=+=+=+=+=+=+=+=+=")
-        print(await smol_rag.mix_query("What subjects we can discuss?"))
+        print(await smol_rag.mix_query("What subjects we can discuss?", use_cache=False))
 
     asyncio.run(main())

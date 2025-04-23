@@ -1,5 +1,7 @@
 ### SmolRAG Overview
 
+This is a demo RAG and MCP server for Salable documentation. Salable is a platform created to monetize SaaS apps.
+
 SmolRAG is a lightweight retrieval‑augmented generation system inspired by LightRAG, focused on fast, up‑to‑date
 querying of your own documents.
 
@@ -14,7 +16,7 @@ versions of the documents.
 
 ## Docs
 
-For setup instructions and general guidance, please refer to [SmolRAG Docs](DOCS.md).
+For setup instructions and general guidance, please refer to the [Docs](DOCS.md).
 
 ### Example RAG Documentation
 
@@ -135,4 +137,3 @@ Use this when:
 
 - You want **maximum context and coverage**.
 - You have a complex query that benefits from both literal excerpts and conceptual links.
-

@@ -44,11 +44,11 @@ async def process_doc(doc, additional_context=None):
     logger.info(f"Processing document: {doc}")
     content = read_file(doc)
     raw_pull_quotes = await rate_limited_get_completion(inspect.cleandoc(f"""
-                Extract up to ten pull quote facts from this document, you must pull the exact copy used in the document.
+                Extract up to three pull quote facts from this document, you must pull the exact copy used in the document.
 
                 Remove all markdown formatting
                 Use no markdown formatting in your response
-                Each pull quote should be on a single line
+                Each pull quote should be on a single line but could span a one to three sentences.
 
                 <content>
                 {content}

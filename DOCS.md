@@ -1,5 +1,7 @@
 # SmolRAG Documentation
 
+This is a demo RAG and MCP server for Salable documentation. Salable is a platform created to monetize SaaS apps.
+
 This document provides comprehensive information for users and developers working with the SmolRAG project.
 
 ## Table of Contents
@@ -43,8 +45,8 @@ This document provides comprehensive information for users and developers workin
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/yourusername/minimal-light-rag.git
-   cd minimal-light-rag
+   git clone https://github.com/Salable/smol-rag.git
+   cd smol-rag
    ```
 
 2. **Python Environment Setup**:
@@ -89,8 +91,8 @@ This document provides comprehensive information for users and developers workin
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/yourusername/minimal-light-rag.git
-   cd minimal-light-rag
+   git clone https://github.com/Salable/smol-rag.git
+   cd smol-rag
    ```
 
 2. **Configure Environment Variables**:
@@ -285,7 +287,7 @@ import json
 
 url = "http://localhost:8000/query"
 payload = {
-    "text": "What is SmolRAG?",
+    "text": "What is Salable?",
     "query_type": "standard"
 }
 headers = {"Content-Type": "application/json"}
